@@ -1,0 +1,49 @@
+{
+  "version": "0.1",
+  "controller_commit": "6e84f524aeb9bd761aa789445c1edb99cdadd9dd",
+  "evidence_level": "external-prompt holdout / manually mapped ACE-S gold",
+  "important_caveat": "Prompts come from external public benchmarks pinned before this evaluation branch. ACE-S gold labels were authored after controller freeze. They are not independent human annotations and ambiguous cases use acceptable candidate sets.",
+  "sources": {
+    "agent-skills": {
+      "repository": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "commit": "272702e0bb1ff4f78d45fb7253da872da170d458",
+      "path": "researcher/benchmarks/router/prompts.jsonl"
+    },
+    "skillrouter": {
+      "repository": "zhengyanzhao1997/SkillRouter",
+      "commit": "21f4bc31327a4d2beebfb454c159860ea21d8631",
+      "path": "data/eval_core/tasks.jsonl"
+    }
+  },
+  "labels": {
+    "activation": ["DIRECT", "ACTIVE"],
+    "primary_candidates": ["CODE", "DOCUMENT", "RESEARCH", "STATE"],
+    "gap_labels": ["WORKING_HISTORY", "DATA_ARTIFACT"]
+  },
+  "cases": [
+    {"id":"as-p001","source":"agent-skills","source_id":"p001","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p003","source":"agent-skills","source_id":"p003","family":"working-history","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"WORKING_HISTORY"},
+    {"id":"as-p006","source":"agent-skills","source_id":"p006","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p007","source":"agent-skills","source_id":"p007","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p008","source":"agent-skills","source_id":"p008","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p011","source":"agent-skills","source_id":"p011","family":"code-implementation","expected_activation":"ACTIVE","acceptable_primary":["CODE"],"architecture_gap":null},
+    {"id":"as-p012","source":"agent-skills","source_id":"p012","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p015","source":"agent-skills","source_id":"p015","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p018","source":"agent-skills","source_id":"p018","family":"working-history","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"WORKING_HISTORY"},
+    {"id":"as-p028","source":"agent-skills","source_id":"p028","family":"direct-concept","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p032","source":"agent-skills","source_id":"p032","family":"current-recommendation","expected_activation":"ACTIVE","acceptable_primary":["RESEARCH"],"architecture_gap":null},
+    {"id":"as-p041","source":"agent-skills","source_id":"p041","family":"bounded-artifact-set","expected_activation":"ACTIVE","acceptable_primary":["CODE","DOCUMENT"],"architecture_gap":null},
+    {"id":"as-p043","source":"agent-skills","source_id":"p043","family":"current-telemetry","expected_activation":"ACTIVE","acceptable_primary":["STATE"],"architecture_gap":null},
+    {"id":"as-p045","source":"agent-skills","source_id":"p045","family":"negative-control","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p047","source":"agent-skills","source_id":"p047","family":"negative-control","expected_activation":"DIRECT","acceptable_primary":[],"architecture_gap":null},
+    {"id":"as-p050","source":"agent-skills","source_id":"p050","family":"code-implementation","expected_activation":"ACTIVE","acceptable_primary":["CODE"],"architecture_gap":null},
+    {"id":"sr-3d-scan-calc","source":"skillrouter","source_id":"3d-scan-calc","family":"data-artifact","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-adaptive-cruise-control","source":"skillrouter","source_id":"adaptive-cruise-control","family":"code-implementation","expected_activation":"ACTIVE","acceptable_primary":["CODE"],"architecture_gap":null},
+    {"id":"sr-azure-bgp-oscillation-route-leak","source":"skillrouter","source_id":"azure-bgp-oscillation-route-leak","family":"data-artifact","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-citation-check","source":"skillrouter","source_id":"citation-check","family":"external-evidence","expected_activation":"ACTIVE","acceptable_primary":["RESEARCH"],"architecture_gap":null},
+    {"id":"sr-civ6-adjacency-optimizer","source":"skillrouter","source_id":"civ6-adjacency-optimizer","family":"data-artifact","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-court-form-filling","source":"skillrouter","source_id":"court-form-filling","family":"document","expected_activation":"ACTIVE","acceptable_primary":["DOCUMENT"],"architecture_gap":null},
+    {"id":"sr-crystallographic-wyckoff-position-analysis","source":"skillrouter","source_id":"crystallographic-wyckoff-position-analysis","family":"code-implementation","expected_activation":"ACTIVE","acceptable_primary":["CODE"],"architecture_gap":null},
+    {"id":"sr-dapt-intrusion-detection","source":"skillrouter","source_id":"dapt-intrusion-detection","family":"data-artifact","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"}
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "version": "0.2",
+  "controller_commit": "6e84f524aeb9bd761aa789445c1edb99cdadd9dd",
+  "base_fixture": "benchmarks/unseen-routing-v0.1.json",
+  "evidence_level": "structural taxonomy stress only",
+  "important_caveat": "Additional cases are drawn from a tool-execution-heavy external benchmark, so this is intentionally a stress test for general agent context coverage, not a representative distribution of all chat tasks.",
+  "source": {
+    "repository": "zhengyanzhao1997/SkillRouter",
+    "commit": "21f4bc31327a4d2beebfb454c159860ea21d8631",
+    "path": "data/eval_core/tasks.jsonl"
+  },
+  "additional_cases": [
+    {"id":"sr-data-to-d3","source_id":"data-to-d3","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-dialogue-parser","source_id":"dialogue-parser","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-dynamic-object-aware-egomotion","source_id":"dynamic-object-aware-egomotion","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-earthquake-phase-association","source_id":"earthquake-phase-association","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-earthquake-plate-calculation","source_id":"earthquake-plate-calculation","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-econ-detrending-correlation","source_id":"econ-detrending-correlation","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-energy-ac-optimal-power-flow","source_id":"energy-ac-optimal-power-flow","expected_activation":"ACTIVE","acceptable_primary":["DOCUMENT"],"architecture_gap":null},
+    {"id":"sr-energy-market-pricing","source_id":"energy-market-pricing","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-gravitational-wave-detection","source_id":"gravitational-wave-detection","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-grid-dispatch-operator","source_id":"grid-dispatch-operator","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-hvac-control","source_id":"hvac-control","expected_activation":"ACTIVE","acceptable_primary":["CODE"],"architecture_gap":null},
+    {"id":"sr-invoice-fraud-detection","source_id":"invoice-fraud-detection","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-jax-computing-basics","source_id":"jax-computing-basics","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-jpg-ocr-stat","source_id":"jpg-ocr-stat","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-lab-unit-harmonization","source_id":"lab-unit-harmonization","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"},
+    {"id":"sr-lake-warming-attribution","source_id":"lake-warming-attribution","expected_activation":"ACTIVE","acceptable_primary":[],"architecture_gap":"DATA_ARTIFACT"}
+  ]
+}
