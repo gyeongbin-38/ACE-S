@@ -8,7 +8,7 @@
       "url": "https://github.com/gyeongbin-38/ACE-S",
       "revision": "7ddf00c09211a069c1279a9e5d5849f55d80548d"
     },
-    "viewBox": [1680, 700],
+    "viewBox": [980, 700],
     "views": [
       {
         "id": "decision-path",
@@ -36,7 +36,7 @@
       "type": "external",
       "label": "User Task",
       "sublabel": "question · code · research",
-      "pos": [40, 150],
+      "pos": [30, 120],
       "size": [150, 72]
     },
     {
@@ -46,7 +46,7 @@
       "sublabel": "is current context enough?",
       "tag": "no retrieval is valid",
       "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Activation policy"}],
-      "pos": [300, 150],
+      "pos": [255, 120],
       "size": [160, 72]
     },
     {
@@ -55,7 +55,7 @@
       "label": "Problem Router",
       "sublabel": "classify context problem",
       "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Route classifier"}],
-      "pos": [570, 150],
+      "pos": [495, 120],
       "size": [160, 72]
     },
     {
@@ -68,7 +68,7 @@
         {"path": "skills/adaptive-context-engineering/references/research.md", "label": "Research route"},
         {"path": "skills/adaptive-context-engineering/references/temporal.md", "label": "Temporal route"}
       ],
-      "pos": [840, 150],
+      "pos": [735, 120],
       "size": [180, 72]
     },
     {
@@ -77,7 +77,7 @@
       "label": "Resolution Ladder",
       "sublabel": "index → summary → extract → raw",
       "sources": [{"path": "skills/adaptive-context-engineering/references/resolution-ladder.md", "label": "Resolution policy"}],
-      "pos": [1130, 150],
+      "pos": [735, 310],
       "size": [180, 72]
     },
     {
@@ -85,16 +85,16 @@
       "type": "external",
       "label": "Context Tools",
       "sublabel": "files · GitHub · web · memory · backends",
-      "pos": [1420, 150],
-      "size": [190, 72]
+      "pos": [495, 310],
+      "size": [160, 72]
     },
     {
       "id": "sources",
       "type": "database",
       "label": "Raw Sources",
       "sublabel": "repo · docs · logs · records",
-      "pos": [1420, 410],
-      "size": [190, 72]
+      "pos": [255, 310],
+      "size": [160, 72]
     },
     {
       "id": "working",
@@ -102,8 +102,8 @@
       "label": "Bounded Working Context",
       "sublabel": "selected evidence + references",
       "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Context hygiene"}],
-      "pos": [1130, 410],
-      "size": [180, 72]
+      "pos": [30, 310],
+      "size": [150, 72]
     },
     {
       "id": "sufficiency",
@@ -112,8 +112,8 @@
       "sublabel": "would more context change the answer?",
       "tag": "stop or expand",
       "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Sufficiency checks"}],
-      "pos": [840, 410],
-      "size": [180, 72]
+      "pos": [30, 500],
+      "size": [150, 72]
     },
     {
       "id": "verification",
@@ -124,15 +124,15 @@
         {"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Final verification"},
         {"path": "skills/adaptive-context-engineering/references/evidence-and-provenance.md", "label": "Evidence policy"}
       ],
-      "pos": [570, 410],
+      "pos": [255, 500],
       "size": [160, 72]
     },
     {
       "id": "answer",
       "type": "external",
       "label": "Agent Answer / Action",
-      "sublabel": "correct · traceable · context-efficient",
-      "pos": [300, 410],
+      "sublabel": "correct · traceable · efficient",
+      "pos": [495, 500],
       "size": [160, 72]
     }
   ],
@@ -141,20 +141,20 @@
       "kind": "region",
       "label": "ACE-S policy layer",
       "wraps": ["activation", "router", "specialists", "resolution", "working", "sufficiency", "verification"],
-      "pad": 24
+      "pad": 20
     }
   ],
   "connections": [
     {"id": "task-activation", "from": "task", "to": "activation", "label": "task", "variant": "emphasis"},
-    {"id": "activation-router", "from": "activation", "to": "router", "label": "needs context", "variant": "emphasis"},
-    {"id": "router-specialists", "from": "router", "to": "specialists", "label": "choose route"},
-    {"id": "specialists-resolution", "from": "specialists", "to": "resolution", "label": "choose fidelity"},
-    {"id": "resolution-tools", "from": "resolution", "to": "tools", "label": "query / inspect"},
-    {"id": "tools-sources", "from": "tools", "to": "sources", "label": "retrieve", "variant": "dashed", "labelAt": [1515, 236]},
-    {"id": "sources-working", "from": "sources", "to": "working", "label": "selected evidence"},
+    {"id": "activation-router", "from": "activation", "to": "router", "label": "needs context", "variant": "emphasis", "labelAt": [455, 105]},
+    {"id": "router-specialists", "from": "router", "to": "specialists", "label": "route"},
+    {"id": "specialists-resolution", "from": "specialists", "to": "resolution", "label": "fidelity"},
+    {"id": "resolution-tools", "from": "resolution", "to": "tools", "label": "query"},
+    {"id": "tools-sources", "from": "tools", "to": "sources", "label": "retrieve", "variant": "dashed"},
+    {"id": "sources-working", "from": "sources", "to": "working", "label": "evidence"},
     {"id": "working-sufficiency", "from": "working", "to": "sufficiency", "label": "evaluate"},
     {"id": "sufficiency-verification", "from": "sufficiency", "to": "verification", "label": "sufficient", "variant": "emphasis"},
-    {"id": "verification-answer", "from": "verification", "to": "answer", "label": "verified result", "variant": "emphasis"}
+    {"id": "verification-answer", "from": "verification", "to": "answer", "label": "verified", "variant": "emphasis"}
   ],
   "cards": [
     {
