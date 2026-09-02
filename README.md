@@ -22,7 +22,11 @@ It is **not** a vector database, memory server, or replacement for your agent fr
 
 ## Architecture at a glance
 
-[![ACE-S architecture rendered with Archify](docs/archify/ace-s.architecture.png)](docs/archify/ace-s.architecture.html)
+<p align="center">
+  <a href="docs/archify/ace-s.architecture.html">
+    <img src="docs/archify/ace-s.architecture.png" alt="ACE-S architecture rendered with Archify" width="720" />
+  </a>
+</p>
 
 This map is generated from a typed [Archify architecture source](docs/archify/ace-s.architecture.json), not hand-drawn. The `showcase` validation profile checks layout/readability and verifies the linked ACE-S repository evidence before the deterministic HTML artifact is committed.
 
