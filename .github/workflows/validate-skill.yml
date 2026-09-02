@@ -34,5 +34,7 @@ jobs:
         run: python scripts/discover_context_acquisition_policy.py
       - name: Run sealed frozen-policy acquisition test
         run: python scripts/run_sealed_acquisition_policy_test.py
+      - name: Run adaptive resolution scheduler search
+        run: python scripts/discover_resolution_scheduler.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
