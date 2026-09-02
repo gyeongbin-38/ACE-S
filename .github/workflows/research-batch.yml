@@ -1,0 +1,23 @@
+name: research-batch
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-batch.yml
+      - scripts/run_batched_hidden_acquisition_bench.py
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  batched-acquisition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run batched hidden acquisition development bench
+        run: python scripts/run_batched_hidden_acquisition_bench.py
