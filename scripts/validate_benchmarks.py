@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import csv
-import math
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -18,8 +17,8 @@ EXPECTED = {
     "round_sum": 29,
     "ace_repo_coverage": 7,
     "baseline_repo_coverage": 5,
-    "ace_score": 90.3,
-    "baseline_score": 72.9,
+    "ace_score_display": 90.2,
+    "baseline_score_display": 72.9,
 }
 
 
@@ -61,7 +60,7 @@ def main() -> None:
     stage1 = 0
     final_exact = 0
     canonical = 0
-    rounds = []
+    rounds: list[int] = []
     per_repo_stage1 = defaultdict(int)
     per_repo_final = defaultdict(int)
     per_repo_total = defaultdict(int)
@@ -119,10 +118,17 @@ def main() -> None:
     ace_score = score(final_exact, mean_rounds, ace_covered, total_rows, total_repos)
     baseline_score = score(stage1, 1.0, baseline_covered, total_rows, total_repos)
 
-    if not math.isclose(round(ace_score, 1), EXPECTED["ace_score"], abs_tol=0.05):
-        fail(f"ACE-S score drift: expected {EXPECTED['ace_score']}, got {ace_score:.3f}")
-    if not math.isclose(round(baseline_score, 1), EXPECTED["baseline_score"], abs_tol=0.05):
-        fail(f"baseline score drift: expected {EXPECTED['baseline_score']}, got {baseline_score:.3f}")
+    # README/report headline values are shown to one decimal place.
+    if round(ace_score, 1) != EXPECTED["ace_score_display"]:
+        fail(
+            f"ACE-S score drift: expected display {EXPECTED['ace_score_display']}, "
+            f"got raw {ace_score:.6f} / display {round(ace_score, 1):.1f}"
+        )
+    if round(baseline_score, 1) != EXPECTED["baseline_score_display"]:
+        fail(
+            f"baseline score drift: expected display {EXPECTED['baseline_score_display']}, "
+            f"got raw {baseline_score:.6f} / display {round(baseline_score, 1):.1f}"
+        )
 
     print("OK: live benchmark invariants validated")
     print(f"  tasks:             {total_rows}")
@@ -131,8 +137,8 @@ def main() -> None:
     print(f"  ACE-S exact:       {final_exact}/{total_rows}")
     print(f"  ACE-S canonical:   {canonical}/{total_rows}")
     print(f"  mean ACE-S rounds: {mean_rounds:.3f}")
-    print(f"  baseline score:    {baseline_score:.1f}/100")
-    print(f"  ACE-S score:       {ace_score:.1f}/100")
+    print(f"  baseline score:    {baseline_score:.6f} -> {baseline_score:.1f}/100")
+    print(f"  ACE-S score:       {ace_score:.6f} -> {ace_score:.1f}/100")
 
 
 if __name__ == "__main__":
