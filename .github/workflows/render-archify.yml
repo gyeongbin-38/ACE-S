@@ -83,5 +83,8 @@ jobs:
             echo "Archify artifacts are unchanged."
           else
             git commit -m "docs: render ACE-S Archify architecture"
-            git push
+            # A README or documentation commit may land while rendering. Rebase
+            # the generated-artifact commit before pushing instead of failing.
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
