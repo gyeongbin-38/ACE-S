@@ -1,0 +1,23 @@
+name: research-composition
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-composition.yml
+      - scripts/run_certificate_frontier_composition_bench.py
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  composition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run certificate plus exact frontier composition development bench
+        run: python scripts/run_certificate_frontier_composition_bench.py
