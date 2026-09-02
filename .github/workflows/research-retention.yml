@@ -1,0 +1,24 @@
+name: research-retention
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-retention.yml
+      - scripts/run_selective_retention_lookahead_sealed.py
+      - benchmarks/SELECTIVE_RETENTION_LOOKAHEAD_FREEZE_V0.2.md
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  selective-retention:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run sealed selective retention lookahead OOD test
+        run: python scripts/run_selective_retention_lookahead_sealed.py
