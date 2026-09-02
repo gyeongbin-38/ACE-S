@@ -1,0 +1,38 @@
+{
+  "version": "0.1",
+  "candidate_policy_commit": "0e9a0ba03bfda7ffb8997a68f63e46dfcdbad503",
+  "source": {
+    "repository": "zhengyanzhao1997/SkillRouter",
+    "commit": "21f4bc31327a4d2beebfb454c159860ea21d8631",
+    "path": "data/eval_core/tasks.jsonl",
+    "source_lines": "51-75"
+  },
+  "important_caveat": "Task wording is external and was first inspected only after the candidate policy was frozen. ACE-S entry-mode labels are manual mappings by the evaluator, so ambiguous cases are explicitly separated rather than forced into one gold label.",
+  "cases": [
+    {"id":"parallel-tfidf-search","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"pddl-tpp-planning","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"pdf-excel-diff","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["STATE"]},
+    {"id":"pedestrian-traffic-counting","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"pg-essay-to-audiobook","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["RESEARCH"]},
+    {"id":"powerlifting-coef-calc","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"pptx-reference-formatting","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"protein-expression-analysis","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"python-scala-translation","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"quantum-numerical-simulation","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["RESEARCH"]},
+    {"id":"r2r-mpc-control","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"react-performance-debugging","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"reserves-at-risk-calc","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["RESEARCH"]},
+    {"id":"sales-pivot-analysis","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"scheduling-email-assistant","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["STATE"]},
+    {"id":"sec-financial-report","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["STATE"]},
+    {"id":"seismic-phase-picking","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"setup-fuzzing-py","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"shock-analysis-demand","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["RESEARCH"]},
+    {"id":"shock-analysis-supply","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["RESEARCH"]},
+    {"id":"simpo-code-reproduction","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"software-dependency-audit","gold_strength":"ambiguous","acceptable_modes":["GENERIC","SPECIALIZED"],"acceptable_domains":["RESEARCH"]},
+    {"id":"speaker-diarization-subtitles","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]},
+    {"id":"spring-boot-jakarta-migration","gold_strength":"hard","acceptable_modes":["SPECIALIZED"],"acceptable_domains":["CODE"]},
+    {"id":"suricata-custom-exfil","gold_strength":"hard","acceptable_modes":["GENERIC"],"acceptable_domains":[]}
+  ]
+}
