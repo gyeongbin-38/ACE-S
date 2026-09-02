@@ -6,12 +6,12 @@
   "input": "/home/runner/work/ACE-S/ACE-S/docs/archify/ace-s.architecture.json",
   "output": "/home/runner/work/ACE-S/ACE-S/docs/archify/ace-s.architecture.html",
   "specification": {
-    "sha256": "3534f850d48a3150cc42898ca0f8f9b1da5b8776fe97b9504ef6b8fd32b4a73f",
-    "bytes": 5911
+    "sha256": "d5aeb31a6d3c53d79b3a67581d62a1a0fd869561a0179d0722a9e1a5c6aa2335",
+    "bytes": 6029
   },
   "artifact": {
-    "sha256": "11e6a4bf77982be909b976c14f12f89dacd103051ba1eb062bbf5af38f836c0e",
-    "bytes": 721071
+    "sha256": "d239f0be46cbaf8a88c397a8cd071e86d0413d88d8d7ea3e8912f88d67971cae",
+    "bytes": 721335
   },
   "validation": {
     "checksPassed": 9,
@@ -24,7 +24,7 @@
   "evidence": {
     "verified": true,
     "repository": "https://github.com/gyeongbin-38/ACE-S",
-    "revision": "7ddf00c09211a069c1279a9e5d5849f55d80548d",
-    "references": 10
+    "revision": "521276c6f5313e013dc381752b2498b8e4e21f04",
+    "references": 11
   }
 }
