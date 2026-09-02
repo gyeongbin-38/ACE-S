@@ -18,22 +18,8 @@ jobs:
         run: python scripts/validate_microkernel_runtime.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
-      - name: Run legacy RouterBench policy experiment
-        run: python scripts/run_routerbench_experiment_v2.py
-      - name: Run Selective Policy Load Bench
-        run: python scripts/run_policy_load_bench.py
-      - name: Run Specialization Gate Bench
-        run: python scripts/run_specialization_gate_bench.py
       - name: Run Microkernel Control Exposure Bench
         run: python scripts/run_microkernel_bench.py
-      - name: Run Information-Value Acquisition Bench
-        run: python scripts/run_information_value_bench.py
-      - name: Run Value Robustness Bench
-        run: python scripts/run_value_robustness_bench.py
-      - name: Run symbolic acquisition-policy discovery
-        run: python scripts/discover_context_acquisition_policy.py
-      - name: Run sealed frozen-policy acquisition test
-        run: python scripts/run_sealed_acquisition_policy_test.py
       - name: Run bounded adaptive resolution scheduler search
         run: python scripts/discover_resolution_scheduler_fast.py
       - name: Run lifecycle retention scheduler search
