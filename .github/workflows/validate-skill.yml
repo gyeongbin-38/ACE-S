@@ -32,5 +32,7 @@ jobs:
         run: python scripts/run_value_robustness_bench.py
       - name: Run symbolic acquisition-policy discovery
         run: python scripts/discover_context_acquisition_policy.py
+      - name: Run sealed frozen-policy acquisition test
+        run: python scripts/run_sealed_acquisition_policy_test.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
