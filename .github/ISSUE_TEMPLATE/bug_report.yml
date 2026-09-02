@@ -1,0 +1,74 @@
+name: Bug report
+description: Report incorrect routing, context loss, over-triggering, or another ACE-S defect
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve ACE-S. Please describe the smallest reproducible context failure.
+  - type: input
+    id: version
+    attributes:
+      label: ACE-S version or commit
+      placeholder: v0.3.0-alpha or commit SHA
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Agent/runtime
+      placeholder: Codex, Claude Code, OpenCode, custom agent, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task / prompt
+      description: Remove secrets and private data.
+    validations:
+      required: true
+  - type: dropdown
+    id: failure
+    attributes:
+      label: Failure class
+      options:
+        - MISS_CONTEXT
+        - OVER_CONTEXT
+        - WRONG_ROUTE
+        - WRONG_RESOLUTION
+        - STALE_STATE
+        - PROVENANCE_BREAK
+        - EARLY_STOP
+        - LATE_STOP
+        - HANDOFF_LOSS
+        - Triggered when it should stay dormant
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Reproduction evidence
+      description: Relevant files, source refs, tool calls, logs, or a minimal public example.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Checklist
+      options:
+        - label: I removed secrets/private data from this report.
+          required: true
+        - label: I checked that the issue is not already documented.
+          required: true
