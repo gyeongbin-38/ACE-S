@@ -1,0 +1,33 @@
+{
+  "run_id": "gpt-5.6-sol-single-conversation-2026-09-02",
+  "model": "GPT-5.6 Sol",
+  "controller_commit": "6e84f524aeb9bd761aa789445c1edb99cdadd9dd",
+  "execution": "single conversational routing pass using the frozen Tiny Kernel and manifest semantics",
+  "independence": "NOT BLIND: external task prompts were authored by third parties and the controller was frozen first, but the same assistant session authored the ACE-S gold mapping and these predictions. Treat only as a sanity check, never as a stable model-performance claim.",
+  "predictions": [
+    {"id":"as-p001","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p003","activation":"ACTIVE","primary":"DOCUMENT","backup":null,"manifest_fit":false,"gap_detected":"WORKING_HISTORY"},
+    {"id":"as-p006","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p007","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p008","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p011","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"as-p012","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p015","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p018","activation":"ACTIVE","primary":"DOCUMENT","backup":null,"manifest_fit":false,"gap_detected":"WORKING_HISTORY"},
+    {"id":"as-p028","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p032","activation":"ACTIVE","primary":"RESEARCH","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"as-p041","activation":"ACTIVE","primary":"CODE","backup":"DOCUMENT","manifest_fit":true,"gap_detected":null},
+    {"id":"as-p043","activation":"ACTIVE","primary":"STATE","backup":"CODE","manifest_fit":true,"gap_detected":null},
+    {"id":"as-p045","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p047","activation":"DIRECT","primary":null,"backup":null,"manifest_fit":null,"gap_detected":null},
+    {"id":"as-p050","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"sr-3d-scan-calc","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":false,"gap_detected":"DATA_ARTIFACT"},
+    {"id":"sr-adaptive-cruise-control","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"sr-azure-bgp-oscillation-route-leak","activation":"ACTIVE","primary":"STATE","backup":"CODE","manifest_fit":false,"gap_detected":"DATA_ARTIFACT"},
+    {"id":"sr-citation-check","activation":"ACTIVE","primary":"RESEARCH","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"sr-civ6-adjacency-optimizer","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":false,"gap_detected":"DATA_ARTIFACT"},
+    {"id":"sr-court-form-filling","activation":"ACTIVE","primary":"DOCUMENT","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"sr-crystallographic-wyckoff-position-analysis","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":true,"gap_detected":null},
+    {"id":"sr-dapt-intrusion-detection","activation":"ACTIVE","primary":"CODE","backup":null,"manifest_fit":false,"gap_detected":"DATA_ARTIFACT"}
+  ]
+}
