@@ -19,6 +19,6 @@ jobs:
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
       - name: Run second sealed context scheduler OOD test
-        run: python scripts/run_second_sealed_scheduler_test.py
+        run: python scripts/run_second_sealed_scheduler_test_fixed.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
