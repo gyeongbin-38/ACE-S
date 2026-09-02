@@ -10,6 +10,7 @@ skill_path = skill / "SKILL.md"
 readme_path = root / "README.md"
 eval_path = skill / "evals" / "evals.json"
 citation_path = root / "CITATION.cff"
+routerbench_path = root / "benchmarks" / "routerbench-v0.1.json"
 
 errors = []
 
@@ -64,7 +65,7 @@ required_refs = {
 for ref in sorted(required_refs - referenced):
     fail(f"SKILL.md does not route to required specialist reference: {ref}")
 
-# --- Evals ---------------------------------------------------------------
+# --- Existing skill evals -------------------------------------------------
 if not eval_path.exists():
     fail("missing evals/evals.json")
     eval_data = {}
@@ -101,6 +102,34 @@ if skill_version and eval_data.get("version") != skill_version:
         f"evals={eval_data.get('version')}"
     )
 
+# --- RouterBench fixture --------------------------------------------------
+if not routerbench_path.exists():
+    fail("missing benchmarks/routerbench-v0.1.json")
+else:
+    try:
+        routerbench = json.loads(routerbench_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid RouterBench JSON: {exc}")
+        routerbench = {}
+
+    rb_cases = routerbench.get("cases", [])
+    if routerbench.get("version") != "0.1":
+        fail("RouterBench version must be 0.1")
+    if len(rb_cases) < 20:
+        fail("RouterBench v0.1 needs at least 20 seed fixtures")
+
+    rb_ids = [case.get("id") for case in rb_cases if isinstance(case, dict)]
+    if len(rb_ids) != len(set(rb_ids)):
+        fail("RouterBench case ids must be unique")
+
+    required_buckets = {"negative_control", "near_miss", "mixed_route", "ambiguous"}
+    present_buckets = {
+        case.get("bucket") for case in rb_cases if isinstance(case, dict)
+    }
+    missing_buckets = required_buckets - present_buckets
+    if missing_buckets:
+        fail(f"RouterBench missing buckets: {sorted(missing_buckets)}")
+
 # --- Public repository consistency ---------------------------------------
 required_public_files = [
     "AGENTS.md",
@@ -110,6 +139,9 @@ required_public_files = [
     "docs/QUICKSTART.md",
     "docs/CONTEXT_CONTRACTS.md",
     "benchmarks/AGENT_AB_PROTOCOL.md",
+    "benchmarks/ROUTERBENCH.md",
+    "benchmarks/routerbench-v0.1.json",
+    "scripts/validate_routerbench.py",
 ]
 for relative_path in required_public_files:
     if not (root / relative_path).exists():
@@ -135,5 +167,5 @@ if errors:
 
 print(
     f"OK: ACE-S {skill_version} structure, specialist routes, evals, "
-    "and public metadata are consistent"
+    "RouterBench seed fixtures, and public metadata are consistent"
 )
