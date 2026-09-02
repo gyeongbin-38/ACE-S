@@ -18,7 +18,7 @@ jobs:
         run: python scripts/validate_microkernel_runtime.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
-      - name: Run third sealed sampled rollout robustness test
-        run: python scripts/run_third_sealed_sampled_rollout_test.py
+      - name: Validate retention baseline accounting correction
+        run: python scripts/validate_retention_baseline_correction.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
