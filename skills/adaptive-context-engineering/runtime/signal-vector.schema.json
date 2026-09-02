@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ACE-S SignalVector v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["N", "S", "Q", "V", "P", "B"],
+  "properties": {
+    "N": {"enum": ["0", "1", "?"]},
+    "S": {"enum": ["C", "D", "R", "T", "G", "?"]},
+    "Q": {
+      "type": "array",
+      "items": {"enum": ["E", "F", "U", "H"]},
+      "uniqueItems": true,
+      "maxItems": 4
+    },
+    "V": {"enum": ["I", "S", "X", "R", "A"]},
+    "P": {"enum": ["0", "1", "?"]},
+    "B": {"enum": ["C", "D", "R", "T", "G", "-"]}
+  }
+}
