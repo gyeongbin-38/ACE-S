@@ -24,5 +24,7 @@ jobs:
         run: python scripts/run_context_action_dominance_sealed.py
       - name: Run corrected acquisition exposure separation development bench
         run: python scripts/run_acquisition_exposure_bench_v2.py
+      - name: Run adaptive rollout budget development search
+        run: python scripts/discover_adaptive_rollout_budget.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
