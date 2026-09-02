@@ -1,0 +1,6 @@
+{
+  "candidate": "ACE-S context microkernel v0.4 experimental",
+  "policy_commit": "b713876bc5498c3c1b1e20355bee9f0e93ec913f",
+  "protected_prefix": "skills/adaptive-context-engineering/",
+  "note": "The microkernel/policy runtime was fixed before inspecting SkillRouter task lines 76-87. Evaluation-only scripts, fixtures, reports, and workflows may change after this commit; files under the protected skill prefix may not."
+}
