@@ -1,0 +1,23 @@
+name: research-accounting
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-accounting.yml
+      - scripts/audit_rollout_compute_accounting.py
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  accounting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Audit rollout compute accounting
+        run: python scripts/audit_rollout_compute_accounting.py
