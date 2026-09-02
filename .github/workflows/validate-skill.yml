@@ -22,7 +22,7 @@ jobs:
         run: python scripts/run_microkernel_bench.py
       - name: Run bounded adaptive resolution scheduler search
         run: python scripts/discover_resolution_scheduler_fast.py
-      - name: Run lifecycle retention scheduler search
-        run: python scripts/discover_retention_scheduler.py
+      - name: Run receding-horizon rollout scheduler bench
+        run: python scripts/run_rollout_scheduler_bench.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
