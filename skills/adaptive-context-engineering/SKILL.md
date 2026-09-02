@@ -3,7 +3,7 @@ name: adaptive-context-engineering
 description: Use this skill when a task may suffer from too much, too little, stale, conflicting, or poorly scoped context: long or multi-step work, deep research, many files or tools, repository investigation, long documents, conflicting historical facts, handoffs, or explicit context/token optimization. It selects the smallest sufficient evidence set and expands only when needed. Do not use for simple one-shot questions, casual conversation, creative writing, or tasks already solvable from the current context without additional retrieval.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.1.0-alpha"
   methodology: "quality-first adaptive context selection"
 ---
 
