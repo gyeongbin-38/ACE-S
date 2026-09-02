@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/research-fast.yml
       - scripts/run_cost_floor_pruning_bench.py
+      - scripts/run_cost_floor_pruning_sealed.py
+      - benchmarks/COST_FLOOR_PRUNING_FREEZE_V0.1.md
 
 env:
   PYTHONHASHSEED: "0"
@@ -21,3 +23,5 @@ jobs:
           python-version: "3.12"
       - name: Run safe cost-floor pruning development bench
         run: python scripts/run_cost_floor_pruning_bench.py
+      - name: Run sealed cost-floor pruning OOD test
+        run: python scripts/run_cost_floor_pruning_sealed.py
