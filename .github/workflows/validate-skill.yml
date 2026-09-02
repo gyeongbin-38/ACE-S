@@ -26,5 +26,7 @@ jobs:
         run: python scripts/run_specialization_gate_bench.py
       - name: Run Microkernel Control Exposure Bench
         run: python scripts/run_microkernel_bench.py
+      - name: Run Information-Value Acquisition Bench
+        run: python scripts/run_information_value_bench.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
