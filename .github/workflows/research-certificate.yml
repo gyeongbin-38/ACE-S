@@ -1,0 +1,23 @@
+name: research-certificate
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-certificate.yml
+      - scripts/discover_evidence_certificate_bench.py
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  certificate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run typed evidence certificate development bench
+        run: python scripts/discover_evidence_certificate_bench.py
