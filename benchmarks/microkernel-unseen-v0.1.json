@@ -1,0 +1,25 @@
+{
+  "name": "microkernel-unseen-v0.1",
+  "source": {
+    "repository": "zhengyanzhao1997/SkillRouter",
+    "commit": "21f4bc31327a4d2beebfb454c159860ea21d8631",
+    "path": "data/eval_core/tasks.jsonl",
+    "line_range": "76-87"
+  },
+  "policy_commit": "b713876bc5498c3c1b1e20355bee9f0e93ec913f",
+  "label_policy": "Hard labels only. SPECIALIZED is used only when one ACE-S source domain clearly dominates the next context procedure; otherwise GENERIC. No task text from this range was used to author the frozen policy files.",
+  "cases": [
+    {"task_id": "syzkaller-ppdev-syzlang", "source_line": 76, "entry_mode": "SPECIALIZED", "source": "CODE"},
+    {"task_id": "taxonomy-tree-merge", "source_line": 77, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "threejs-structure-parser", "source_line": 78, "entry_mode": "SPECIALIZED", "source": "CODE"},
+    {"task_id": "threejs-to-obj", "source_line": 79, "entry_mode": "SPECIALIZED", "source": "CODE"},
+    {"task_id": "travel-planning", "source_line": 80, "entry_mode": "SPECIALIZED", "source": "RESEARCH"},
+    {"task_id": "trend-anomaly-causal-inference", "source_line": 81, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "video-filler-word-remover", "source_line": 82, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "video-silence-remover", "source_line": 83, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "video-tutorial-indexer", "source_line": 84, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "virtualhome-agent-planning", "source_line": 85, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "weighted-gdp-calc", "source_line": 86, "entry_mode": "GENERIC", "source": "GENERIC"},
+    {"task_id": "xlsx-recover-data", "source_line": 87, "entry_mode": "GENERIC", "source": "GENERIC"}
+  ]
+}
