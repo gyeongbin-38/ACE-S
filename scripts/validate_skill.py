@@ -102,14 +102,18 @@ if skill_version and eval_data.get("version") != skill_version:
     )
 
 # --- Public repository consistency ---------------------------------------
-if not (root / "docs" / "QUICKSTART.md").exists():
-    fail("missing docs/QUICKSTART.md")
-if not (root / "ROADMAP.md").exists():
-    fail("missing ROADMAP.md")
-if not (root / "SECURITY.md").exists():
-    fail("missing SECURITY.md")
-if not citation_path.exists():
-    fail("missing CITATION.cff")
+required_public_files = [
+    "AGENTS.md",
+    "ROADMAP.md",
+    "SECURITY.md",
+    "CITATION.cff",
+    "docs/QUICKSTART.md",
+    "docs/CONTEXT_CONTRACTS.md",
+    "benchmarks/AGENT_AB_PROTOCOL.md",
+]
+for relative_path in required_public_files:
+    if not (root / relative_path).exists():
+        fail(f"missing {relative_path}")
 
 if readme_path.exists() and skill_version:
     readme = readme_path.read_text(encoding="utf-8")
