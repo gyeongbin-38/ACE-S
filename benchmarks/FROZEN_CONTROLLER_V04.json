@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1",
+  "frozen_at": "2026-09-02",
+  "controller_commit": "6e84f524aeb9bd761aa789445c1edb99cdadd9dd",
+  "branch_at_freeze": "feat/layered-context-controller-v04",
+  "policy_files_frozen": [
+    "skills/adaptive-context-engineering/SKILL.md",
+    "skills/adaptive-context-engineering/manifests/INDEX.md",
+    "skills/adaptive-context-engineering/manifests/code.md",
+    "skills/adaptive-context-engineering/manifests/document.md",
+    "skills/adaptive-context-engineering/manifests/research.md",
+    "skills/adaptive-context-engineering/manifests/state.md",
+    "skills/adaptive-context-engineering/manifests/temporal.md",
+    "skills/adaptive-context-engineering/manifests/evidence.md",
+    "skills/adaptive-context-engineering/manifests/tools.md",
+    "skills/adaptive-context-engineering/manifests/retention.md",
+    "skills/adaptive-context-engineering/references/coding.md",
+    "skills/adaptive-context-engineering/references/long-document.md",
+    "skills/adaptive-context-engineering/references/research.md",
+    "skills/adaptive-context-engineering/references/temporal.md",
+    "skills/adaptive-context-engineering/references/evidence-and-provenance.md",
+    "skills/adaptive-context-engineering/references/plan-aware.md",
+    "skills/adaptive-context-engineering/references/tool-discovery.md",
+    "skills/adaptive-context-engineering/references/resolution-ladder.md"
+  ],
+  "evaluation_rule": "Do not modify frozen policy files while authoring/scoring unseen-routing-v0.1. Record failures and taxonomy gaps instead of tuning against the holdout.",
+  "notes": "The evaluation branch eval/unseen-routing-v04 was created directly from this commit."
+}
