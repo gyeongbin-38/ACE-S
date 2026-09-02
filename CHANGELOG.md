@@ -6,11 +6,14 @@
 - Expanded the research route into claim-centered retrieval with source hierarchy, contradiction handling, freshness checks, a compact claim ledger, and an explicit sufficiency stop.
 - Expanded plan-aware context management with future-utility buckets, semantic-boundary compaction, reconstruction-cost checks, and a reusable `HandoffState` shape.
 - Expanded evidence/provenance handling with `EXACT / EXTRACTIVE / LOSSY` fidelity classes, `EvidencePacket`, source-state tracking, transformation provenance, corroboration policy, and abstention conditions.
-- Expanded the eval suite with long-document cross-reference, redundant-research stop, handoff retention, provenance-transform, and additional no-trigger cases.
+- Expanded the eval suite with long-document cross-reference, redundant-research stop, handoff retention, provenance-transform, premature-raw-load, over-retention, trust-boundary, and additional no-trigger cases.
 - Published `docs/QUICKSTART.md` and practical before/after examples.
+- Published experimental backend-neutral context contracts for `ContextDecision`, `EvidencePacket`, `HandoffState`, `SufficiencyReport`, and `WorkingContext` without treating them as a stable runtime API.
+- Added root `AGENTS.md` so coding agents can navigate the repository using selective, source-of-truth-first context loading.
 - Published a conservative end-to-end agent OFF vs ON benchmark protocol with task strata, failure taxonomy, anti-gaming rules, and stable-release evidence gates.
 - Added an evidence-gated `ROADMAP.md`, `SECURITY.md`, `CITATION.cff`, pull-request template, and structured bug/feature/benchmark issue templates.
-- Strengthened CI validation to check required specialist routes, eval integrity, version consistency, citation metadata, and public project files.
+- Strengthened CI validation to check required specialist routes, eval integrity, version consistency, citation metadata, agent guidance, context contracts, and public project files.
+- Upgraded GitHub Actions dependencies to the current v7 generation and added Dependabot maintenance for workflow dependencies.
 - Refreshed the Archify repository evidence to the v0.3 source state and included the long-document/plan-aware specialist routes.
 
 ## 0.2.0-alpha - 2026-09-02
