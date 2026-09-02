@@ -1,0 +1,22 @@
+{
+  "name": "frozen-retention-scheduler-v0.1",
+  "status": "frozen_before_sealed_ood_test",
+  "freeze_after_rollout_commit": "79a3ea4c71377ba015079c46eef966709109bb82",
+  "policy": {
+    "benefit_exp": 1.0,
+    "cost_exp": 0.75,
+    "exact_weight": 1.5,
+    "abstract_risk_weight": 1.5,
+    "discount": 1.0,
+    "threshold": 1.2
+  },
+  "actions": ["RAW", "ABSTRACT", "DROP"],
+  "development_observation_only": {
+    "ratio_to_exact_optimal_mean": 1.06129,
+    "p90": 1.15574,
+    "within_10pct": 85.86,
+    "within_25pct": 93.05
+  },
+  "guardrail": "No sealed retention seed, OOD family, result, or coefficient may be added to this artifact after this freeze commit. The first sealed OOD lifecycle test must be implemented only in a later commit.",
+  "claim_boundary": "Synthetic lifecycle mechanics only. Equal task correctness is enforced by reacquiring exact evidence when needed."
+}
