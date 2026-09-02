@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/gyeongbin-38/ACE-S/security
+    about: Please use GitHub security reporting for vulnerabilities or sensitive exploit details.
+  - name: Benchmark protocol
+    url: https://github.com/gyeongbin-38/ACE-S/blob/main/benchmarks/AGENT_AB_PROTOCOL.md
+    about: Read the OFF vs ON protocol before submitting performance claims.
