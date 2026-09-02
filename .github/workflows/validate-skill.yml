@@ -20,5 +20,7 @@ jobs:
         run: python scripts/validate_routerbench.py
       - name: Run retention rollout development bench
         run: python scripts/run_retention_rollout_bench.py
+      - name: Run context action dominance development bench
+        run: python scripts/run_context_action_dominance_bench.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
