@@ -8,6 +8,7 @@ from typing import Iterable
 
 HERE = Path(__file__).resolve().parent
 IR = json.loads((HERE / "policy-ir.json").read_text(encoding="utf-8"))
+CAPSULES = json.loads((HERE / "policy-capsules.json").read_text(encoding="utf-8"))
 
 SOURCE = IR["codes"]["source"]
 REQ = IR["codes"]["requirement"]
@@ -124,6 +125,33 @@ def compact_directive(decision: dict) -> str:
     return f"A={action};S={source};Q={req};V={fidelity};OPS={ops}"
 
 
+def worker_capsule(decision: dict) -> str:
+    """Emit only the procedure text needed by the current worker step.
+
+    The full policy store remains outside worker context. This is the harness-mode
+    boundary ACE-S is experimenting with: policy selection happens in the control
+    plane; the worker receives a small executable capsule rather than the rulebook.
+    """
+    if decision["entry_mode"] == "DIRECT":
+        return ""
+    if decision["action"] == "PROBE":
+        target = decision["ops"][0] if decision["ops"] else "CONTEXT"
+        return f"Probe only {target.lower()} uncertainty; do not preload specialist policy."
+
+    source = decision.get("source")
+    lines: list[str] = []
+    lines.extend(CAPSULES["common"])
+    if source in CAPSULES["source"]:
+        lines.extend(CAPSULES["source"][source])
+    for requirement in decision.get("requirements", []):
+        lines.extend(CAPSULES["requirement"].get(requirement, []))
+
+    # Keep the action header machine-readable while the body remains concise.
+    header = compact_directive(decision)
+    body = "\n".join(f"- {line}" for line in lines)
+    return f"{header}\n{body}" if body else header
+
+
 if __name__ == "__main__":
     import argparse
 
@@ -132,4 +160,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
     signal = SignalVector.from_dict(json.loads(args.signal_json))
     result = decide(signal)
-    print(json.dumps({"decision": result, "directive": compact_directive(result)}, indent=2))
+    print(
+        json.dumps(
+            {
+                "decision": result,
+                "directive": compact_directive(result),
+                "worker_capsule": worker_capsule(result),
+            },
+            indent=2,
+        )
+    )
