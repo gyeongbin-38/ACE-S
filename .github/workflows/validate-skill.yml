@@ -36,5 +36,7 @@ jobs:
         run: python scripts/run_sealed_acquisition_policy_test.py
       - name: Run adaptive resolution scheduler search
         run: python scripts/discover_resolution_scheduler.py
+      - name: Run lifecycle retention scheduler search
+        run: python scripts/discover_retention_scheduler.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
