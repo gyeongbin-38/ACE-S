@@ -8,6 +8,8 @@ on:
       - .github/workflows/research-certificate.yml
       - scripts/discover_evidence_certificate_bench.py
       - scripts/discover_certificate_call_penalty.py
+      - scripts/run_typed_evidence_certificate_sealed.py
+      - benchmarks/TYPED_EVIDENCE_CERTIFICATE_FREEZE_V0.1.md
 
 env:
   PYTHONHASHSEED: "0"
@@ -20,7 +22,5 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Run typed evidence certificate development bench
-        run: python scripts/discover_evidence_certificate_bench.py
-      - name: Run certificate call-penalty sensitivity bench
-        run: python scripts/discover_certificate_call_penalty.py
+      - name: Run sealed typed evidence certificate OOD test
+        run: python scripts/run_typed_evidence_certificate_sealed.py
