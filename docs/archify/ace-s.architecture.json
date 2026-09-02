@@ -4,7 +4,7 @@
   "meta": {
     "title": "ACE-S — Adaptive Context Engineering Skill",
     "quality_profile": "showcase",
-    "repository": {"url": "https://github.com/gyeongbin-38/ACE-S", "revision": "7ddf00c09211a069c1279a9e5d5849f55d80548d"},
+    "repository": {"url": "https://github.com/gyeongbin-38/ACE-S", "revision": "521276c6f5313e013dc381752b2498b8e4e21f04"},
     "viewBox": [970, 700],
     "views": [
       {"id": "decision-path", "label": "Decision path", "focus": ["task", "activation", "router", "specialists", "resolution", "tools", "sources", "working", "sufficiency", "verification", "answer"], "note": "Follow how ACE-S turns a task into the smallest sufficient, verified context."},
@@ -16,7 +16,7 @@
     {"id": "task", "type": "external", "label": "User Task", "sublabel": "question · code · research", "pos": [30, 120], "size": [150, 72]},
     {"id": "activation", "type": "security", "label": "Activation Gate", "sublabel": "is current context enough?", "tag": "no retrieval is valid", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Activation policy"}], "pos": [255, 120], "size": [160, 72]},
     {"id": "router", "type": "backend", "label": "Problem Router", "sublabel": "classify context problem", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Route classifier"}], "pos": [495, 120], "size": [160, 72]},
-    {"id": "specialists", "type": "backend", "label": "Specialist Routes", "sublabel": "code · research · time · plans · evidence", "sources": [{"path": "skills/adaptive-context-engineering/references/coding.md", "label": "Coding route"}, {"path": "skills/adaptive-context-engineering/references/research.md", "label": "Research route"}, {"path": "skills/adaptive-context-engineering/references/temporal.md", "label": "Temporal route"}], "pos": [735, 120], "size": [180, 72]},
+    {"id": "specialists", "type": "backend", "label": "Specialist Routes", "sublabel": "code · docs · research · state · plans", "sources": [{"path": "skills/adaptive-context-engineering/references/coding.md", "label": "Coding route"}, {"path": "skills/adaptive-context-engineering/references/long-document.md", "label": "Long-document route"}, {"path": "skills/adaptive-context-engineering/references/research.md", "label": "Research route"}, {"path": "skills/adaptive-context-engineering/references/temporal.md", "label": "Temporal route"}, {"path": "skills/adaptive-context-engineering/references/plan-aware.md", "label": "Plan-aware route"}], "pos": [735, 120], "size": [180, 72]},
     {"id": "resolution", "type": "backend", "label": "Resolution Ladder", "sublabel": "index → summary → extract → raw", "sources": [{"path": "skills/adaptive-context-engineering/references/resolution-ladder.md", "label": "Resolution policy"}], "pos": [735, 310], "size": [180, 72]},
     {"id": "tools", "type": "external", "label": "Context Tools", "sublabel": "files · web · memory", "pos": [495, 310], "size": [160, 72]},
     {"id": "sources", "type": "database", "label": "Raw Sources", "sublabel": "repo · docs · logs · records", "pos": [255, 310], "size": [160, 72]},
