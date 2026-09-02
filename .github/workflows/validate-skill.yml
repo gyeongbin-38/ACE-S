@@ -14,6 +14,8 @@ jobs:
           python-version: "3.12"
       - name: Validate Agent Skill structure
         run: python scripts/validate_skill.py
+      - name: Validate Microkernel Runtime
+        run: python scripts/validate_microkernel_runtime.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
       - name: Run legacy RouterBench policy experiment
