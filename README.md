@@ -9,6 +9,7 @@
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-portable-6f42c1)](skills/adaptive-context-engineering/SKILL.md)
 ![Version](https://img.shields.io/badge/version-0.2.0--alpha-orange)
 [![RepoReplay](https://img.shields.io/badge/RepoReplay-90.2%2F100-brightgreen)](benchmarks/POPULAR_REPO_REPLAY.md)
+[![Archify](https://img.shields.io/badge/Archify-showcase%209%2F9-22c55e)](docs/archify/ace-s.architecture.html)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
@@ -19,42 +20,23 @@ It is **not** a vector database, memory server, or replacement for your agent fr
 
 ---
 
-## ACE-S in 30 seconds
+## Architecture at a glance
 
-```text
-                         USER TASK
-                            │
-                            ▼
-                 ┌────────────────────┐
-                 │ Context sufficient? │
-                 └─────────┬──────────┘
-                       YES │ NO
-              ┌────────────┘ └─────────────┐
-              ▼                            ▼
-         ANSWER DIRECTLY             CLASSIFY PROBLEM
-      (no retrieval cost)                  │
-                                           ▼
-                           ┌──────────────────────────┐
-                           │ smallest useful scope    │
-                           │ path / symbol / index    │
-                           │ structure / lexical      │
-                           └────────────┬─────────────┘
-                                        ▼
-                              RESOLUTION LADDER
-                          index → summary → extract → raw
-                                        │
-                                        ▼
-                                SUFFICIENCY GATE
-                           enough? ── yes ──► ANSWER
-                              │
-                              no
-                              ▼
-                     EXPAND ONE NARROW STEP
-```
+[![ACE-S architecture rendered with Archify](docs/archify/ace-s.architecture.png)](docs/archify/ace-s.architecture.html)
+
+This map is generated from a typed [Archify architecture source](docs/archify/ace-s.architecture.json), not hand-drawn. The `showcase` validation profile checks layout/readability and verifies the linked ACE-S repository evidence before the deterministic HTML artifact is committed.
+
+**Artifacts:** [interactive/standalone HTML](docs/archify/ace-s.architecture.html) · [typed JSON source](docs/archify/ace-s.architecture.json) · [validation receipt](docs/archify/ace-s.architecture.receipt.json)
 
 The core idea is simple:
 
 > **Do not maximize context. Maximize sufficient, trustworthy context.**
+
+ACE-S follows a bounded decision path:
+
+`Task → Activation Gate → Problem Router → Specialist Route → Resolution Ladder → Context Tools → Evidence → Sufficiency Gate → Verification → Answer`
+
+If the current context is already sufficient, the process stops at the activation gate. If evidence is insufficient later, ACE-S expands **one narrow step** and evaluates again.
 
 ---
 
@@ -190,7 +172,7 @@ correctness & completeness
 With the open `skills` CLI:
 
 ```bash
-npx skills add gyeongbin-38/ACE-S-adaptive-context-engineering-skill \
+npx skills add gyeongbin-38/ACE-S \
   --skill adaptive-context-engineering
 ```
 
