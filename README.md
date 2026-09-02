@@ -7,16 +7,67 @@
 **Give AI agents the right context, at the right resolution, only when they need it.**
 
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-portable-6f42c1)](skills/adaptive-context-engineering/SKILL.md)
-![Version](https://img.shields.io/badge/version-0.2.0--alpha-orange)
+![Version](https://img.shields.io/badge/version-0.3.0--alpha-orange)
+[![Validate ACE-S](https://github.com/gyeongbin-38/ACE-S/actions/workflows/validate-skill.yml/badge.svg)](https://github.com/gyeongbin-38/ACE-S/actions/workflows/validate-skill.yml)
 [![RepoReplay](https://img.shields.io/badge/RepoReplay-90.2%2F100-brightgreen)](benchmarks/POPULAR_REPO_REPLAY.md)
 [![Archify](https://img.shields.io/badge/Archify-showcase%209%2F9-22c55e)](docs/archify/ace-s.architecture.html)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
 
-ACE-S is a portable **meta-skill for context selection**. It decides whether an agent should retrieve anything at all, which source or structure to inspect first, what fidelity to load, and when enough evidence has been gathered.
+ACE-S is a portable **meta-skill for context selection**. It decides whether an agent should retrieve anything at all, which source or structure to inspect first, what fidelity to load, what information must survive a handoff, and when enough evidence has been gathered.
 
 It is **not** a vector database, memory server, or replacement for your agent framework. It is the policy layer that tells the agent how to use whatever context tools it already has.
+
+<table>
+<tr>
+<td><b>Route before retrieve</b><br/>Classify the context problem before loading data.</td>
+<td><b>Resolution before volume</b><br/>Index → summary → extract → raw.</td>
+<td><b>Stop on sufficiency</b><br/>More context is not automatically better.</td>
+</tr>
+<tr>
+<td><b>Structure-aware</b><br/>Prefer symbols, paths, dependencies, and hierarchy when available.</td>
+<td><b>Provenance-preserving</b><br/>Summaries remain traceable to source truth.</td>
+<td><b>Plan-aware</b><br/>Retain what later workflow steps will actually need.</td>
+</tr>
+</table>
+
+---
+
+## Try it in 60 seconds
+
+Install with the open `skills` CLI:
+
+```bash
+npx skills add gyeongbin-38/ACE-S \
+  --skill adaptive-context-engineering
+```
+
+Then use your agent normally. ACE-S should activate only when context selection matters.
+
+```text
+Simple question
+→ DIRECT
+→ no retrieval
+
+Repository bug
+→ exact symbol/path
+→ local dependencies/tests
+→ expand only if insufficient
+
+120-page policy
+→ TOC/heading/search
+→ relevant section
+→ raw exact clause
+
+Deep research
+→ claims
+→ primary evidence
+→ necessary corroboration
+→ stop when the decision is supported
+```
+
+See the practical [`Quickstart`](docs/QUICKSTART.md) and [`examples/`](examples/README.md).
 
 ---
 
@@ -28,7 +79,7 @@ It is **not** a vector database, memory server, or replacement for your agent fr
   </a>
 </p>
 
-This map is generated from a typed [Archify architecture source](docs/archify/ace-s.architecture.json), not hand-drawn. The `showcase` validation profile checks layout/readability and verifies the linked ACE-S repository evidence before the deterministic HTML artifact is committed.
+This map is generated from a typed [Archify architecture source](docs/archify/ace-s.architecture.json), not hand-drawn. The `showcase` validation profile checks layout/readability and verifies linked ACE-S repository evidence before the deterministic HTML artifact is committed.
 
 **Artifacts:** [interactive/standalone HTML](docs/archify/ace-s.architecture.html) · [typed JSON source](docs/archify/ace-s.architecture.json) · [validation receipt](docs/archify/ace-s.architecture.receipt.json)
 
@@ -46,7 +97,7 @@ If the current context is already sufficient, the process stops at the activatio
 
 ## Why use it?
 
-Long-context agents fail in two opposite directions:
+Long-context agents fail in both directions:
 
 | Failure | What happens | ACE-S response |
 |---|---|---|
@@ -55,7 +106,8 @@ Long-context agents fail in two opposite directions:
 | **Wrong resolution** | summaries hide exact contracts or numbers | escalate to extract/raw evidence |
 | **Wrong source** | semantic search misses structural relationships | prefer path/symbol/graph structure when available |
 | **Stale state** | old and new facts are silently merged | use temporal/conflict route |
-| **Long workflow drift** | useful evidence is discarded too early | preserve future-utility state |
+| **Long workflow drift** | useful evidence is discarded too early | preserve future-utility state and handoff refs |
+| **Provenance break** | transformed context can no longer be audited | retain source/version/locator through compaction |
 
 ACE-S is designed to stay out of the way on simple questions. **No retrieval is a valid action.**
 
@@ -69,7 +121,7 @@ We replayed **21 real upstream bug-fix tasks across 7 widely used open-source re
 
 `Requests` · `Django` · `Zod` · `Actix Web` · `Gson` · `Gin` · `Kubernetes`
 
-The replay used live GitHub code search on the repositories' current default branches. A single-pass baseline gets one condensed lexical search. ACE-S may use up to three retrieval rounds, but can only expand from information surfaced by the previous round (symbol, module, test sibling, package, or exact path hint).
+The replay used live GitHub code search on the repositories' current default branches. A single-pass baseline gets one condensed lexical search. ACE-S may use up to three retrieval rounds, but can only expand from information surfaced by the previous round: symbol, module, test sibling, package, or exact-path hint.
 
 ```text
 Exact target localization
@@ -104,6 +156,10 @@ RepoReplay Score =
 Per-repository results, all 21 fixtures, exact queries, and caveats are in [`benchmarks/POPULAR_REPO_REPLAY.md`](benchmarks/POPULAR_REPO_REPLAY.md) and [`benchmarks/results/live-github-replay-v0.2.csv`](benchmarks/results/live-github-replay-v0.2.csv).
 
 > **Important:** this is a retrieval-policy replay, not an end-to-end model quality benchmark. It does not prove a 90.2% answer accuracy rate or a fixed token saving for every agent.
+
+### Stable-claim release gate
+
+We now publish the exact [`End-to-End Agent A/B Protocol`](benchmarks/AGENT_AB_PROTOCOL.md) that will be used for same-model ACE-S OFF vs ON evaluation. It requires verified task success, trigger precision, raw context-efficiency metrics, failure categories, and disclosure of regressions/no-uplift cases.
 
 ---
 
@@ -171,27 +227,17 @@ correctness & completeness
 
 ---
 
-# Install
-
-With the open `skills` CLI:
-
-```bash
-npx skills add gyeongbin-38/ACE-S \
-  --skill adaptive-context-engineering
-```
-
-The skill itself has no required vector database, embedding model, API key, or background service.
-
-### Skill layout
+# Skill layout
 
 ```text
 skills/adaptive-context-engineering/
-├── SKILL.md                  # small router / activation policy
+├── SKILL.md                  # compact activation/router policy
 ├── references/
 │   ├── coding.md             # structural repo route
+│   ├── long-document.md      # PDFs/specs/policies/books
 │   ├── temporal.md           # changing/conflicting state
-│   ├── research.md           # multi-source research
-│   ├── plan-aware.md         # future-utility retention
+│   ├── research.md           # claim-centered multi-source research
+│   ├── plan-aware.md         # future-utility retention + handoff
 │   ├── resolution-ladder.md  # progressive fidelity
 │   └── evidence-and-provenance.md
 └── evals/
@@ -199,6 +245,8 @@ skills/adaptive-context-engineering/
 ```
 
 Only the relevant specialist reference should be loaded for the current task. **The skill uses progressive disclosure on itself.**
+
+The skill itself requires no vector database, embedding model, API key, or background service.
 
 ---
 
@@ -222,6 +270,23 @@ It should normally stay dormant for:
 
 ---
 
+# Project docs
+
+| Resource | Purpose |
+|---|---|
+| [`docs/QUICKSTART.md`](docs/QUICKSTART.md) | practical installation and route examples |
+| [`examples/README.md`](examples/README.md) | before/after context decisions |
+| [`docs/DESIGN.md`](docs/DESIGN.md) | architecture and design rationale |
+| [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) | related context-engineering work |
+| [`benchmarks/README.md`](benchmarks/README.md) | benchmark evidence levels and methodology |
+| [`benchmarks/AGENT_AB_PROTOCOL.md`](benchmarks/AGENT_AB_PROTOCOL.md) | stable-claim OFF vs ON evaluation protocol |
+| [`ROADMAP.md`](ROADMAP.md) | evidence-gated development plan |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | contribution and benchmark rules |
+| [`SECURITY.md`](SECURITY.md) | security model and reporting |
+| [`CITATION.cff`](CITATION.cff) | research/software citation metadata |
+
+---
+
 # Benchmark policy
 
 We separate three evidence levels:
@@ -236,9 +301,11 @@ We intentionally publish misses and caveats. See [`benchmarks/`](benchmarks/).
 
 ## Status
 
-**v0.2.0-alpha** — public research alpha.
+**v0.3.0-alpha** — public research alpha.
 
-Next release gate: reproducible Codex / Claude Code / OpenCode A/B evaluation with pass rate, trigger precision, input tokens, latency, and failure categories.
+This release adds a dedicated long-document route, deeper research/provenance/plan-aware control, stronger eval coverage, a reproducible real-agent A/B protocol, and public project contribution/security/citation infrastructure.
+
+Next evidence gate: reproducible Codex / Claude Code / OpenCode A/B evaluation with verified success, trigger precision, input/output tokens, tool calls, latency, and failure categories.
 
 ## License
 
