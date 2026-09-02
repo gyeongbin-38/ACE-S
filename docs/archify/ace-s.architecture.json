@@ -4,11 +4,8 @@
   "meta": {
     "title": "ACE-S — Adaptive Context Engineering Skill",
     "quality_profile": "showcase",
-    "repository": {
-      "url": "https://github.com/gyeongbin-38/ACE-S",
-      "revision": "7ddf00c09211a069c1279a9e5d5849f55d80548d"
-    },
-    "viewBox": [980, 700],
+    "repository": {"url": "https://github.com/gyeongbin-38/ACE-S", "revision": "7ddf00c09211a069c1279a9e5d5849f55d80548d"},
+    "viewBox": [970, 700],
     "views": [
       {"id": "decision-path", "label": "Decision path", "focus": ["task", "activation", "router", "specialists", "resolution", "tools", "sources", "working", "sufficiency", "verification", "answer"], "note": "Follow how ACE-S turns a task into the smallest sufficient, verified context."},
       {"id": "routing-core", "label": "Routing core", "focus": ["activation", "router", "specialists", "resolution", "sufficiency"], "note": "Inspect the policy layer that decides whether, where, and how deeply to retrieve."},
