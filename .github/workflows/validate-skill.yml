@@ -22,7 +22,7 @@ jobs:
         run: python scripts/run_retention_rollout_bench.py
       - name: Run sealed context action dominance test
         run: python scripts/run_context_action_dominance_sealed.py
-      - name: Run acquisition exposure separation development bench
-        run: python scripts/run_acquisition_exposure_bench.py
+      - name: Run corrected acquisition exposure separation development bench
+        run: python scripts/run_acquisition_exposure_bench_v2.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
