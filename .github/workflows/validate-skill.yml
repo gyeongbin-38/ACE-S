@@ -20,5 +20,7 @@ jobs:
         run: python scripts/run_routerbench_experiment_v2.py
       - name: Run Selective Policy Load Bench
         run: python scripts/run_policy_load_bench.py
+      - name: Run Specialization Gate Bench
+        run: python scripts/run_specialization_gate_bench.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py

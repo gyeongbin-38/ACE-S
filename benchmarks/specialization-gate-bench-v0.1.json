@@ -1,0 +1,36 @@
+{
+  "version": "0.1",
+  "evidence_level": "controller-mechanics screening only",
+  "question": "Does optional specialization preserve clear specialist tasks while avoiding forced specialist loading for generic context tasks?",
+  "cases": [
+    {"id":"direct-1","family":"direct","activation":"DIRECT","required_mode":"DIRECT","required_domain":null,"required_modifiers":[],"late_domain":null,"forced_domain":null},
+    {"id":"direct-2","family":"direct","activation":"DIRECT","required_mode":"DIRECT","required_domain":null,"required_modifiers":[],"late_domain":null,"forced_domain":null},
+    {"id":"direct-3","family":"direct","activation":"DIRECT","required_mode":"DIRECT","required_domain":null,"required_modifiers":[],"late_domain":null,"forced_domain":null},
+    {"id":"direct-4","family":"direct","activation":"DIRECT","required_mode":"DIRECT","required_domain":null,"required_modifiers":[],"late_domain":null,"forced_domain":null},
+
+    {"id":"spec-code-1","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"CODE","required_modifiers":[],"late_domain":null,"forced_domain":"CODE"},
+    {"id":"spec-code-2","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"CODE","required_modifiers":["EVIDENCE"],"late_domain":null,"forced_domain":"CODE"},
+    {"id":"spec-document-1","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"DOCUMENT","required_modifiers":[],"late_domain":null,"forced_domain":"DOCUMENT"},
+    {"id":"spec-document-2","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"DOCUMENT","required_modifiers":["EVIDENCE"],"late_domain":null,"forced_domain":"DOCUMENT"},
+    {"id":"spec-research-1","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"RESEARCH","required_modifiers":[],"late_domain":null,"forced_domain":"RESEARCH"},
+    {"id":"spec-research-2","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"RESEARCH","required_modifiers":["TEMPORAL"],"late_domain":null,"forced_domain":"RESEARCH"},
+    {"id":"spec-state-1","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"STATE","required_modifiers":[],"late_domain":null,"forced_domain":"STATE"},
+    {"id":"spec-state-2","family":"clear-specialized","activation":"ACTIVE","required_mode":"SPECIALIZED","required_domain":"STATE","required_modifiers":["EVIDENCE"],"late_domain":null,"forced_domain":"STATE"},
+
+    {"id":"generic-artifact-known-1","family":"generic-artifact","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":[],"late_domain":null,"forced_domain":"CODE"},
+    {"id":"generic-artifact-known-2","family":"generic-artifact","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["EVIDENCE"],"late_domain":null,"forced_domain":"DOCUMENT"},
+    {"id":"generic-artifact-tools-1","family":"generic-artifact","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["TOOLS"],"late_domain":null,"forced_domain":"CODE"},
+    {"id":"generic-artifact-tools-2","family":"generic-artifact","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["TOOLS","EVIDENCE"],"late_domain":null,"forced_domain":"RESEARCH"},
+
+    {"id":"generic-history-1","family":"generic-history","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["RETENTION"],"late_domain":null,"forced_domain":"DOCUMENT"},
+    {"id":"generic-history-2","family":"generic-history","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["RETENTION","EVIDENCE"],"late_domain":null,"forced_domain":"STATE"},
+    {"id":"generic-history-3","family":"generic-history","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["RETENTION"],"late_domain":null,"forced_domain":"CODE"},
+
+    {"id":"late-code","family":"generic-late-specialize","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["TOOLS"],"late_domain":"CODE","forced_domain":"CODE"},
+    {"id":"late-document","family":"generic-late-specialize","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":[],"late_domain":"DOCUMENT","forced_domain":"DOCUMENT"},
+    {"id":"late-research","family":"generic-late-specialize","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["TOOLS"],"late_domain":"RESEARCH","forced_domain":"RESEARCH"},
+
+    {"id":"wrong-specialist-to-generic-1","family":"wrong-specialist-recovery","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["TOOLS"],"late_domain":null,"forced_domain":"CODE"},
+    {"id":"wrong-specialist-to-generic-2","family":"wrong-specialist-recovery","activation":"ACTIVE","required_mode":"GENERIC","required_domain":null,"required_modifiers":["RETENTION"],"late_domain":null,"forced_domain":"DOCUMENT"}
+  ]
+}

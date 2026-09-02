@@ -52,16 +52,21 @@ if f"`{index_rel}`" not in text:
 if not (skill / index_rel).exists():
     fail("missing manifests/INDEX.md")
 
-required_manifests = {
+specialized_manifests = {
     "manifests/code.md",
     "manifests/document.md",
     "manifests/research.md",
     "manifests/state.md",
+}
+generic_manifest = "manifests/generic.md"
+modifier_manifests = {
     "manifests/temporal.md",
     "manifests/evidence.md",
     "manifests/tools.md",
     "manifests/retention.md",
 }
+required_manifests = specialized_manifests | {generic_manifest} | modifier_manifests
+
 index_text = (skill / index_rel).read_text(encoding="utf-8") if (skill / index_rel).exists() else ""
 for manifest in sorted(required_manifests):
     if not (skill / manifest).exists():
@@ -69,7 +74,8 @@ for manifest in sorted(required_manifests):
     if f"`{manifest}`" not in index_text:
         fail(f"manifest index does not route to {manifest}")
 
-# Manifests may route to specialist references; validate only what they name.
+# Specialized/modifier manifests may route to specialist references.
+# GENERIC is intentionally non-specialist and must not do so by default.
 manifest_reference_paths = set()
 for manifest in sorted(required_manifests):
     path = skill / manifest
@@ -77,6 +83,10 @@ for manifest in sorted(required_manifests):
         continue
     body = path.read_text(encoding="utf-8")
     refs = set(re.findall(r"`(references/[^`]+\.md)`", body))
+    if manifest == generic_manifest:
+        if refs:
+            fail("manifests/generic.md must remain non-specialist; route through lazy manifests instead")
+        continue
     if not refs:
         fail(f"{manifest} must name at least one specialist reference")
     for ref in refs:
@@ -93,6 +103,13 @@ if not (skill / "references/resolution-ladder.md").exists():
 direct_specialist_refs = set(re.findall(r"`(references/[^`]+\.md)`", text))
 if len(direct_specialist_refs) > 1:
     fail("SKILL.md should not directly enumerate/load specialist references; use manifests")
+
+# Guard the architectural distinction: GENERIC is an entry mode, not another
+# specialist domain with a dedicated specialist reference.
+if "GENERIC is not a fifth specialist" not in index_text:
+    fail("manifest index must preserve GENERIC as a non-specialist entry mode")
+if "Specialization is optional" not in text:
+    fail("SKILL.md must state that specialization is optional")
 
 # --- Existing skill evals -------------------------------------------------
 try:
@@ -202,6 +219,6 @@ if errors:
     sys.exit(1)
 
 print(
-    f"OK: ACE-S {skill_version} progressive policy manifests, evals, "
-    "RouterBench fixtures, Selective Policy Load Bench, and metadata are consistent"
+    f"OK: ACE-S {skill_version} optional specialization, progressive policy manifests, "
+    "evals, RouterBench fixtures, Selective Policy Load Bench, and metadata are consistent"
 )
