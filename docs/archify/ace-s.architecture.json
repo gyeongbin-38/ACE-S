@@ -148,11 +148,11 @@
     {"id": "task-activation", "from": "task", "to": "activation", "label": "task", "variant": "emphasis"},
     {"id": "activation-router", "from": "activation", "to": "router", "label": "needs context", "variant": "emphasis", "labelAt": [455, 105]},
     {"id": "router-specialists", "from": "router", "to": "specialists", "label": "route"},
-    {"id": "specialists-resolution", "from": "specialists", "to": "resolution", "label": "fidelity"},
+    {"id": "specialists-resolution", "from": "specialists", "to": "resolution", "label": "fidelity", "labelAt": [825, 206]},
     {"id": "resolution-tools", "from": "resolution", "to": "tools", "label": "query"},
     {"id": "tools-sources", "from": "tools", "to": "sources", "label": "retrieve", "variant": "dashed"},
     {"id": "sources-working", "from": "sources", "to": "working", "label": "evidence"},
-    {"id": "working-sufficiency", "from": "working", "to": "sufficiency", "label": "evaluate"},
+    {"id": "working-sufficiency", "from": "working", "to": "sufficiency", "label": "evaluate", "labelAt": [105, 396]},
     {"id": "sufficiency-verification", "from": "sufficiency", "to": "verification", "label": "sufficient", "variant": "emphasis"},
     {"id": "verification-answer", "from": "verification", "to": "answer", "label": "verified", "variant": "emphasis"}
   ],
