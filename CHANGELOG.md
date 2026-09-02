@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0-alpha - 2026-09-02
+
+- Added a dedicated `long-document` specialist route for large PDFs, policies, specifications, books, transcripts, and scanned/visual pages.
+- Expanded the research route into claim-centered retrieval with source hierarchy, contradiction handling, freshness checks, a compact claim ledger, and an explicit sufficiency stop.
+- Expanded plan-aware context management with future-utility buckets, semantic-boundary compaction, reconstruction-cost checks, and a reusable `HandoffState` shape.
+- Expanded evidence/provenance handling with `EXACT / EXTRACTIVE / LOSSY` fidelity classes, `EvidencePacket`, source-state tracking, transformation provenance, corroboration policy, and abstention conditions.
+- Expanded the eval suite with long-document cross-reference, redundant-research stop, handoff retention, provenance-transform, and additional no-trigger cases.
+- Published `docs/QUICKSTART.md` and practical before/after examples.
+- Published a conservative end-to-end agent OFF vs ON benchmark protocol with task strata, failure taxonomy, anti-gaming rules, and stable-release evidence gates.
+- Added an evidence-gated `ROADMAP.md`, `SECURITY.md`, `CITATION.cff`, pull-request template, and structured bug/feature/benchmark issue templates.
+- Strengthened CI validation to check required specialist routes, eval integrity, version consistency, citation metadata, and public project files.
+- Refreshed the Archify repository evidence to the v0.3 source state and included the long-document/plan-aware specialist routes.
+
 ## 0.2.0-alpha - 2026-09-02
 
 - Rebranded the public project as **ACE-S — Adaptive Context Engineering Skill**.
