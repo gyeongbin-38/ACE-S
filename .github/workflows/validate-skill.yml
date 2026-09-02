@@ -23,11 +23,17 @@ jobs:
         run: python scripts/validate_routerbench.py
       - name: Run sealed retention rollout OOD test
         run: python scripts/run_retention_rollout_sealed.py
+      - name: Run retention lookahead depth development bench
+        run: python scripts/discover_retention_lookahead_depth.py
       - name: Run sealed context action dominance test
         run: python scripts/run_context_action_dominance_sealed.py
       - name: Run corrected acquisition exposure separation development bench
         run: python scripts/run_acquisition_exposure_bench_v2.py
+      - name: Run batched hidden acquisition development bench
+        run: python scripts/run_batched_hidden_acquisition_bench.py
       - name: Run quality-constrained adaptive rollout search
         run: python scripts/discover_adaptive_rollout_budget_v2.py
+      - name: Run sealed adaptive rollout budget OOD test
+        run: python scripts/run_adaptive_rollout_budget_sealed.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
