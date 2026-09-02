@@ -8,10 +8,13 @@ on:
     paths:
       - "benchmarks/FROZEN_CONTROLLER_V04.json"
       - "benchmarks/unseen-routing-v0.1.json"
+      - "benchmarks/external-taxonomy-expansion-v0.2.json"
       - "benchmarks/UNSEEN_ROUTING_PROTOCOL.md"
       - "benchmarks/UNSEEN_ROUTING_RESULTS_V0.1.md"
+      - "benchmarks/EXTERNAL_TAXONOMY_COVERAGE_V0.2.md"
       - "benchmarks/results/unseen-routing-v0.1-gpt-5.6-sol-single-run.json"
       - "scripts/score_unseen_routing.py"
+      - "scripts/score_external_taxonomy_coverage.py"
       - "scripts/validate_unseen_holdout_freeze.py"
       - ".github/workflows/validate-unseen-holdout.yml"
 
@@ -31,3 +34,5 @@ jobs:
         run: >-
           python scripts/score_unseen_routing.py
           benchmarks/results/unseen-routing-v0.1-gpt-5.6-sol-single-run.json
+      - name: Score 40-task structural taxonomy stress
+        run: python scripts/score_external_taxonomy_coverage.py
