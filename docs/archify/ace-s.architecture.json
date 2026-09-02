@@ -150,7 +150,7 @@
     {"id": "router-specialists", "from": "router", "to": "specialists", "label": "choose route"},
     {"id": "specialists-resolution", "from": "specialists", "to": "resolution", "label": "choose fidelity"},
     {"id": "resolution-tools", "from": "resolution", "to": "tools", "label": "query / inspect"},
-    {"id": "tools-sources", "from": "tools", "to": "sources", "label": "retrieve", "variant": "dashed"},
+    {"id": "tools-sources", "from": "tools", "to": "sources", "label": "retrieve", "variant": "dashed", "labelAt": [1515, 236]},
     {"id": "sources-working", "from": "sources", "to": "working", "label": "selected evidence"},
     {"id": "working-sufficiency", "from": "working", "to": "sufficiency", "label": "evaluate"},
     {"id": "sufficiency-verification", "from": "sufficiency", "to": "verification", "label": "sufficient", "variant": "emphasis"},
