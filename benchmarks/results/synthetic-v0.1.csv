@@ -1,0 +1,7 @@
+strategy,mean_quality,success_rate,mean_total_context_tokens,composite_score,tier
+baseline_all,0.498,0.394,10891,38.77,baseline
+resolution_ladder,0.838,0.891,3656,78.49,single-mechanism
+monolithic_ace_core,0.851,0.877,4673,75.03,public-skill
+trigger_gated_monolithic,0.859,0.876,4482,75.77,public-skill
+modular_router_plus_refs,0.932,0.978,3551,86.58,public-skill-recommended
+persistent_backend_variant,0.905,0.958,4300,83.65,power-user-backend
