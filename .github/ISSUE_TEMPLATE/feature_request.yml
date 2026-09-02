@@ -1,0 +1,55 @@
+name: Feature request
+description: Propose a new route, controller rule, integration, eval, or benchmark improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Context problem
+      description: What failure or missing capability does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest policy or interface change that would address it.
+    validations:
+      required: true
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Primary layer
+      options:
+        - Activation / trigger
+        - Routing
+        - Retrieval scope
+        - Resolution / fidelity
+        - Provenance
+        - Temporal state
+        - Plan-aware retention
+        - Compaction / handoff
+        - Integration / adapter
+        - Evaluation / benchmark
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or motivating example
+      description: Paper, repository, reproducible task, failure trace, or a concrete scenario.
+  - type: textarea
+    id: regression
+    attributes:
+      label: Possible regressions
+      description: How could this increase context, latency, false triggers, or fidelity risk?
+  - type: checkboxes
+    id: quality
+    attributes:
+      label: Quality-first check
+      options:
+        - label: The proposal can be evaluated against a baseline rather than justified only by token reduction.
+          required: true
