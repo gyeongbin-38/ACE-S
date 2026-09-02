@@ -8,6 +8,7 @@ on:
       - .github/workflows/research-fast.yml
       - scripts/run_cost_floor_pruning_bench.py
       - scripts/run_cost_floor_pruning_sealed.py
+      - scripts/run_cost_floor_abstention_sealed.py
       - benchmarks/COST_FLOOR_PRUNING_FREEZE_V0.1.md
 
 env:
@@ -25,3 +26,5 @@ jobs:
         run: python scripts/run_cost_floor_pruning_bench.py
       - name: Run sealed cost-floor pruning OOD test
         run: python scripts/run_cost_floor_pruning_sealed.py
+      - name: Run guaranteed no-bound abstention sealed test
+        run: python scripts/run_cost_floor_abstention_sealed.py
