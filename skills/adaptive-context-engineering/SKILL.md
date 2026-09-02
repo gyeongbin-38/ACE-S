@@ -3,7 +3,7 @@ name: adaptive-context-engineering
 description: Use this skill when a task may suffer from too much, too little, stale, conflicting, poorly scoped, or prematurely compressed context: repository investigation, long documents, deep research, changing facts, multi-step work, handoffs, or explicit context/token optimization. ACE-S extracts a small set of context signals, derives a primary domain plus cross-cutting modifiers, chooses the lowest sufficient fidelity, and expands only when evidence is insufficient. Do not use for simple one-shot questions, casual conversation, creative writing, or tasks already solvable from current context without retrieval.
 license: MIT
 metadata:
-  version: "0.4.0-alpha"
+  version: "0.3.0-alpha"
   methodology: "quality-first layered context decision control"
   benchmark: "popular-repo-replay-v0.2 + routerbench-v0.1"
 ---
