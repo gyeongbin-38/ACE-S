@@ -57,13 +57,15 @@ jobs:
             echo "No headless Chrome executable found on runner." >&2
             exit 1
           fi
+          # Keep the 1200px share-card width, but give the Archify canvas enough
+          # vertical room to render the complete 970x700 diagram without clipping.
           "$CHROME" \
             --headless=new \
             --disable-gpu \
             --no-sandbox \
             --hide-scrollbars \
             --force-device-scale-factor=1 \
-            --window-size=1200,630 \
+            --window-size=1200,820 \
             --virtual-time-budget=2500 \
             --screenshot="$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.png" \
             "file://$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.html?embed=1&theme=dark"
