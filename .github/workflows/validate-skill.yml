@@ -16,5 +16,7 @@ jobs:
         run: python scripts/validate_skill.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
+      - name: Run RouterBench policy experiment
+        run: python scripts/run_routerbench_experiment.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
