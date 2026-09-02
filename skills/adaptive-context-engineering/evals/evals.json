@@ -1,6 +1,6 @@
 {
   "skill_name": "adaptive-context-engineering",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "cases": [
     {"id":"direct-no-retrieval","prompt":"Explain why Python lists are mutable in two sentences.","expected":"Answers directly without unnecessary search or context expansion.","assertions":["no unnecessary retrieval","correct concise answer"]},
     {"id":"long-document","prompt":"Use the supplied 80-page policy document to identify the exact eligibility exception and cite the governing section.","expected":"Navigates/indexes first, then opens the relevant section and exact text.","assertions":["progressive disclosure","raw verification for exact rule"]},
