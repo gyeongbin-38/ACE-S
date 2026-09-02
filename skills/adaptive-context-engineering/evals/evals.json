@@ -1,0 +1,18 @@
+{
+  "skill_name": "adaptive-context-engineering",
+  "version": "0.1.0",
+  "cases": [
+    {"id":"direct-no-retrieval","prompt":"Explain why Python lists are mutable in two sentences.","expected":"Answers directly without unnecessary search or context expansion.","assertions":["no unnecessary retrieval","correct concise answer"]},
+    {"id":"long-document","prompt":"Use the supplied 80-page policy document to identify the exact eligibility exception and cite the governing section.","expected":"Navigates/indexes first, then opens the relevant section and exact text.","assertions":["progressive disclosure","raw verification for exact rule"]},
+    {"id":"conflicting-state","prompt":"The project notes say timeout=30 in January and timeout=60 in July. What is the current value and what changed?","expected":"Returns 60 as current and preserves the earlier state as history.","assertions":["current state selected","superseded state not silently merged"]},
+    {"id":"repo-local","prompt":"Fix a bug in parseConfig; identify the minimum files and tests that need inspection.","expected":"Starts from symbol/path and local dependencies/tests instead of scanning the whole repository.","assertions":["structural seed first","bounded expansion"]},
+    {"id":"repo-ripple","prompt":"Changing AuthToken may affect callers. Find the likely blast radius before editing.","expected":"Expands dependency neighborhood before broad semantic search.","assertions":["dependency expansion","relevant tests/contracts"]},
+    {"id":"research","prompt":"Compare two current approaches using primary sources and stop once the evidence is sufficient for a recommendation.","expected":"Uses authoritative sources, claim-centered evidence, and a sufficiency stop.","assertions":["source quality","stop condition"]},
+    {"id":"multi-source-conflict","prompt":"Two sources disagree on the latest version. Resolve which one should control and explain why.","expected":"Compares freshness/authority/scope and re-checks exact source.","assertions":["conflict handling","provenance"]},
+    {"id":"multi-step","prompt":"Research a library, choose one, then prepare an implementation plan. Preserve only what the later plan will need.","expected":"Retains evidence/constraints useful to later steps and compresses exploration chatter.","assertions":["future utility","state compaction"]},
+    {"id":"large-tool-output","prompt":"A tool returned 20,000 log lines. Diagnose the error without keeping the entire log in working context.","expected":"Extracts/indexes relevant regions and keeps a route back to raw log evidence.","assertions":["observation offload","raw recoverability"]},
+    {"id":"exact-contract","prompt":"Verify the exact API field name and allowed values before suggesting code.","expected":"Reads raw authoritative contract rather than relying on a summary.","assertions":["exact evidence","no lossy substitution"]},
+    {"id":"aggregation","prompt":"Summarize recurring themes across many sessions without losing the ability to inspect examples.","expected":"Uses aggregate summaries as views while preserving references to examples/raw records.","assertions":["aggregate view","source-of-truth distinction"]},
+    {"id":"near-miss-trigger","prompt":"Write a short birthday message.","expected":"Skill should not activate.","assertions":["should_not_trigger"]}
+  ]
+}
