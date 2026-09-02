@@ -1,0 +1,64 @@
+name: render-archify
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "docs/archify/*.json"
+      - ".github/workflows/render-archify.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ACE-S
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch Archify
+        run: git clone --depth 1 https://github.com/tt-a1i/archify.git "$RUNNER_TEMP/archify-src"
+
+      - name: Install Archify dependencies
+        working-directory: ${{ runner.temp }}/archify-src/archify
+        run: npm ci
+
+      - name: Validate showcase architecture
+        working-directory: ${{ runner.temp }}/archify-src/archify
+        run: |
+          node bin/archify.mjs validate architecture \
+            "$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.json" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --quality showcase \
+            --json
+
+      - name: Deliver deterministic Archify HTML
+        working-directory: ${{ runner.temp }}/archify-src/archify
+        run: |
+          node bin/archify.mjs deliver architecture \
+            "$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.json" \
+            "$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.html" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --quality showcase \
+            --json | tee "$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.receipt.json"
+
+      - name: Commit generated artifact
+        working-directory: ${{ github.workspace }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/archify/ace-s.architecture.html docs/archify/ace-s.architecture.receipt.json
+          if git diff --cached --quiet; then
+            echo "Archify artifact is unchanged."
+          else
+            git commit -m "docs: render ACE-S Archify architecture"
+            git push
+          fi
