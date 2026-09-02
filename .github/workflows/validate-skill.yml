@@ -17,6 +17,6 @@ jobs:
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
       - name: Run RouterBench policy experiment
-        run: python scripts/run_routerbench_experiment.py
+        run: python scripts/run_routerbench_experiment_v2.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
