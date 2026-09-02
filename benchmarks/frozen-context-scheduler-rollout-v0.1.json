@@ -1,0 +1,32 @@
+{
+  "name": "frozen-context-scheduler-rollout-v0.1",
+  "status": "frozen_before_second_sealed_test",
+  "freeze_parent_commit": "975a73a2788aa968063c95ff27e99616daf2299d",
+  "base_policy": {
+    "ig_exp": 0.35,
+    "cost_exp": 1.25,
+    "gini_weight": 1.0,
+    "solve_weight": 1.5,
+    "worst_weight": 0.5,
+    "count_weight": 0.5
+  },
+  "rollout_algorithm": {
+    "name": "one-step-policy-rollout-receding-horizon",
+    "decision_rule": "For every feasible next context action, compute immediate measured action cost plus the frozen base policy's expected remaining cost after each possible observation; choose the minimum expected total, execute exactly one action, observe, and replan.",
+    "retuning": "none",
+    "lookahead_terminal_policy": "frozen base policy",
+    "replanning": "after every observation",
+    "cost_source": "runtime-measured/exact in mechanics benchmark",
+    "value_source": "finite-world transition model in mechanics benchmark; real-agent implementation requires calibrated or sampled estimates"
+  },
+  "development_observation_only": {
+    "acquisition_ratio_to_exact_optimal_mean": 1.00494,
+    "acquisition_p90": 1.00482,
+    "acquisition_within_10pct": 99.48,
+    "resolution_ratio_to_exact_optimal_mean": 1.00031,
+    "resolution_p90": 1.0,
+    "resolution_within_10pct": 100.0
+  },
+  "guardrail": "No second-sealed-test seed, generator, OOD family, result, or coefficient may be added to this artifact after this freeze commit. Any sealed test must be implemented only in a later commit and must use new seeds and OOD families not used by the rollout development script.",
+  "claim_boundary": "Synthetic controller mechanics only. This freeze does not establish natural-language routing accuracy or end-to-end LLM answer quality."
+}
