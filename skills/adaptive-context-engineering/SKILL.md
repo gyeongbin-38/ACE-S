@@ -3,7 +3,7 @@ name: adaptive-context-engineering
 description: Use this skill when a task may suffer from too much, too little, stale, conflicting, or poorly scoped context: long or multi-step work, deep research, many files or tools, repository investigation, long documents, conflicting historical facts, handoffs, or explicit context/token optimization. It selects the smallest sufficient evidence set and expands only when needed. Do not use for simple one-shot questions, casual conversation, creative writing, or tasks already solvable from the current context without additional retrieval.
 license: MIT
 metadata:
-  version: "0.2.0-alpha"
+  version: "0.3.0-alpha"
   methodology: "quality-first adaptive context selection"
   benchmark: "popular-repo-replay-v0.2"
 ---
@@ -65,9 +65,10 @@ See `references/resolution-ladder.md` when a task has large documents, large too
 ## 5. Apply the specialist route only when needed
 
 - Code/repository tasks → read `references/coding.md`.
+- Long PDFs/specifications/policies/books → read `references/long-document.md`.
 - Conflicting, changing, or historical state → read `references/temporal.md`.
 - Deep research or multi-source synthesis → read `references/research.md`.
-- Multi-step workflows → read `references/plan-aware.md`.
+- Multi-step workflows or handoffs → read `references/plan-aware.md`.
 - High-risk claims or source disputes → read `references/evidence-and-provenance.md`.
 
 Do not load unrelated reference files.
@@ -90,6 +91,7 @@ If sufficient, stop retrieving. If not, expand the narrowest relevant scope or r
 - Preserve a route back to raw evidence for important decisions.
 - At semantic task boundaries, compact completed exploration into concise state plus references.
 - Keep large tool outputs or logs out of the main working context when they can be re-read by reference.
+- Preserve future-critical state before handoff or compaction; do not rely on the next step reconstructing it.
 
 ## 8. Final verification
 
@@ -98,7 +100,8 @@ Before answering or acting:
 1. Re-check fidelity-critical facts against raw evidence.
 2. Confirm the final answer uses the current, not superseded, state.
 3. Make uncertainty explicit where evidence remains incomplete.
-4. Do not claim an optimization improved quality unless it was measured against a baseline.
+4. Confirm summaries/aggregates still have a recoverable path to source truth when provenance matters.
+5. Do not claim an optimization improved quality unless it was measured against a baseline.
 
 The default priority is:
 
