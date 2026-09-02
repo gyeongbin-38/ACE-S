@@ -101,9 +101,10 @@ def load_optional(case: dict) -> list[str]:
         if case["family"] == "wrong-specialist-recovery":
             files.extend(specialized_files(case["forced_domain"]))
         files.append(GENERIC)
-        files.extend(modifier_files(case["required_modifiers"]))
         if case["late_domain"]:
             files.extend(specialized_files(case["late_domain"]))
+    # Lazy modifiers apply after either specialized or generic entry.
+    files.extend(modifier_files(case["required_modifiers"]))
     return uniq(files)
 
 
