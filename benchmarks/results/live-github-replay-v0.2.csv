@@ -1,0 +1,22 @@
+task_id,repo,sha,ground_truth_file,stage1_query,stage1_top5_exact,retrieval_rounds,final_exact,canonical_target,note
+requests-t1,psf/requests,f0198e6dfc431a2293dc16e1b1e8fcddc910a7f3,src/requests/utils.py,Content-Type header parsing,true,1,true,true,ground truth surfaced at rank 2
+requests-t2,psf/requests,47914226c2968802f2cdee3f6f0f6e06e4472f64,src/requests/utils.py,netrc credentials None,false,2,true,true,test result surfaced get_netrc_auth then exact symbol search
+requests-t3,psf/requests,3ff3ff21dd45957c9e143cd500291959bb15f690,src/requests/exceptions.py,JSONDecodeError picklable deserializable,false,2,true,true,strict query returned nothing then broadened to exact exception symbol
+django-t1,django/django,a284a49153f005f2a7af087025e5112ba06cbd5f,django/db/models/sql/query.py,orderby_issubset_groupby descending random,false,2,true,true,exact property symbol resolved target
+django-t2,django/django,b33c31d992591bc8e8d20ac156809e4ae5b45375,django/core/handlers/asgi.py,ASGIRequest path_info script name,true,1,true,true,rank 1
+django-t3,django/django,e779bc7d78cbcadd395d48e5b6b00acea07ce503,django/db/models/fields/__init__.py,Field deconstruct serialization,false,2,true,true,documentation result explicitly pointed to built-in Field implementation path
+zod-t1,colinhacks/zod,7f789defd73ee35f3099ab5c2091cb19bd2b3578,packages/zod/src/v4/core/schemas.ts,record non-enumerable properties validation,true,1,true,true,rank 1
+zod-t2,colinhacks/zod,2f8414bc90cebc76be87c3640617e300a5d9b060,packages/zod/src/v4/classic/schemas.ts,transform context addIssue,true,1,true,true,rank 2
+zod-t3,colinhacks/zod,3a818de145dc2fa9b5753bc8bf97b0b8484cfbaf,packages/zod/src/v4/core/util.ts,floatSafeRemainder exponent,false,2,true,true,strict query missed then exact function symbol surfaced target at rank 2
+actix-t1,actix/actix-web,f31f9bc92c2518e40fecd7eaa711b0bdf01ec0b9,actix-files/src/named.rs,mtime unix epoch panic,true,1,true,true,rank 1
+actix-t2,actix/actix-web,d3bf929040129241d9141dfce9826c40acec549f,actix-web/src/route.rs,Route wrap to service panic,true,1,true,true,rank 1
+actix-t3,actix/actix-web,41e4863748ac0c8e446d96528fa1c31b2b20aae1,awc/src/client/h1proto.rs,Transfer-Encoding chunked empty body,true,1,true,true,target surfaced within top 5
+ Gson-t1,google/gson,6bf8bf6cbf4d4f5f72f69262be890a5a5e28259d,gson/src/main/java/com/google/gson/stream/JsonReader.java,NumberFormatException location JsonReader,true,1,true,true,rank 1
+Gson-t2,google/gson,f4d371d29c04066dbe7fdb31f642831f9c7f40cd,gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java,duplicate key null MapTypeAdapterFactory,true,1,true,true,rank 1
+Gson-t3,google/gson,e8cdabf296cd4c2c1550ed76cf27a1a8e0c4ec59,gson/src/main/java/com/google/gson/internal/$Gson$Types.java,ParameterizedType typeArguments owner clone,false,1,false,true,live branch renamed equivalent module to GsonTypes.java
+gin-t1,gin-gonic/gin,472d086af2acd924cb4b9d7be0525f7d790f69bc,tree.go,findCaseInsensitivePathRec RedirectFixedPath,false,2,true,true,changelog surfaced exact symbol then symbol search resolved tree.go
+gin-t2,gin-gonic/gin,9914178584e42458ff7d23891463a880f58c9d86,context.go,ClientIP X-Forwarded-For multiple,true,1,true,true,rank 1
+gin-t3,gin-gonic/gin,c3d1092b3b48addf6f9cd00fe274ec3bd14650eb,binding/form_mapping.go,form binding empty slice array,true,1,true,true,rank 1
+k8s-t1,kubernetes/kubernetes,81e4b115fd290208d757566d4e6f58c62d0833eb,pkg/kubelet/status/status_manager.go,resource claim statuses pod status comparison,true,1,true,true,rank 2
+k8s-t2,kubernetes/kubernetes,ffa084f81129ea685b176a282921c4d54906c539,staging/src/k8s.io/client-go/tools/clientcmd/loader.go,current-context kubeconfig wrong file,false,3,true,true,kubectl config package led to clientcmd then loader_test sibling led to loader.go
+k8s-t3,kubernetes/kubernetes,a49bc6f2fbbd9b1a634d9224dac9828e2012b4ab,pkg/proxy/winkernel/proxier.go,terminatedEndpoints RemoteEndpoints,true,1,true,true,rank 2
