@@ -10,140 +10,25 @@
     },
     "viewBox": [980, 700],
     "views": [
-      {
-        "id": "decision-path",
-        "label": "Decision path",
-        "focus": ["task", "activation", "router", "specialists", "resolution", "tools", "sources", "working", "sufficiency", "verification", "answer"],
-        "note": "Follow how ACE-S turns a task into the smallest sufficient, verified context."
-      },
-      {
-        "id": "routing-core",
-        "label": "Routing core",
-        "focus": ["activation", "router", "specialists", "resolution", "sufficiency"],
-        "note": "Inspect the policy layer that decides whether, where, and how deeply to retrieve."
-      },
-      {
-        "id": "evidence-loop",
-        "label": "Evidence loop",
-        "focus": ["tools", "sources", "working", "sufficiency", "verification"],
-        "note": "See how evidence stays bounded, recoverable, and expandable only when insufficient."
-      }
+      {"id": "decision-path", "label": "Decision path", "focus": ["task", "activation", "router", "specialists", "resolution", "tools", "sources", "working", "sufficiency", "verification", "answer"], "note": "Follow how ACE-S turns a task into the smallest sufficient, verified context."},
+      {"id": "routing-core", "label": "Routing core", "focus": ["activation", "router", "specialists", "resolution", "sufficiency"], "note": "Inspect the policy layer that decides whether, where, and how deeply to retrieve."},
+      {"id": "evidence-loop", "label": "Evidence loop", "focus": ["tools", "sources", "working", "sufficiency", "verification"], "note": "See how evidence stays bounded, recoverable, and expandable only when insufficient."}
     ]
   },
   "components": [
-    {
-      "id": "task",
-      "type": "external",
-      "label": "User Task",
-      "sublabel": "question · code · research",
-      "pos": [30, 120],
-      "size": [150, 72]
-    },
-    {
-      "id": "activation",
-      "type": "security",
-      "label": "Activation Gate",
-      "sublabel": "is current context enough?",
-      "tag": "no retrieval is valid",
-      "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Activation policy"}],
-      "pos": [255, 120],
-      "size": [160, 72]
-    },
-    {
-      "id": "router",
-      "type": "backend",
-      "label": "Problem Router",
-      "sublabel": "classify context problem",
-      "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Route classifier"}],
-      "pos": [495, 120],
-      "size": [160, 72]
-    },
-    {
-      "id": "specialists",
-      "type": "backend",
-      "label": "Specialist Routes",
-      "sublabel": "code · research · time · plans · evidence",
-      "sources": [
-        {"path": "skills/adaptive-context-engineering/references/coding.md", "label": "Coding route"},
-        {"path": "skills/adaptive-context-engineering/references/research.md", "label": "Research route"},
-        {"path": "skills/adaptive-context-engineering/references/temporal.md", "label": "Temporal route"}
-      ],
-      "pos": [735, 120],
-      "size": [180, 72]
-    },
-    {
-      "id": "resolution",
-      "type": "backend",
-      "label": "Resolution Ladder",
-      "sublabel": "index → summary → extract → raw",
-      "sources": [{"path": "skills/adaptive-context-engineering/references/resolution-ladder.md", "label": "Resolution policy"}],
-      "pos": [735, 310],
-      "size": [180, 72]
-    },
-    {
-      "id": "tools",
-      "type": "external",
-      "label": "Context Tools",
-      "sublabel": "files · GitHub · web · memory · backends",
-      "pos": [495, 310],
-      "size": [160, 72]
-    },
-    {
-      "id": "sources",
-      "type": "database",
-      "label": "Raw Sources",
-      "sublabel": "repo · docs · logs · records",
-      "pos": [255, 310],
-      "size": [160, 72]
-    },
-    {
-      "id": "working",
-      "type": "database",
-      "label": "Bounded Working Context",
-      "sublabel": "selected evidence + references",
-      "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Context hygiene"}],
-      "pos": [30, 310],
-      "size": [150, 72]
-    },
-    {
-      "id": "sufficiency",
-      "type": "security",
-      "label": "Sufficiency Gate",
-      "sublabel": "would more context change the answer?",
-      "tag": "stop or expand",
-      "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Sufficiency checks"}],
-      "pos": [30, 500],
-      "size": [150, 72]
-    },
-    {
-      "id": "verification",
-      "type": "security",
-      "label": "Final Verification",
-      "sublabel": "re-open fidelity-critical evidence",
-      "sources": [
-        {"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Final verification"},
-        {"path": "skills/adaptive-context-engineering/references/evidence-and-provenance.md", "label": "Evidence policy"}
-      ],
-      "pos": [255, 500],
-      "size": [160, 72]
-    },
-    {
-      "id": "answer",
-      "type": "external",
-      "label": "Agent Answer / Action",
-      "sublabel": "correct · traceable · efficient",
-      "pos": [495, 500],
-      "size": [160, 72]
-    }
+    {"id": "task", "type": "external", "label": "User Task", "sublabel": "question · code · research", "pos": [30, 120], "size": [150, 72]},
+    {"id": "activation", "type": "security", "label": "Activation Gate", "sublabel": "is current context enough?", "tag": "no retrieval is valid", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Activation policy"}], "pos": [255, 120], "size": [160, 72]},
+    {"id": "router", "type": "backend", "label": "Problem Router", "sublabel": "classify context problem", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Route classifier"}], "pos": [495, 120], "size": [160, 72]},
+    {"id": "specialists", "type": "backend", "label": "Specialist Routes", "sublabel": "code · research · time · plans · evidence", "sources": [{"path": "skills/adaptive-context-engineering/references/coding.md", "label": "Coding route"}, {"path": "skills/adaptive-context-engineering/references/research.md", "label": "Research route"}, {"path": "skills/adaptive-context-engineering/references/temporal.md", "label": "Temporal route"}], "pos": [735, 120], "size": [180, 72]},
+    {"id": "resolution", "type": "backend", "label": "Resolution Ladder", "sublabel": "index → summary → extract → raw", "sources": [{"path": "skills/adaptive-context-engineering/references/resolution-ladder.md", "label": "Resolution policy"}], "pos": [735, 310], "size": [180, 72]},
+    {"id": "tools", "type": "external", "label": "Context Tools", "sublabel": "files · web · memory", "pos": [495, 310], "size": [160, 72]},
+    {"id": "sources", "type": "database", "label": "Raw Sources", "sublabel": "repo · docs · logs · records", "pos": [255, 310], "size": [160, 72]},
+    {"id": "working", "type": "database", "label": "Bounded Working Context", "sublabel": "selected evidence + references", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Context hygiene"}], "pos": [30, 310], "size": [150, 72]},
+    {"id": "sufficiency", "type": "security", "label": "Sufficiency Gate", "sublabel": "would more context change the answer?", "tag": "stop or expand", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Sufficiency checks"}], "pos": [30, 500], "size": [150, 72]},
+    {"id": "verification", "type": "security", "label": "Final Verification", "sublabel": "re-open fidelity-critical evidence", "sources": [{"path": "skills/adaptive-context-engineering/SKILL.md", "label": "Final verification"}, {"path": "skills/adaptive-context-engineering/references/evidence-and-provenance.md", "label": "Evidence policy"}], "pos": [255, 500], "size": [160, 72]},
+    {"id": "answer", "type": "external", "label": "Agent Answer / Action", "sublabel": "correct · traceable · efficient", "pos": [495, 500], "size": [160, 72]}
   ],
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "ACE-S policy layer",
-      "wraps": ["activation", "router", "specialists", "resolution", "working", "sufficiency", "verification"],
-      "pad": 20
-    }
-  ],
+  "boundaries": [{"kind": "region", "label": "ACE-S policy layer", "wraps": ["activation", "router", "specialists", "resolution", "working", "sufficiency", "verification"], "pad": 20}],
   "connections": [
     {"id": "task-activation", "from": "task", "to": "activation", "label": "task", "variant": "emphasis"},
     {"id": "activation-router", "from": "activation", "to": "router", "label": "needs context", "variant": "emphasis", "labelAt": [455, 105]},
@@ -157,29 +42,8 @@
     {"id": "verification-answer", "from": "verification", "to": "answer", "label": "verified", "variant": "emphasis"}
   ],
   "cards": [
-    {
-      "dot": "cyan",
-      "title": "Core rule",
-      "items": [
-        "Do not maximize context; maximize sufficient trustworthy context",
-        "If current context is enough, retrieval stops before it starts"
-      ]
-    },
-    {
-      "dot": "violet",
-      "title": "Progressive disclosure",
-      "items": [
-        "Prefer path, symbol, index, and structure before broad semantic search",
-        "Escalate fidelity only when the lower-resolution view is insufficient"
-      ]
-    },
-    {
-      "dot": "emerald",
-      "title": "Sufficiency loop",
-      "items": [
-        "When evidence is insufficient, expand one narrow step and re-evaluate",
-        "Summaries remain views; fidelity-critical facts route back to raw evidence"
-      ]
-    }
+    {"dot": "cyan", "title": "Core rule", "items": ["Do not maximize context; maximize sufficient trustworthy context", "If current context is enough, retrieval stops before it starts"]},
+    {"dot": "violet", "title": "Progressive disclosure", "items": ["Prefer path, symbol, index, and structure before broad semantic search", "Escalate fidelity only when the lower-resolution view is insufficient"]},
+    {"dot": "emerald", "title": "Sufficiency loop", "items": ["When evidence is insufficient, expand one narrow step and re-evaluate", "Summaries remain views; fidelity-critical facts route back to raw evidence"]}
   ]
 }
