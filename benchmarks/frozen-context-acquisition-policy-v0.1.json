@@ -1,0 +1,32 @@
+{
+  "name": "context-acquisition-policy-v0.1-frozen",
+  "status": "frozen-before-sealed-test",
+  "frozen_from_discovery_commit": "a106c162dbf15f3168f9eecd138af32e06fac9f4",
+  "selection_protocol": {
+    "candidate_count": 384,
+    "train_worlds": 32,
+    "validation_worlds": 64,
+    "train_sigmas": [0.0, 0.5, 1.0],
+    "validation_sigmas": [0.0, 0.25, 0.5, 1.0],
+    "sealed_test_seen_before_freeze": false
+  },
+  "policy": {
+    "ig_exp": 0.35,
+    "cost_exp": 1.25,
+    "gini_weight": 1.0,
+    "solve_weight": 1.5,
+    "worst_weight": 0.5,
+    "count_weight": 0.5
+  },
+  "validation": {
+    "mean_ratio_to_optimal": 1.05624,
+    "median_ratio_to_optimal": 1.0,
+    "p90_ratio_to_optimal": 1.17332,
+    "within_10pct_optimal_rate": 80.27,
+    "current_value_per_cost_mean_ratio_to_optimal": 1.20311,
+    "current_value_per_cost_p90_ratio_to_optimal": 1.45586,
+    "current_value_per_cost_within_10pct_optimal_rate": 62.89
+  },
+  "interpretation": "A symbolic controller-policy candidate selected on development train/validation only. Exact acquisition cost is measurable; uncertainty belongs to decision-value estimates. The policy is frozen before any sealed-test generator or seed is introduced.",
+  "claim_boundary": "Synthetic finite-decision controller evidence only. Not an LLM answer-quality or natural-language routing claim."
+}
