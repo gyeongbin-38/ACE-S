@@ -18,8 +18,8 @@ jobs:
         run: python scripts/validate_microkernel_runtime.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
-      - name: Run retention rollout development bench
-        run: python scripts/run_retention_rollout_bench.py
+      - name: Run sealed retention rollout OOD test
+        run: python scripts/run_retention_rollout_sealed.py
       - name: Run sealed context action dominance test
         run: python scripts/run_context_action_dominance_sealed.py
       - name: Run corrected acquisition exposure separation development bench
