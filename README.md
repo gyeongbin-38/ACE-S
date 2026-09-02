@@ -8,7 +8,7 @@
 
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-portable-6f42c1)](skills/adaptive-context-engineering/SKILL.md)
 ![Version](https://img.shields.io/badge/version-0.2.0--alpha-orange)
-[![RepoReplay](https://img.shields.io/badge/RepoReplay-90.3%2F100-brightgreen)](benchmarks/POPULAR_REPO_REPLAY.md)
+[![RepoReplay](https://img.shields.io/badge/RepoReplay-90.2%2F100-brightgreen)](benchmarks/POPULAR_REPO_REPLAY.md)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
@@ -102,7 +102,7 @@ Canonical target         21 / 21  ███████████████�
 | Cross-repo coverage | 5 / 7 | **7 / 7** |
 | Mean retrieval rounds | 1.00 | **1.38** |
 | Maximum retrieval rounds | 1 | **3** |
-| RepoReplay Score | **72.9 / 100** | **90.3 / 100** |
+| RepoReplay Score | **72.9 / 100** | **90.2 / 100** |
 
 ### RepoReplay Score
 
@@ -117,7 +117,7 @@ RepoReplay Score =
 
 Per-repository results, all 21 fixtures, exact queries, and caveats are in [`benchmarks/POPULAR_REPO_REPLAY.md`](benchmarks/POPULAR_REPO_REPLAY.md) and [`benchmarks/results/live-github-replay-v0.2.csv`](benchmarks/results/live-github-replay-v0.2.csv).
 
-> **Important:** this is a retrieval-policy replay, not an end-to-end model quality benchmark. It does not prove a 90.3% answer accuracy rate or a fixed token saving for every agent.
+> **Important:** this is a retrieval-policy replay, not an end-to-end model quality benchmark. It does not prove a 90.2% answer accuracy rate or a fixed token saving for every agent.
 
 ---
 
