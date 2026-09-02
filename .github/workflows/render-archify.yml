@@ -50,14 +50,35 @@ jobs:
             --quality showcase \
             --json | tee "$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.receipt.json"
 
-      - name: Commit generated artifact
+      - name: Capture README preview
+        run: |
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo "No headless Chrome executable found on runner." >&2
+            exit 1
+          fi
+          "$CHROME" \
+            --headless=new \
+            --disable-gpu \
+            --no-sandbox \
+            --hide-scrollbars \
+            --force-device-scale-factor=1 \
+            --window-size=1200,630 \
+            --virtual-time-budget=2500 \
+            --screenshot="$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.png" \
+            "file://$GITHUB_WORKSPACE/docs/archify/ace-s.architecture.html?embed=1&theme=dark"
+
+      - name: Commit generated artifacts
         working-directory: ${{ github.workspace }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/archify/ace-s.architecture.html docs/archify/ace-s.architecture.receipt.json
+          git add \
+            docs/archify/ace-s.architecture.html \
+            docs/archify/ace-s.architecture.receipt.json \
+            docs/archify/ace-s.architecture.png
           if git diff --cached --quiet; then
-            echo "Archify artifact is unchanged."
+            echo "Archify artifacts are unchanged."
           else
             git commit -m "docs: render ACE-S Archify architecture"
             git push
