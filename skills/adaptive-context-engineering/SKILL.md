@@ -1,108 +1,131 @@
 ---
 name: adaptive-context-engineering
-description: Use this skill when a task may suffer from too much, too little, stale, conflicting, or poorly scoped context: long or multi-step work, deep research, many files or tools, repository investigation, long documents, conflicting historical facts, handoffs, or explicit context/token optimization. It selects the smallest sufficient evidence set and expands only when needed. Do not use for simple one-shot questions, casual conversation, creative writing, or tasks already solvable from the current context without additional retrieval.
+description: Use this skill when a task may fail because context is missing, excessive, stale, conflicting, poorly scoped, or prematurely compressed. ACE-S first decides whether more context is needed, then loads only the smallest relevant policy manifest and specialist guidance, retrieves the narrowest useful context, and expands or switches policy only when evidence remains insufficient. Do not use for simple one-shot tasks already solvable from supplied context.
 license: MIT
 metadata:
   version: "0.3.0-alpha"
-  methodology: "quality-first adaptive context selection"
-  benchmark: "popular-repo-replay-v0.2"
+  methodology: "quality-first progressive policy loading"
+  benchmark: "popular-repo-replay-v0.2 + routerbench-v0.1"
 ---
 
 # Adaptive Context Engineering
 
-Optimize **successful-task quality per unit of context**, not token count in isolation.
+Optimize **successful-task quality per unit of context**.
 
-## 1. Activation gate
+ACE-S is a **small context-policy kernel**, not a rulebook that should be fully loaded on every task.
 
-Before retrieving or loading more material, ask:
+## 0. Sufficiency first
 
-1. Is the current context already sufficient to answer reliably?
-2. Would additional retrieval materially reduce uncertainty or prevent an important error?
+Before loading any policy or retrieving anything:
 
-If both answers are no, solve directly. **No retrieval is a valid action.**
+- `DIRECT` — current context is sufficient; solve now.
+- `ACTIVE` — context selection materially affects correctness, completeness, freshness, provenance, or later work.
+- `UNCERTAIN` — make one bounded check before deciding.
 
-## 2. Classify the context problem
+**No retrieval is a valid action.** Do not activate merely because tools, files, or long context are available.
 
-Choose one primary route:
+## 1. Coarse recognition
 
-- **Direct** — current/recent context is sufficient.
-- **Research** — multiple external sources or synthesis are required.
-- **Long document** — information is inside one or more large documents.
-- **Code / repository** — symbols, files, dependencies, tests, or change impact matter.
-- **Temporal / conflicting state** — facts may have changed, been superseded, or conflict.
-- **Plan-aware** — later workflow steps will need information gathered now.
-- **High-risk evidence** — exact wording, provenance, independent corroboration, or verification matters.
+If `ACTIVE` or `UNCERTAIN`, identify only the **next likely context family**, not every possible route/modifier.
 
-If classification is uncertain, use the generic Resolution Ladder rather than guessing a specialist route.
+Ask at a coarse level:
 
-## 3. Start with the smallest useful scope
+- Does the next useful evidence primarily live in code/repository structure, a long document, external research, or conflicting/current state?
+- Is there one materially plausible backup family if the first guess is wrong?
 
-Prefer, in order when applicable:
+Then read `manifests/INDEX.md`.
 
-1. exact owner/path/symbol/entity/index
-2. lexical or structured lookup
-3. local dependency / hierarchy neighborhood
-4. task-aware or semantic retrieval
-5. broad search only as fallback
+Choose **one primary candidate**. Keep at most one backup when genuinely ambiguous. Do not score or classify every policy up front.
 
-Do not load every available file, tool, skill, source, or conversation segment by default.
+## 2. Progressive policy loading
 
-## 4. Use the Resolution Ladder
+Open only the selected candidate manifest. If it fits, open only the specialist reference named by that manifest.
 
-Read information at the lowest fidelity that can safely answer the current question:
+Do **not** read all manifests or all specialist references “for awareness”.
 
-1. **Index / metadata**
-2. **Compact summary**
-3. **Relevant extract**
-4. **Raw exact evidence**
+Cross-cutting policies such as freshness, provenance, tool discovery, or retention are **lazy modifiers**. Load their manifest only when the current subproblem makes that concern material.
 
-Escalate one level only when the current level is insufficient.
+Example:
 
-Use raw evidence immediately for exact contracts, quotations, precise numbers, changed requirements, disputed facts, or other fidelity-critical material.
+```text
+repo task
+  → CODE manifest
+  → coding specialist
+  → inspect repository
+  → comparison now requires fresh external evidence
+  → RESEARCH manifest
+  → research specialist
+  → freshness becomes material
+  → TEMPORAL manifest
+```
 
-See `references/resolution-ladder.md` when a task has large documents, large tool output, or long histories.
+The architecture should emerge from the task as evidence is gathered; it should not be preloaded in full.
 
-## 5. Apply the specialist route only when needed
+## 3. Retrieve the minimum useful context
 
-- Code/repository tasks → read `references/coding.md`.
-- Long PDFs/specifications/policies/books → read `references/long-document.md`.
-- Conflicting, changing, or historical state → read `references/temporal.md`.
-- Deep research or multi-source synthesis → read `references/research.md`.
-- Multi-step workflows or handoffs → read `references/plan-aware.md`.
-- High-risk claims or source disputes → read `references/evidence-and-provenance.md`.
+Prefer the narrowest useful scope:
 
-Do not load unrelated reference files.
+1. exact owner/path/symbol/entity/heading/source id;
+2. structured or lexical lookup;
+3. local dependency/hierarchy neighborhood;
+4. task-aware semantic retrieval;
+5. broad search only as fallback.
 
-## 6. Sufficiency gate
+Use the lowest sufficient fidelity:
 
-After each retrieval round, check:
+`INDEX → SUMMARY → EXTRACT → RAW`
 
-- Do I have the evidence needed for every material claim or action?
-- Are important contradictions unresolved?
-- Is any missing evidence likely to change the answer?
-- Can I trace high-risk claims back to a source or exact record?
+This is not a mandatory staircase. Skip directly to exact evidence when the current claim genuinely requires it. If fidelity itself is unclear, read `references/resolution-ladder.md`; otherwise do not load that reference.
 
-If sufficient, stop retrieving. If not, expand the narrowest relevant scope or raise the resolution level.
+## 4. Check sufficiency after each useful retrieval
 
-## 7. Context hygiene during long work
+Stop when the material claims are covered and no unresolved issue is likely to change the answer.
 
-- Keep current goals, constraints, decisions, unresolved questions, and evidence references separate from raw history.
-- Treat summaries as **views, not source of truth**.
-- Preserve a route back to raw evidence for important decisions.
-- At semantic task boundaries, compact completed exploration into concise state plus references.
-- Keep large tool outputs or logs out of the main working context when they can be re-read by reference.
-- Preserve future-critical state before handoff or compaction; do not rely on the next step reconstructing it.
+Before `STOP`, check only what is relevant:
 
-## 8. Final verification
+- material evidence covered?
+- unresolved material conflict?
+- freshness verified if required?
+- exact evidence available if required?
+- likely that one more bounded fetch changes the answer?
 
-Before answering or acting:
+If insufficient, take **one narrow next action**. Re-enter from the current policy/action state; do not restart the whole routing process unless the task itself changed.
 
-1. Re-check fidelity-critical facts against raw evidence.
-2. Confirm the final answer uses the current, not superseded, state.
-3. Make uncertainty explicit where evidence remains incomplete.
-4. Confirm summaries/aggregates still have a recoverable path to source truth when provenance matters.
-5. Do not claim an optimization improved quality unless it was measured against a baseline.
+## 5. Bounded recovery
 
-The default priority is:
+An early coarse guess is allowed to be wrong.
+
+If a selected manifest clearly mismatches the task, or its specialist produces no useful next retrieval:
+
+1. stop that branch;
+2. try the retained backup candidate, if any;
+3. otherwise form one new candidate from what was learned;
+4. never recover by loading every remaining policy.
+
+A wrong first candidate is a recoverable routing event, not a fatal classification failure.
+
+## 6. Long-horizon context only when needed
+
+Load retention guidance only for real multi-step/handoff pressure.
+
+When active:
+
+- `PIN` future-critical constraints, decisions, state, and evidence refs;
+- `OFFLOAD` large recoverable outputs;
+- `COMPACT` completed exploration at semantic boundaries;
+- preserve a route back to raw source truth;
+- count reacquisition when discarded context must be reconstructed.
+
+## Invariants
+
+- **Quality first.** Never trade verified task quality for token reduction.
+- **Policy is context too.** ACE-S must progressively disclose its own rules.
+- **One candidate first.** At most one backup during coarse recognition.
+- **Lazy modifiers.** Do not classify/load every concern at task start.
+- **Summaries are views, not truth.** Keep exact source recoverability when it matters.
+- **Expand on insufficiency, not availability.** More accessible context is not a reason to load it.
+- **Measure before claiming improvement.** Separate controller-mechanics benchmarks from real-model routing and end-to-end quality results.
+
+Priority:
 
 **correctness and completeness → recoverability/provenance → context efficiency → latency.**

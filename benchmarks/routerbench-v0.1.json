@@ -1,0 +1,134 @@
+{
+  "name": "ACE-S RouterBench",
+  "version": "0.1",
+  "status": "fixture-only",
+  "description": "Layer-level routing fixtures for ACE-S activation, domain, modifier, and fidelity evaluation. These are ground-truth cases, not measured model results.",
+  "labels": {
+    "activation": ["DIRECT", "ACTIVE", "UNCERTAIN"],
+    "primary_domain": ["GENERAL", "CODE", "LONG_DOCUMENT", "RESEARCH", "STATE"],
+    "modifiers": ["TEMPORAL", "EVIDENCE_CRITICAL", "PLAN_AWARE", "TOOL_DISCOVERY"],
+    "fidelity": ["INDEX", "SUMMARY", "EXTRACT", "RAW"]
+  },
+  "cases": [
+    {
+      "id": "neg-simple-rewrite",
+      "bucket": "negative_control",
+      "prompt": "Rewrite this sentence to sound friendlier: I cannot attend tomorrow.",
+      "expected": {"activation": "DIRECT", "primary_domain": "GENERAL", "modifiers": [], "fidelity": "INDEX"}
+    },
+    {
+      "id": "neg-simple-fact",
+      "bucket": "negative_control",
+      "prompt": "What is the capital of France?",
+      "expected": {"activation": "DIRECT", "primary_domain": "GENERAL", "modifiers": [], "fidelity": "INDEX"}
+    },
+    {
+      "id": "neg-code-explanation-given",
+      "bucket": "negative_control",
+      "prompt": "Given this complete function in the prompt, explain what the for-loop does. No repository lookup is needed.",
+      "expected": {"activation": "DIRECT", "primary_domain": "CODE", "modifiers": [], "fidelity": "EXTRACT"}
+    },
+    {
+      "id": "code-local-symbol",
+      "bucket": "positive",
+      "prompt": "In this repository, find where ContextDecision is defined and explain which fields control retrieval.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["EVIDENCE_CRITICAL"], "fidelity": "EXTRACT"}
+    },
+    {
+      "id": "code-change-impact",
+      "bucket": "positive",
+      "prompt": "If I rename this public method, which tests and callers in the repo are likely to break?",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["PLAN_AWARE"], "fidelity": "EXTRACT"}
+    },
+    {
+      "id": "code-exact-contract",
+      "bucket": "positive",
+      "prompt": "Quote the exact enum values accepted by this API from the current source file.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["EVIDENCE_CRITICAL", "TEMPORAL"], "fidelity": "RAW"}
+    },
+    {
+      "id": "doc-heading-localization",
+      "bucket": "positive",
+      "prompt": "In this 180-page specification, find the section that defines retry behavior before reading the whole document.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "LONG_DOCUMENT", "modifiers": [], "fidelity": "INDEX"}
+    },
+    {
+      "id": "doc-exact-clause",
+      "bucket": "positive",
+      "prompt": "From this long policy PDF, quote the exact clause governing cancellation fees.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "LONG_DOCUMENT", "modifiers": ["EVIDENCE_CRITICAL"], "fidelity": "RAW"}
+    },
+    {
+      "id": "research-multi-source",
+      "bucket": "positive",
+      "prompt": "Compare three recent papers on context compression and tell me where their findings disagree.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "RESEARCH", "modifiers": ["TEMPORAL", "EVIDENCE_CRITICAL"], "fidelity": "EXTRACT"}
+    },
+    {
+      "id": "research-current-repo",
+      "bucket": "mixed_route",
+      "prompt": "Analyze this GitHub repository and compare its architecture with the newest relevant research, then recommend the next implementation step.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["TEMPORAL", "EVIDENCE_CRITICAL", "PLAN_AWARE"], "fidelity": "EXTRACT"}
+    },
+    {
+      "id": "state-current-vs-old",
+      "bucket": "positive",
+      "prompt": "These two sources give different current API limits. Determine which one controls today.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "STATE", "modifiers": ["TEMPORAL", "EVIDENCE_CRITICAL"], "fidelity": "RAW"}
+    },
+    {
+      "id": "state-historical-fixed-date",
+      "bucket": "near_miss",
+      "prompt": "What API limit did the documentation state on January 1, 2024? The historical date is fixed.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "STATE", "modifiers": ["EVIDENCE_CRITICAL"], "fidelity": "RAW"}
+    },
+    {
+      "id": "plan-handoff",
+      "bucket": "positive",
+      "prompt": "Investigate the bug now, but preserve the exact constraints and evidence another agent will need to implement the fix later.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["PLAN_AWARE", "EVIDENCE_CRITICAL"], "fidelity": "EXTRACT"}
+    },
+    {
+      "id": "tool-discovery",
+      "bucket": "positive",
+      "prompt": "I need to inspect an unknown binary artifact but do not yet know which available tool can read it. Find the smallest suitable capability first.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "GENERAL", "modifiers": ["TOOL_DISCOVERY"], "fidelity": "INDEX"}
+    },
+    {
+      "id": "near-latest-not-required",
+      "bucket": "near_miss",
+      "prompt": "Explain why the phrase 'latest update' can be ambiguous in technical documentation, without checking any current product.",
+      "expected": {"activation": "DIRECT", "primary_domain": "GENERAL", "modifiers": [], "fidelity": "INDEX"}
+    },
+    {
+      "id": "near-research-word-only",
+      "bucket": "near_miss",
+      "prompt": "Rewrite this title: Research methods for beginners.",
+      "expected": {"activation": "DIRECT", "primary_domain": "GENERAL", "modifiers": [], "fidelity": "INDEX"}
+    },
+    {
+      "id": "mixed-doc-current-law",
+      "bucket": "mixed_route",
+      "prompt": "Use this long regulation PDF and current official amendments to determine the rule that applies today, with exact citations.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "LONG_DOCUMENT", "modifiers": ["TEMPORAL", "EVIDENCE_CRITICAL"], "fidelity": "RAW"}
+    },
+    {
+      "id": "mixed-code-tool-discovery",
+      "bucket": "mixed_route",
+      "prompt": "Trace this repository issue, but first determine which installed code-search capability can resolve symbol references efficiently.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["TOOL_DISCOVERY"], "fidelity": "INDEX"}
+    },
+    {
+      "id": "uncertain-source-boundary",
+      "bucket": "ambiguous",
+      "prompt": "I may have enough information in the pasted excerpt, but one omitted table could change the conclusion. Decide whether one bounded check is needed.",
+      "expected": {"activation": "UNCERTAIN", "primary_domain": "LONG_DOCUMENT", "modifiers": ["EVIDENCE_CRITICAL"], "fidelity": "INDEX"}
+    },
+    {
+      "id": "large-tool-output-offload",
+      "bucket": "positive",
+      "prompt": "The tool returned 50,000 lines of logs. Keep only what the next debugging step needs while preserving a route back to the raw output.",
+      "expected": {"activation": "ACTIVE", "primary_domain": "CODE", "modifiers": ["PLAN_AWARE", "EVIDENCE_CRITICAL"], "fidelity": "EXTRACT"}
+    }
+  ]
+}

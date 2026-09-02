@@ -1,21 +1,73 @@
 # Experimental Context Contracts
 
-> **Status:** experimental in `v0.3.x`; names and fields are not yet a stable runtime API.
+> **Status:** experimental for the v0.4 development line. These are trace/contracts for implementers, not a requirement that every field be placed in every model prompt.
 
-ACE-S is primarily a skill/policy, but runtime implementers need a small shared vocabulary. These contracts describe the **minimum state worth passing between context selection, retrieval, execution, and handoff** without forwarding the entire transcript.
+ACE-S is a portable context-policy skill. The contracts below make **selective policy loading, recovery, evidence, and sufficiency** observable without requiring a particular backend.
 
-They are deliberately backend-neutral.
+## 1. ContextIntent — coarse recognition only
 
-## 1. ContextDecision
+Do not fully classify the task at entry.
 
-Represents one context-control decision.
+```yaml
+ContextIntent:
+  activation: DIRECT | ACTIVE | UNCERTAIN
+  primary_candidate: CODE | DOCUMENT | RESEARCH | STATE | GENERAL | null
+  backup_candidate: CODE | DOCUMENT | RESEARCH | STATE | GENERAL | null
+  reason: string
+```
+
+### Invariants
+
+- `DIRECT` requires no candidate policy.
+- Keep at most one backup candidate.
+- Candidates are **where to look next**, not a complete description of the whole task.
+- Do not predict every modifier at entry.
+
+## 2. PolicyLoadState — policy is context too
+
+```yaml
+PolicyLoadState:
+  loaded_manifests: [string]
+  loaded_specialists: [string]
+  active_domain: CODE | DOCUMENT | RESEARCH | STATE | GENERAL | null
+  active_modifiers: [TEMPORAL | EVIDENCE | TOOLS | RETENTION]
+  backup_candidate: string | null
+  recovery_count: integer
+  last_progress: string | null
+```
+
+### Invariants
+
+- A manifest load does not imply its specialist must be loaded if the manifest mismatches.
+- Do not load every manifest or specialist to improve confidence.
+- Modifier policies are loaded lazily when the current subproblem makes them material.
+- `recovery_count` records wrong-first-candidate recovery rather than hiding it as a perfect initial classification.
+
+## 3. Local ContextSignals — optional, policy-scoped
+
+Signals are useful **inside the currently loaded policy**, but ACE-S no longer requires one global all-domain signal vector at task start.
+
+Example:
+
+```yaml
+ContextSignals:
+  scope: CODE
+  exact_symbol_known: true | false | uncertain
+  callers_needed: true | false | uncertain
+  tests_needed: true | false | uncertain
+  branch_freshness_material: true | false | uncertain
+```
+
+A research or document policy may define different local signals. Prefer categorical observations over vague numeric scoring.
+
+## 4. ContextDecision — one next action
 
 ```yaml
 ContextDecision:
-  route: DIRECT | CODE | LONG_DOCUMENT | TEMPORAL | RESEARCH | PLAN_AWARE | EVIDENCE
+  action: DIRECT | FETCH | EXPAND | SWITCH_POLICY | REOPEN_RAW | PIN | OFFLOAD | COMPACT | STOP
+  policy: string | null
   target: string | null
   resolution: INDEX | SUMMARY | EXTRACT | RAW | null
-  evidence_needed: [string]
   current_sufficiency: SUFFICIENT | INSUFFICIENT | UNCERTAIN
   next_expansion: string | null
   stop_reason: string | null
@@ -23,14 +75,12 @@ ContextDecision:
 
 ### Invariants
 
-- `DIRECT` should not carry a retrieval target unless the host already supplied evidence.
-- `RAW` is appropriate for fidelity-critical facts, not as a default resolution.
-- `next_expansion` should name one narrow expansion step, not “search everything”.
-- `SUFFICIENT` requires a non-empty `stop_reason` in implementations that persist decisions.
+- `DIRECT` and `STOP` introduce no new retrieval target.
+- `SWITCH_POLICY` is bounded recovery, not permission to load all remaining policies.
+- `RAW` is fidelity-critical source truth, not the default.
+- `next_expansion` names one narrow action.
 
-## 2. EvidencePacket
-
-Represents source-backed evidence that can survive compaction.
+## 5. EvidencePacket
 
 ```yaml
 EvidencePacket:
@@ -45,72 +95,66 @@ EvidencePacket:
   caveat: string | null
 ```
 
-### Invariants
+- Exact or fidelity-critical evidence remains recoverable from `locator`.
+- Summaries never become their own source of truth.
+- Version/revision/date belongs in `source_state` when it can change the answer.
 
-- `EXACT` evidence must remain recoverable from `locator`.
-- A transformed summary must not become its own source of truth.
-- `source_state` should carry a version, revision, commit, date, or equivalent when staleness could change the answer.
-- Conflicting packets should coexist until a controlling source is justified; do not silently overwrite one.
+## 6. SufficiencyReport
 
-## 3. HandoffState
+```yaml
+SufficiencyReport:
+  status: SUFFICIENT | INSUFFICIENT | UNCERTAIN
+  material_claims_covered: boolean
+  unresolved_material_conflict: boolean
+  freshness_verified: true | false | not_required
+  exact_evidence_available: true | false | not_required
+  likely_to_change_answer: boolean
+  next_expansion: string | null
+```
 
-Represents the smallest useful state needed to resume a multi-step task.
+A conservative stop rule is:
+
+```text
+status == SUFFICIENT
+AND material_claims_covered == true
+AND unresolved_material_conflict == false
+AND freshness_verified != false
+AND exact_evidence_available != false
+AND likely_to_change_answer == false
+```
+
+Do not use token count alone as a stop condition.
+
+## 7. RetentionDecision and HandoffState
+
+These are optional and should not be created for ordinary one-shot tasks.
+
+```yaml
+RetentionDecision:
+  pin: [string]
+  offload: [string]
+  compact: [string]
+  evict: [string]
+  reason: string
+```
 
 ```yaml
 HandoffState:
   objective: string
-  completed: [string]
   constraints: [string]
   decisions:
     - decision: string
-      rationale: string
       evidence_refs: [string]
-  artifacts: [string]
   current_state: [string]
+  artifacts: [string]
   open_questions: [string]
   next_action: string
   do_not_repeat: [string]
 ```
 
-### Invariants
+Track reacquisition when evicted/offloaded information must be fetched or reconstructed again.
 
-- `constraints` contains only requirements that are still binding.
-- `current_state` must not merge superseded and current values.
-- `do_not_repeat` is for completed/rejected exploration that would otherwise be needlessly rediscovered.
-- Exact contracts should be referenced, not rewritten from memory into lossy prose.
-
-## 4. SufficiencyReport
-
-Makes the stop condition explicit.
-
-```yaml
-SufficiencyReport:
-  status: SUFFICIENT | INSUFFICIENT | UNCERTAIN
-  material_claims:
-    - claim: string
-      evidence_ref: string | null
-      status: SUPPORTED | MIXED | UNSUPPORTED | STALE
-  unresolved_conflicts: [string]
-  missing_evidence: [string]
-  likely_to_change_answer: boolean
-  next_expansion: string | null
-```
-
-### Stop rule
-
-A conservative implementation may stop when:
-
-```text
-status == SUFFICIENT
-AND likely_to_change_answer == false
-AND unresolved_conflicts contains no material conflict
-```
-
-Do not use token count alone as the stop rule.
-
-## 5. WorkingContext
-
-A bounded projection consumed by the solver/agent.
+## 8. WorkingContext
 
 ```yaml
 WorkingContext:
@@ -119,76 +163,66 @@ WorkingContext:
   current_state: [string]
   decisions: [string]
   evidence_refs: [string]
-  artifacts: [string]
   unresolved: [string]
 ```
 
-The projection should contain **what the next model call needs**, not every event that produced it.
+This projection contains what the **next model call needs**, not the entire event history or every policy ever considered.
 
-Raw history, large logs, document bodies, repository files, and full tool output should remain externally recoverable whenever the host runtime supports it.
-
-## 6. Recommended controller actions
-
-These action names are intentionally small and composable:
-
-```text
-DIRECT       solve with current context
-ROUTE        select a specialist policy
-FETCH        retrieve one targeted source/scope
-EXPAND       widen scope or fidelity one step
-PIN          retain future-critical state
-OFFLOAD      move large raw material behind a reference
-REOPEN_RAW   verify a fidelity-critical fact
-COMPACT      replace completed exploration with state + refs
-STOP         declare the context sufficient
-```
-
-These are policy semantics, not a required transport protocol.
-
-## 7. Minimal control loop
+## 9. Progressive control loop
 
 ```text
 Task
  ↓
-ContextDecision
+Tiny Kernel: DIRECT / ACTIVE / UNCERTAIN
  ↓
-FETCH / EXPAND / DIRECT
+Coarse candidate (1 + optional backup)
  ↓
-EvidencePacket(s)
+Manifest index
  ↓
-WorkingContext
- ↓
+ONE candidate manifest
+ ├─ mismatch → bounded SWITCH_POLICY
+ └─ fits
+      ↓
+ONE specialist policy
+      ↓
+minimal context retrieval
+      ↓
 SufficiencyReport
- ├─ sufficient → REOPEN_RAW if needed → STOP
- └─ insufficient → one narrow next_expansion → repeat
+ ├─ sufficient → STOP
+ └─ insufficient
+      ↓
+next narrow action
+      ├─ same policy → FETCH / EXPAND
+      └─ new concern becomes material → load ONE lazy modifier/domain policy
 ```
 
-For multi-step tasks, emit or update `HandoffState` at semantic boundaries.
+Ordinary retrieval loops re-enter at the current policy/action state. Re-run coarse recognition only when the task materially changes or the selected policy cannot make progress.
 
-## 8. What is intentionally absent
+## 10. What is intentionally absent
 
-The contracts do not prescribe:
+ACE-S does not prescribe:
 
-- vector database vendor;
-- embedding model;
-- graph database;
-- memory server;
+- vector database or embedding model;
+- memory/storage engine;
 - prompt format;
 - agent framework;
-- storage engine;
-- serialization format;
-- learned vs deterministic controller.
+- graph database;
+- learned vs deterministic candidate selector;
+- mandatory global classifier over all policies.
 
-ACE-S should be implementable over local files, web search, code graphs, databases, memory systems, or combinations of them.
+## 11. Evaluation requirements
 
-## 9. Stabilization criteria
+Do not treat policy-selection accuracy alone as the objective. Evaluate:
 
-These contracts should not become a stable API until real-agent A/B evaluation shows that the fields are sufficient across multiple agent surfaces without encouraging unnecessary context growth.
+- verified task success / final answer quality;
+- initial-candidate recall;
+- wrong-first-candidate recovery rate;
+- specialist manifests loaded per task;
+- irrelevant policy-load rate;
+- policy bytes/tokens loaded;
+- false stop / unnecessary expansion;
+- context retrieval volume and rounds;
+- reacquisition overhead;
+- provenance recoverability.
 
-Before stabilization, evaluate:
-
-- whether fields are actually used downstream;
-- whether exact/provenance-sensitive tasks remain recoverable;
-- whether handoffs resume without rediscovery;
-- whether controller decisions can be logged without leaking full raw context;
-- whether the shape remains backend-neutral.
+Controller-mechanics benchmarks must be labeled separately from real-model routing and end-to-end agent benchmarks.

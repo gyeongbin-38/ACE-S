@@ -1,0 +1,40 @@
+{
+  "version": "0.1",
+  "benchmark": "Selective Policy Load Bench",
+  "purpose": "Controller-mechanics benchmark. Domain/modifier requirements are oracle labels; this does not measure natural-language classifier accuracy.",
+  "cases": [
+    {"id":"direct-rewrite","family":"direct","activation":"DIRECT","required_domain":"GENERAL","required_modifiers":[],"initial_candidates":[],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"direct-supplied-code","family":"direct","activation":"DIRECT","required_domain":"GENERAL","required_modifiers":[],"initial_candidates":[],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"direct-fixed-fact","family":"direct","activation":"DIRECT","required_domain":"GENERAL","required_modifiers":[],"initial_candidates":[],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"direct-summary","family":"direct","activation":"DIRECT","required_domain":"GENERAL","required_modifiers":[],"initial_candidates":[],"recovery_mode":"none","needs_resolution_policy":false},
+
+    {"id":"code-basic","family":"single-domain","activation":"ACTIVE","required_domain":"CODE","required_modifiers":[],"initial_candidates":["CODE"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"document-basic","family":"single-domain","activation":"ACTIVE","required_domain":"DOCUMENT","required_modifiers":[],"initial_candidates":["DOCUMENT"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"research-basic","family":"single-domain","activation":"ACTIVE","required_domain":"RESEARCH","required_modifiers":[],"initial_candidates":["RESEARCH"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"state-basic","family":"single-domain","activation":"ACTIVE","required_domain":"STATE","required_modifiers":[],"initial_candidates":["STATE"],"recovery_mode":"none","needs_resolution_policy":false},
+
+    {"id":"code-evidence","family":"lazy-modifier","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["EVIDENCE"],"initial_candidates":["CODE"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"code-retention","family":"lazy-modifier","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["RETENTION"],"initial_candidates":["CODE"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"document-evidence","family":"lazy-modifier","activation":"ACTIVE","required_domain":"DOCUMENT","required_modifiers":["EVIDENCE"],"initial_candidates":["DOCUMENT"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"research-temporal","family":"lazy-modifier","activation":"ACTIVE","required_domain":"RESEARCH","required_modifiers":["TEMPORAL"],"initial_candidates":["RESEARCH"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"state-evidence","family":"lazy-modifier","activation":"ACTIVE","required_domain":"STATE","required_modifiers":["EVIDENCE"],"initial_candidates":["STATE"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"general-tools","family":"lazy-modifier","activation":"ACTIVE","required_domain":"GENERAL","required_modifiers":["TOOLS"],"initial_candidates":["GENERAL"],"recovery_mode":"none","needs_resolution_policy":false},
+
+    {"id":"code-research-manifest-reject","family":"wrong-first-manifest","activation":"ACTIVE","required_domain":"RESEARCH","required_modifiers":[],"initial_candidates":["CODE","RESEARCH"],"recovery_mode":"manifest_reject","needs_resolution_policy":false},
+    {"id":"document-code-manifest-reject","family":"wrong-first-manifest","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["EVIDENCE"],"initial_candidates":["DOCUMENT","CODE"],"recovery_mode":"manifest_reject","needs_resolution_policy":false},
+    {"id":"state-document-manifest-reject","family":"wrong-first-manifest","activation":"ACTIVE","required_domain":"DOCUMENT","required_modifiers":["TEMPORAL"],"initial_candidates":["STATE","DOCUMENT"],"recovery_mode":"manifest_reject","needs_resolution_policy":false},
+    {"id":"research-state-manifest-reject","family":"wrong-first-manifest","activation":"ACTIVE","required_domain":"STATE","required_modifiers":["EVIDENCE"],"initial_candidates":["RESEARCH","STATE"],"recovery_mode":"manifest_reject","needs_resolution_policy":false},
+
+    {"id":"code-document-no-progress","family":"wrong-first-specialist","activation":"ACTIVE","required_domain":"DOCUMENT","required_modifiers":["EVIDENCE"],"initial_candidates":["CODE","DOCUMENT"],"recovery_mode":"specialist_no_progress","needs_resolution_policy":false},
+    {"id":"research-code-no-progress","family":"wrong-first-specialist","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["RETENTION"],"initial_candidates":["RESEARCH","CODE"],"recovery_mode":"specialist_no_progress","needs_resolution_policy":false},
+    {"id":"document-research-no-progress","family":"wrong-first-specialist","activation":"ACTIVE","required_domain":"RESEARCH","required_modifiers":["TEMPORAL","EVIDENCE"],"initial_candidates":["DOCUMENT","RESEARCH"],"recovery_mode":"specialist_no_progress","needs_resolution_policy":false},
+    {"id":"state-code-no-progress","family":"wrong-first-specialist","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["TOOLS"],"initial_candidates":["STATE","CODE"],"recovery_mode":"specialist_no_progress","needs_resolution_policy":false},
+
+    {"id":"code-current-research-plan","family":"compositional","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["TEMPORAL","EVIDENCE","RETENTION"],"initial_candidates":["CODE","RESEARCH"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"research-conflicting-current","family":"compositional","activation":"ACTIVE","required_domain":"RESEARCH","required_modifiers":["TEMPORAL","EVIDENCE"],"initial_candidates":["RESEARCH","STATE"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"document-amendment-handoff","family":"compositional","activation":"ACTIVE","required_domain":"DOCUMENT","required_modifiers":["TEMPORAL","EVIDENCE","RETENTION"],"initial_candidates":["DOCUMENT","STATE"],"recovery_mode":"none","needs_resolution_policy":true},
+    {"id":"code-unknown-capability-evidence","family":"compositional","activation":"ACTIVE","required_domain":"CODE","required_modifiers":["TOOLS","EVIDENCE"],"initial_candidates":["CODE"],"recovery_mode":"none","needs_resolution_policy":false},
+    {"id":"state-current-tool","family":"compositional","activation":"ACTIVE","required_domain":"STATE","required_modifiers":["TEMPORAL","TOOLS","EVIDENCE"],"initial_candidates":["STATE","RESEARCH"],"recovery_mode":"none","needs_resolution_policy":true},
+    {"id":"research-long-horizon","family":"compositional","activation":"ACTIVE","required_domain":"RESEARCH","required_modifiers":["EVIDENCE","RETENTION"],"initial_candidates":["RESEARCH"],"recovery_mode":"none","needs_resolution_policy":false}
+  ]
+}

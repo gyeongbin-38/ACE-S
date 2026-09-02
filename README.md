@@ -4,7 +4,7 @@
 
 ### Adaptive Context Engineering Skill
 
-**Give AI agents the right context, at the right resolution, only when they need it.**
+**Give AI agents the right context — and the right context policy — only when they need it.**
 
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-portable-6f42c1)](skills/adaptive-context-engineering/SKILL.md)
 ![Version](https://img.shields.io/badge/version-0.3.0--alpha-orange)
@@ -15,26 +15,51 @@
 
 </div>
 
-ACE-S is a portable **meta-skill for context selection**. It decides whether an agent should retrieve anything at all, which source or structure to inspect first, what fidelity to load, what information must survive a handoff, and when enough evidence has been gathered.
+ACE-S is a portable **context-policy controller for AI agents**. It decides whether more context is needed, which kind of context should be inspected next, how much fidelity is necessary, what must survive later steps, and when the agent has enough evidence to stop.
 
-It is **not** a vector database, memory server, or replacement for your agent framework. It is the policy layer that tells the agent how to use whatever context tools it already has.
+The v0.4 development direction adds one important idea:
 
-<table>
-<tr>
-<td><b>Route before retrieve</b><br/>Classify the context problem before loading data.</td>
-<td><b>Resolution before volume</b><br/>Index → summary → extract → raw.</td>
-<td><b>Stop on sufficiency</b><br/>More context is not automatically better.</td>
-</tr>
-<tr>
-<td><b>Structure-aware</b><br/>Prefer symbols, paths, dependencies, and hierarchy when available.</td>
-<td><b>Provenance-preserving</b><br/>Summaries remain traceable to source truth.</td>
-<td><b>Plan-aware</b><br/>Retain what later workflow steps will actually need.</td>
-</tr>
-</table>
+> **Policy is context too. Do not preload the whole context-engineering architecture just to decide which part is needed.**
+
+ACE-S therefore uses progressive disclosure on its own instructions: a tiny kernel performs coarse recognition, then only the selected manifest and specialist policy are loaded. Additional concerns such as freshness, provenance, tool discovery, or retention are loaded lazily when they become material.
+
+It is **not** a vector database, memory server, retrieval engine, or replacement for an agent framework. It sits above those systems as a portable decision policy.
 
 ---
 
-## Try it in 60 seconds
+## Core idea
+
+```text
+Task
+ ↓
+Tiny Kernel
+DIRECT / ACTIVE / UNCERTAIN
+ ↓
+Coarse candidate
+one primary + optional backup
+ ↓
+Manifest index
+ ↓
+ONE selected manifest
+ ↓
+ONE specialist policy
+ ↓
+minimum useful context
+ ↓
+Sufficiency
+ ├─ STOP
+ ├─ continue current policy
+ ├─ lazy-load ONE newly material policy
+ └─ bounded recovery to ONE backup/new candidate
+```
+
+This deliberately avoids a giant up-front classifier that tries to decide `CODE + RESEARCH + TEMPORAL + EVIDENCE + PLAN + TOOLS + ...` before the task has produced enough evidence.
+
+An early routing guess is allowed to be wrong. The goal is not perfect first-shot classification; the goal is **cheap recognition, useful progress, and bounded recovery without fan-out**.
+
+---
+
+## Try it
 
 Install with the open `skills` CLI:
 
@@ -43,31 +68,36 @@ npx skills add gyeongbin-38/ACE-S \
   --skill adaptive-context-engineering
 ```
 
-Then use your agent normally. ACE-S should activate only when context selection matters.
+Then use your agent normally.
 
 ```text
-Simple question
+Simple rewrite
 → DIRECT
+→ no policy expansion
 → no retrieval
 
 Repository bug
+→ CODE manifest
+→ coding specialist
 → exact symbol/path
-→ local dependencies/tests
-→ expand only if insufficient
+→ local callers/tests only if needed
 
-120-page policy
-→ TOC/heading/search
-→ relevant section
-→ raw exact clause
+Repository + latest research
+→ CODE first
+→ repository evidence
+→ external comparison becomes material
+→ RESEARCH policy is loaded
+→ freshness matters
+→ TEMPORAL policy is loaded
 
-Deep research
-→ claims
-→ primary evidence
-→ necessary corroboration
-→ stop when the decision is supported
+Wrong first guess
+→ candidate manifest does not fit / makes no progress
+→ stop that branch
+→ try one backup candidate
+→ never load every policy “just in case”
 ```
 
-See the practical [`Quickstart`](docs/QUICKSTART.md) and [`examples/`](examples/README.md).
+See [`docs/QUICKSTART.md`](docs/QUICKSTART.md) and [`examples/`](examples/README.md).
 
 ---
 
@@ -79,59 +109,40 @@ See the practical [`Quickstart`](docs/QUICKSTART.md) and [`examples/`](examples/
   </a>
 </p>
 
-This map is generated from a typed [Archify architecture source](docs/archify/ace-s.architecture.json), not hand-drawn. The `showcase` validation profile checks layout/readability and verifies linked ACE-S repository evidence before the deterministic HTML artifact is committed.
+The Archify artifact above is the current public architecture showcase. The v0.4 development branch is testing the progressive-policy kernel described in this README; the visual artifact will be regenerated only after that structure clears its evidence gate.
 
-**Artifacts:** [interactive/standalone HTML](docs/archify/ace-s.architecture.html) · [typed JSON source](docs/archify/ace-s.architecture.json) · [validation receipt](docs/archify/ace-s.architecture.receipt.json)
-
-The core idea is simple:
-
-> **Do not maximize context. Maximize sufficient, trustworthy context.**
-
-ACE-S follows a bounded decision path:
-
-`Task → Activation Gate → Problem Router → Specialist Route → Resolution Ladder → Context Tools → Evidence → Sufficiency Gate → Verification → Answer`
-
-If the current context is already sufficient, the process stops at the activation gate. If evidence is insufficient later, ACE-S expands **one narrow step** and evaluates again.
+**Artifacts:** [interactive HTML](docs/archify/ace-s.architecture.html) · [typed JSON source](docs/archify/ace-s.architecture.json) · [validation receipt](docs/archify/ace-s.architecture.receipt.json)
 
 ---
 
-## Why use it?
+# Why use it?
 
-Long-context agents fail in both directions:
+Long-context agents fail in both directions, and policy instructions can create the same problem as task context.
 
 | Failure | What happens | ACE-S response |
 |---|---|---|
-| **Too little context** | missing dependency, stale assumption, unsupported claim | expand the narrowest relevant scope |
-| **Too much context** | distraction, tool overload, latency, higher cost | stop early; load only the useful route |
-| **Wrong resolution** | summaries hide exact contracts or numbers | escalate to extract/raw evidence |
-| **Wrong source** | semantic search misses structural relationships | prefer path/symbol/graph structure when available |
-| **Stale state** | old and new facts are silently merged | use temporal/conflict route |
-| **Long workflow drift** | useful evidence is discarded too early | preserve future-utility state and handoff refs |
-| **Provenance break** | transformed context can no longer be audited | retain source/version/locator through compaction |
+| **Too little context** | dependency, source, or controlling state is missing | expand one narrow step |
+| **Too much task context** | distraction, latency, cost, conflicting state | stop on sufficiency; retrieve only useful scope |
+| **Too much policy context** | the agent receives every route/rule even when one is relevant | load one manifest + one specialist, lazily expand |
+| **Wrong first route** | early classification error cascades through the workflow | bounded backup/switch instead of fatal routing |
+| **Wrong resolution** | summary hides exact contract/number | use lowest sufficient fidelity; reopen raw when required |
+| **Stale state** | old and new facts are merged | lazily activate temporal/state handling when freshness matters |
+| **Long workflow drift** | useful constraints/evidence disappear | activate retention only when later steps need it |
+| **Provenance break** | compacted context cannot be audited | preserve source/version/locator back to raw truth |
 
-ACE-S is designed to stay out of the way on simple questions. **No retrieval is a valid action.**
+**No retrieval is a valid action. No policy expansion is also a valid action.**
 
 ---
 
-# Benchmark
+# Benchmarks
 
-## Popular Repo Replay — 21 real bug fixes
+ACE-S separates architecture-mechanics evidence from routing/model-quality claims.
 
-We replayed **21 real upstream bug-fix tasks across 7 widely used open-source repositories** using published holdout fixtures with real commit SHAs and ground-truth files:
+## 1. Popular Repo Replay — 21 real bug fixes
+
+We replayed **21 real upstream bug-fix tasks across 7 popular open-source repositories** using published ground-truth files:
 
 `Requests` · `Django` · `Zod` · `Actix Web` · `Gson` · `Gin` · `Kubernetes`
-
-The replay used live GitHub code search on the repositories' current default branches. A single-pass baseline gets one condensed lexical search. ACE-S may use up to three retrieval rounds, but can only expand from information surfaced by the previous round: symbol, module, test sibling, package, or exact-path hint.
-
-```text
-Exact target localization
-
-ACE-S adaptive route     20 / 21  ███████████████████░  95.2%
-Single-pass baseline     13 / 21  ████████████░░░░░░░░  61.9%
-Canonical target         21 / 21  ████████████████████  100.0%*
-
-* One Gson fixture moved from $Gson$Types.java to GsonTypes.java on the live branch.
-```
 
 | Metric | Single-pass | **ACE-S** |
 |---|---:|---:|
@@ -142,10 +153,6 @@ Canonical target         21 / 21  ███████████████�
 | Maximum retrieval rounds | 1 | **3** |
 | RepoReplay Score | **72.9 / 100** | **90.2 / 100** |
 
-### RepoReplay Score
-
-The score is intentionally simple and published:
-
 ```text
 RepoReplay Score =
   0.60 × exact localization rate
@@ -153,55 +160,71 @@ RepoReplay Score =
 + 0.15 × cross-repo coverage
 ```
 
-Per-repository results, all 21 fixtures, exact queries, and caveats are in [`benchmarks/POPULAR_REPO_REPLAY.md`](benchmarks/POPULAR_REPO_REPLAY.md) and [`benchmarks/results/live-github-replay-v0.2.csv`](benchmarks/results/live-github-replay-v0.2.csv).
+Full methodology and caveats: [`benchmarks/POPULAR_REPO_REPLAY.md`](benchmarks/POPULAR_REPO_REPLAY.md).
 
-> **Important:** this is a retrieval-policy replay, not an end-to-end model quality benchmark. It does not prove a 90.2% answer accuracy rate or a fixed token saving for every agent.
+> RepoReplay is a retrieval-policy replay. It is not a 90.2% answer-accuracy claim and does not prove a fixed token saving for every agent.
 
-### Stable-claim release gate
+## 2. Selective Policy Load Bench — controller mechanics
 
-We now publish the exact [`End-to-End Agent A/B Protocol`](benchmarks/AGENT_AB_PROTOCOL.md) that will be used for same-model ACE-S OFF vs ON evaluation. It requires verified task success, trigger precision, raw context-efficiency metrics, failure categories, and disclosure of regressions/no-uplift cases.
+The v0.4 development branch tests whether ACE-S can avoid reading its entire policy architecture.
 
----
+28 oracle-labeled controller fixtures compare four loading strategies:
 
-## Same fixture family: coding-specific systems
+| Condition | Score | Mechanical success | Wrong-first recovery | Active false-stop | Mean policy bytes | Irrelevant policy bytes |
+|---|---:|---:|---:|---:|---:|---:|
+| **A — Full Load** | 82.5 | **100.0%** | **100.0%** | **0.0%** | 29,899.6 | 53.8% |
+| **B — Hard Single** | 34.2 | 28.6% | 0.0% | 83.3% | **9,687.5** | 6.6% |
+| **C — Progressive / No Recovery** | 67.3 | 71.4% | 0.0% | 33.3% | 12,394.1 | 5.2% |
+| **D — Progressive + Recovery** | **98.6** | **100.0%** | **100.0%** | **0.0%** | **14,457.1** | **4.4%** |
 
-The same 21-task fixture family is also used by `context-router` for a stronger **pinned-commit, locally indexed coding benchmark**. Those conditions are not identical to ACE-S's live/no-index replay, so the numbers should not be treated as a strict leaderboard.
+Under this **controller-mechanics** setup, D matches A's oracle-defined mechanical coverage while loading about **51.6% fewer policy bytes** and **61.2% fewer files on average**.
 
-| System | Execution | Published localization result | Context metric |
-|---|---|---:|---:|
-| **ACE-S** | live GitHub, no local index, adaptive policy | **20/21 exact; 21/21 canonical** | 1.38 retrieval rounds avg |
-| **context-router v4.5** | pinned commits + local index + parent diff | **21/21 rank-1** | 15,325 estimated E2E tokens |
-| **code-review-graph 2.3.2** | same context-router comparison setup | 16/21 rank-1 | 380,260 estimated E2E tokens |
+The important result is architectural:
 
-`context-router` is the stronger tool when you specifically want a local structural code-context engine. ACE-S is trying to solve the broader problem: **which context strategy should the agent use in the first place?**
+```text
+Full load     → reliable but wasteful
+Hard route    → cheap but brittle
+Progressive   → selective but first-route errors remain fatal
+Progressive + bounded recovery
+              → selective and mechanically recoverable
+```
 
-See [`benchmarks/COMPETITORS.md`](benchmarks/COMPETITORS.md).
+Full results: [`benchmarks/POLICY_LOAD_BENCH_RESULTS_V0.1.md`](benchmarks/POLICY_LOAD_BENCH_RESULTS_V0.1.md).
+
+> **Important:** the requirements in this benchmark are oracle-authored. The 98.6 score does **not** mean an LLM has 98.6% routing or answer accuracy. Natural-language candidate selection and end-to-end quality remain separate evidence gates.
+
+## 3. RouterBench — exploratory only
+
+The earlier authored RouterBench experiments are retained for failure analysis, but the high signal-aware scores are **not stable performance claims**. The policy and stress prompts were developed in the same experiment cycle, so leakage/overfitting is plausible.
+
+See [`benchmarks/ROUTERBENCH_RESULTS_V0.1.md`](benchmarks/ROUTERBENCH_RESULTS_V0.1.md).
+
+Stable routing claims require independently authored/blinded prompts and repeated raw model predictions.
 
 ---
 
 # Where ACE-S fits
 
-Different context projects solve different layers. They are often complementary rather than interchangeable.
+Different context projects solve different layers. They are often complementary.
 
-| Project | Primary strength | Context routing | Code structure | Tool discovery | Persistent memory | Plan-aware | Zero-infra skill |
+| Project | Primary strength | Context policy | Code structure | Tool discovery | Persistent memory | Plan-aware | Zero-infra skill |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **ACE-S** | adaptive meta-controller | ● | ◐ | ◐ | — | ● | ● |
+| **ACE-S** | selective context-policy control | ● | ◐ | ◐ | — | ● | ● |
 | **context-router** | structural code context packs | ◐ | ● | — | — | ◐ | — |
 | **Ratel** | dynamic tool/skill discovery | ◐ | — | ● | ◐ | — | — |
 | **Acontext** | skill-native persistent memory | ◐ | — | ◐ | ● | — | — |
 | **memahead** | plan-aware context compression | ◐ | — | ● | — | ● | — |
 | **xMemory** | hierarchical long-term memory retrieval | ● | — | — | ● | — | — |
-| **Context Optimization Skills** | masking/cache/compaction tactics | ◐ | — | ◐ | ◐ | — | ● |
 
 `●` native focus · `◐` partial/policy-level support · `—` not the project's primary job
 
-### Strong combinations
+Example combinations:
 
 ```text
-ACE-S + context-router  → adaptive policy + strong code graph backend
-ACE-S + Ratel           → adaptive policy + large tool/skill discovery
-ACE-S + Acontext        → adaptive policy + persistent skill memory
-ACE-S + memahead        → adaptive policy + explicit plan-aware compression
+ACE-S + context-router  → selective policy + strong code graph backend
+ACE-S + Ratel           → selective policy + large tool discovery
+ACE-S + Acontext        → selective policy + persistent memory
+ACE-S + memahead        → selective policy + plan-aware compression
 ```
 
 ---
@@ -209,12 +232,12 @@ ACE-S + memahead        → adaptive policy + explicit plan-aware compression
 # The 7 rules
 
 1. **No Retrieval Is an Action** — if current context is sufficient, answer directly.
-2. **Route Before Retrieve** — classify the context problem before loading more data.
-3. **Resolution Before Volume** — index → summary → extract → raw.
-4. **Structure Before Global Search** — when paths, symbols, dependencies, or hierarchy exist, use them.
-5. **Future Utility Matters** — keep information that later workflow steps will need.
-6. **Summary Is a View, Not Truth** — preserve a route back to raw evidence.
-7. **Expand on Insufficiency** — not merely because a token threshold was reached.
+2. **Policy Is Context Too** — do not preload every architecture rule.
+3. **One Candidate First** — choose one likely policy and at most one backup.
+4. **Resolution Before Volume** — use the lowest fidelity that safely solves the current subproblem.
+5. **Recover, Do Not Fan Out** — a wrong first candidate should trigger one bounded switch, not load-all.
+6. **Summary Is a View, Not Truth** — preserve a route back to exact evidence when it matters.
+7. **Expand on Insufficiency** — not because more context or more policies are available.
 
 Priority:
 
@@ -231,81 +254,79 @@ correctness & completeness
 
 ```text
 skills/adaptive-context-engineering/
-├── SKILL.md                  # compact activation/router policy
+├── SKILL.md                    # tiny always-loaded kernel
+├── manifests/
+│   ├── INDEX.md                # compact policy directory
+│   ├── code.md
+│   ├── document.md
+│   ├── research.md
+│   ├── state.md
+│   ├── temporal.md             # lazy modifier
+│   ├── evidence.md             # lazy modifier
+│   ├── tools.md                # lazy modifier
+│   └── retention.md            # lazy modifier
 ├── references/
-│   ├── coding.md             # structural repo route
-│   ├── long-document.md      # PDFs/specs/policies/books
-│   ├── temporal.md           # changing/conflicting state
-│   ├── research.md           # claim-centered multi-source research
-│   ├── plan-aware.md         # future-utility retention + handoff
-│   ├── resolution-ladder.md  # progressive fidelity
-│   └── evidence-and-provenance.md
+│   ├── coding.md
+│   ├── long-document.md
+│   ├── research.md
+│   ├── temporal.md
+│   ├── evidence-and-provenance.md
+│   ├── plan-aware.md
+│   ├── tool-discovery.md
+│   └── resolution-ladder.md
 └── evals/
     └── evals.json
 ```
 
-Only the relevant specialist reference should be loaded for the current task. **The skill uses progressive disclosure on itself.**
+The intended load path is **kernel → index → selected manifest → selected specialist**, not `SKILL.md → every reference`.
 
 The skill itself requires no vector database, embedding model, API key, or background service.
 
 ---
 
-# Daily use
+# Experimental contracts
 
-ACE-S is most useful for:
+The v0.4 branch exposes a small trace vocabulary in [`docs/CONTEXT_CONTRACTS.md`](docs/CONTEXT_CONTRACTS.md):
 
-- deep research and multi-source synthesis;
-- repository investigation and code changes;
-- long PDFs/documents and large tool outputs;
-- long-running workflows and handoffs;
-- conflicting or changing project state;
-- exact contracts, numbers, APIs, and provenance-sensitive tasks.
+- `ContextIntent` — coarse primary + optional backup candidate;
+- `PolicyLoadState` — which manifests/specialists were actually loaded and recovery count;
+- policy-scoped `ContextSignals` — local categorical observations, not one giant global vector;
+- `ContextDecision` — one next action, including bounded `SWITCH_POLICY`;
+- `EvidencePacket` — recoverable source truth;
+- `SufficiencyReport` — explicit stop/expand state;
+- optional retention/handoff state for long-running work.
 
-It should normally stay dormant for:
-
-- short factual questions already answerable from context;
-- casual conversation;
-- creative writing;
-- simple transformations where no extra evidence is needed.
-
----
-
-# Project docs
-
-| Resource | Purpose |
-|---|---|
-| [`docs/QUICKSTART.md`](docs/QUICKSTART.md) | practical installation and route examples |
-| [`examples/README.md`](examples/README.md) | before/after context decisions |
-| [`docs/DESIGN.md`](docs/DESIGN.md) | architecture and design rationale |
-| [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md) | related context-engineering work |
-| [`benchmarks/README.md`](benchmarks/README.md) | benchmark evidence levels and methodology |
-| [`benchmarks/AGENT_AB_PROTOCOL.md`](benchmarks/AGENT_AB_PROTOCOL.md) | stable-claim OFF vs ON evaluation protocol |
-| [`ROADMAP.md`](ROADMAP.md) | evidence-gated development plan |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) | contribution and benchmark rules |
-| [`SECURITY.md`](SECURITY.md) | security model and reporting |
-| [`CITATION.cff`](CITATION.cff) | research/software citation metadata |
+The contracts are backend-neutral and remain experimental until validated against real agent traces.
 
 ---
 
 # Benchmark policy
 
-We separate three evidence levels:
+ACE-S uses separate evidence levels:
 
-1. **Synthetic mechanism benchmark** — architecture screening only.
-2. **Live public-repo replay** — real repositories and real ground-truth files, but not a model-quality test.
-3. **End-to-end agent A/B** — same model/task with ACE-S OFF vs ON. This is required before claiming general answer-quality or token improvements.
+1. **Controller-mechanics / synthetic benchmark** — screens architecture behavior and policy-loading cost.
+2. **Natural-language routing benchmark** — evaluates whether models select/recover policies on independently authored prompts.
+3. **Live public-repo replay** — tests retrieval behavior against real repositories and ground truth.
+4. **End-to-end agent A/B** — same model/tasks with ACE-S OFF vs ON; required before general answer-quality or token-efficiency claims.
 
-We intentionally publish misses and caveats. See [`benchmarks/`](benchmarks/).
+We intentionally publish misses, leakage risks, and no-uplift cases instead of optimizing for a headline score.
 
 ---
 
-## Status
+# Status
 
-**v0.3.0-alpha** — public research alpha.
+**v0.3.0-alpha** — public research alpha.  
+**v0.4 development branch** — progressive policy loading + bounded recovery under evaluation.
 
-This release adds a dedicated long-document route, deeper research/provenance/plan-aware control, stronger eval coverage, a reproducible real-agent A/B protocol, and public project contribution/security/citation infrastructure.
+Current next evidence gates:
 
-Next evidence gate: reproducible Codex / Claude Code / OpenCode A/B evaluation with verified success, trigger precision, input/output tokens, tool calls, latency, and failure categories.
+1. freeze the progressive controller mechanics;
+2. create an independently authored/blinded natural-language routing/recovery set;
+3. run repeated frontier-model routing traces;
+4. run same-model end-to-end agent A/B;
+5. require quality preservation before counting context/policy savings.
+
+See [`ROADMAP.md`](ROADMAP.md), [`benchmarks/AGENT_AB_PROTOCOL.md`](benchmarks/AGENT_AB_PROTOCOL.md), and [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
