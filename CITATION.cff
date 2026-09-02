@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If ACE-S is useful in your research or tooling, please cite this repository."
+title: "ACE-S: Adaptive Context Engineering Skill"
+type: software
+authors:
+  - alias: "gyeongbin-38"
+repository-code: "https://github.com/gyeongbin-38/ACE-S"
+url: "https://github.com/gyeongbin-38/ACE-S"
+license: MIT
+version: "0.3.0-alpha"
+date-released: 2026-09-02
+abstract: >-
+  ACE-S is a portable context-selection meta-skill for AI agents. It routes
+  context problems, selects retrieval scope and fidelity, preserves provenance,
+  and stops expansion when the available evidence is sufficient.
+keywords:
+  - ai-agents
+  - context-engineering
+  - retrieval
+  - agent-skills
+  - long-context
+  - provenance
