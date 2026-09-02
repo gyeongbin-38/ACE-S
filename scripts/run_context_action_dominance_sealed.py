@@ -9,7 +9,7 @@ import random
 import statistics
 from collections import defaultdict
 
-from scripts.run_context_action_dominance_bench import (
+from run_context_action_dominance_bench import (
     MODEL_NOISE_SIGMA,
     ROLLOUT_K,
     VALUE_NOISE_SIGMA,
@@ -75,7 +75,6 @@ def gen_sealed_world(seed, family):
             cost = math.exp(rng.uniform(math.log(0.5), math.log(9.0)))
         actions.append({"cost": cost, "outcomes": outcomes})
 
-    # A direct decision-relevant fallback keeps every world solvable.
     actions.append({"cost": rng.uniform(2.0, 8.0), "outcomes": tuple(decisions)})
 
     if family == "sparse_redundancy":
@@ -93,8 +92,6 @@ def gen_sealed_world(seed, family):
         source_out = list(source["outcomes"])
 
         if family == "cached_refinement" and rng.random() < 0.6:
-            # Simulate an already-resident/cached observation: an equally informative
-            # action is now cheaper than a redundant remote fetch.
             actions.append({
                 "cost": source["cost"] * rng.uniform(0.15, 0.65),
                 "outcomes": tuple(source_out),
@@ -106,9 +103,7 @@ def gen_sealed_world(seed, family):
             continue
 
         if family == "cross_source_overlap" and rng.random() < 0.5:
-            # Produce a more informative cached/batched view plus a costlier coarser view.
             finer = list(source_out)
-            # split one outcome where possible
             groups = defaultdict(list)
             for i, value in enumerate(finer):
                 groups[value].append(i)
@@ -133,7 +128,6 @@ def gen_sealed_world(seed, family):
             })
             continue
 
-        # Generic duplicate or costly coarsening.
         outcomes = list(source_out)
         if rng.random() < 0.5:
             values = sorted(set(outcomes))
