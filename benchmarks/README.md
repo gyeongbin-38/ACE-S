@@ -60,7 +60,7 @@ Headline:
 | Exact target localization | 13/21 (61.9%) | **20/21 (95.2%)** |
 | Canonical target localization | 14/21 | **21/21** |
 | Mean retrieval rounds | 1.00 | **1.38** |
-| RepoReplay Score | 72.9/100 | **90.3/100** |
+| RepoReplay Score | 72.9/100 | **90.2/100** |
 
 The replay used live GitHub code search on current default branches. It is a context-localization test, not a bug-fix correctness test.
 
