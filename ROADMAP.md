@@ -4,7 +4,7 @@ ACE-S is currently a public research alpha. The roadmap is organized around **ev
 
 ## v0.3 — Operational depth
 
-Status: in progress
+Status: substantially complete; awaiting external/real-agent validation
 
 - [x] Add a dedicated long-document route.
 - [x] Expand research routing into claim-centered retrieval and explicit sufficiency criteria.
@@ -12,9 +12,9 @@ Status: in progress
 - [x] Expand evidence/provenance rules with fidelity classes and recoverable source chains.
 - [x] Publish the end-to-end agent A/B protocol.
 - [x] Add a practical Quickstart.
+- [x] Add negative evals for over-triggering, premature raw loading, over-retention, and trust-boundary failures.
+- [x] Add experimental context-state contract examples for long-running tasks.
 - [ ] Add executable/adapted integration examples for major agent surfaces.
-- [ ] Add negative evals for over-triggering and over-retention.
-- [ ] Add context-state schema examples for long-running tasks.
 
 ## v0.4 — Real-agent evaluation
 
@@ -31,6 +31,8 @@ Release gate: reproducible same-model OFF vs ON results.
 
 Goal: make the policy easier to implement in agent runtimes without forcing one backend.
 
+An experimental vocabulary now exists in [`docs/CONTEXT_CONTRACTS.md`](docs/CONTEXT_CONTRACTS.md). It is intentionally **not yet a stable API**.
+
 Candidate controller actions:
 
 ```text
@@ -45,12 +47,13 @@ COMPACT
 STOP
 ```
 
-Planned work:
+Stabilization work:
 
-- [ ] Define a minimal typed ContextDecision schema.
-- [ ] Define EvidencePacket and HandoffState schemas.
-- [ ] Separate policy decisions from retrieval backend implementation.
+- [ ] Validate the draft `ContextDecision` fields across multiple agent surfaces.
+- [ ] Validate `EvidencePacket`, `HandoffState`, `SufficiencyReport`, and `WorkingContext` against real A/B traces.
+- [ ] Separate policy decisions from retrieval backend implementation in executable adapters.
 - [ ] Add adapters/examples for structural code retrieval, persistent memory, and hierarchical stores.
+- [ ] Remove fields that do not earn their context/storage cost before freezing a schema.
 
 ## v0.6 — Learned/adaptive control experiments
 
