@@ -35,5 +35,7 @@ jobs:
         run: python scripts/discover_adaptive_rollout_budget_v2.py
       - name: Run sealed adaptive rollout budget OOD test
         run: python scripts/run_adaptive_rollout_budget_sealed.py
+      - name: Run action-agreement adaptive compute development bench
+        run: python scripts/discover_agreement_adaptive_rollout.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
