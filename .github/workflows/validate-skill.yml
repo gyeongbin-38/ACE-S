@@ -14,5 +14,7 @@ jobs:
           python-version: "3.12"
       - name: Validate Agent Skill structure
         run: python scripts/validate_skill.py
+      - name: Validate RouterBench fixtures
+        run: python scripts/validate_routerbench.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
