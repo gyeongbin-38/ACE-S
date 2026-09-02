@@ -1,0 +1,16 @@
+{
+  "name": "frozen-sampled-rollout-protocol-v0.1",
+  "status": "frozen_before_third_sealed_test",
+  "base_rollout_freeze_commit": "79a3ea4c71377ba015079c46eef966709109bb82",
+  "protocol": {
+    "sample_counts": [2, 4, 8, 16],
+    "branch_model_log_noise_sigmas": [0.5, 1.0, 1.5],
+    "base_policy_value_noise_sigma": 1.0,
+    "sample_seed_count": 2,
+    "selection": "For each feasible next action, estimate immediate measured cost plus base-policy cost-to-go by Monte Carlo sampling from a deliberately miscalibrated branch-probability model; choose the minimum estimated action, execute one action under the true environment distribution, observe, and replan.",
+    "branch_miscalibration": "Multiply each true branch probability by independent mean-preserving log-normal noise at each state/action and normalize before Monte Carlo sampling.",
+    "actual_evaluation": "Expected cost is always accumulated under the true branch distribution and compared to exact unrestricted dynamic-programming optimal cost."
+  },
+  "guardrail": "No third-sealed-test world seed, result, or post-hoc tuning may be added to this artifact. Sample counts, branch-noise levels, and base-policy noise are frozen here before the next test worlds are introduced.",
+  "claim_boundary": "Synthetic controller robustness protocol. Sampling from a perturbed finite-world transition model is a stress proxy for imperfect predictive value estimation, not an empirical LLM world-model calibration distribution."
+}
