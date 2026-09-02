@@ -1,0 +1,45 @@
+{
+  "version": "0.1",
+  "principle": ["quality", "recoverability", "context_cost", "latency"],
+  "codes": {
+    "source": {"C": "CODE", "D": "DOCUMENT", "R": "RESEARCH", "T": "STATE", "G": "GENERIC"},
+    "requirement": {"E": "EVIDENCE", "F": "TEMPORAL", "U": "TOOLS", "H": "RETENTION"},
+    "fidelity": {"I": "INDEX", "S": "SUMMARY", "X": "EXTRACT", "R": "RAW", "A": "AUTO"}
+  },
+  "entry": {
+    "0": ["STOP"],
+    "?": ["PROBE", "SUFFICIENCY"],
+    "1:?": ["PROBE", "SOURCE"],
+    "1:G": ["OPEN", "GENERIC"],
+    "1:C": ["SPECIALIZE", "CODE"],
+    "1:D": ["SPECIALIZE", "DOCUMENT"],
+    "1:R": ["SPECIALIZE", "RESEARCH"],
+    "1:T": ["SPECIALIZE", "STATE"]
+  },
+  "source_ops": {
+    "C": ["TARGET_EXACT", "LOOKUP_STRUCTURAL", "NEIGHBOR_DEPENDENCY", "SEARCH_SEMANTIC", "SEARCH_BROAD"],
+    "D": ["INDEX_STRUCTURE", "LOCATE_SECTION", "READ_CONTIGUOUS", "REOPEN_EXACT"],
+    "R": ["QUERY_TARGETED", "SELECT_AUTHORITATIVE", "CORROBORATE_IF_MATERIAL", "RECONCILE_CONFLICT"],
+    "T": ["ENUMERATE_CANDIDATE_STATE", "VERIFY_AS_OF", "SELECT_CURRENT_AUTHORITY", "RECONCILE_CONFLICT"],
+    "G": ["IDENTIFY_TARGET_OR_CAPABILITY", "INSPECT_ONE", "SPECIALIZE_IF_STRUCTURE_EMERGES"]
+  },
+  "requirement_ops": {
+    "E": ["KEEP_PROVENANCE", "REOPEN_EXACT_IF_CLAIM_CRITICAL"],
+    "F": ["VERIFY_VERSION_OR_AS_OF"],
+    "U": ["CAPABILITY_INDEX_FIRST", "LOAD_TOOL_ONLY_AFTER_MATCH"],
+    "H": ["PIN_FUTURE_CRITICAL", "OFFLOAD_RECOVERABLE", "COMPACT_AT_BOUNDARY"]
+  },
+  "resolution": {
+    "order": ["I", "S", "X", "R"],
+    "rule": "lowest_sufficient_not_mandatory_staircase"
+  },
+  "recovery": {
+    "no_progress_with_backup": ["SWITCH", "B"],
+    "no_progress_without_backup": ["SWITCH", "G"],
+    "generic_structure_emerges": ["SPECIALIZE", "S"],
+    "never": ["LOAD_ALL_POLICIES"]
+  },
+  "stop": {
+    "all": ["MATERIAL_CLAIMS_COVERED", "NO_MATERIAL_CONFLICT", "REQUIRED_FRESHNESS_VERIFIED", "REQUIRED_EXACT_EVIDENCE_AVAILABLE", "NEXT_FETCH_LOW_DECISION_VALUE"]
+  }
+}
