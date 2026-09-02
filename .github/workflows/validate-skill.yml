@@ -21,21 +21,15 @@ jobs:
         run: python scripts/validate_microkernel_runtime.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
-      - name: Run sealed retention rollout OOD test
+      - name: Run sealed retention rollout OOD regression
         run: python scripts/run_retention_rollout_sealed.py
-      - name: Run retention lookahead depth development bench
-        run: python scripts/discover_retention_lookahead_depth.py
-      - name: Run sealed context action dominance test
+      - name: Run selective retention lookahead development search
+        run: python scripts/discover_selective_retention_lookahead.py
+      - name: Run sealed context action dominance regression
         run: python scripts/run_context_action_dominance_sealed.py
-      - name: Run corrected acquisition exposure separation development bench
-        run: python scripts/run_acquisition_exposure_bench_v2.py
-      - name: Run batched hidden acquisition development bench
-        run: python scripts/run_batched_hidden_acquisition_bench.py
-      - name: Run quality-constrained adaptive rollout search
-        run: python scripts/discover_adaptive_rollout_budget_v2.py
-      - name: Run sealed adaptive rollout budget OOD test
-        run: python scripts/run_adaptive_rollout_budget_sealed.py
-      - name: Run action-agreement adaptive compute development bench
-        run: python scripts/discover_agreement_adaptive_rollout.py
+      - name: Run sealed action-agreement adaptive compute test
+        run: python scripts/run_agreement_adaptive_rollout_sealed.py
+      - name: Run typed evidence certificate development bench
+        run: python scripts/discover_evidence_certificate_bench.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
