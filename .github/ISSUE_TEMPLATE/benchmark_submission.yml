@@ -1,0 +1,70 @@
+name: Benchmark submission
+description: Share a reproducible ACE-S OFF vs ON result or public-repository replay
+title: "[Benchmark]: "
+labels: ["benchmark"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ACE-S accepts wins, regressions, and no-uplift results. Reproducibility matters more than headline score.
+  - type: input
+    id: runtime
+    attributes:
+      label: Agent/runtime and version
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model/version
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Task set
+      description: Link to fixtures or describe how tasks can be reproduced.
+    validations:
+      required: true
+  - type: textarea
+    id: controls
+    attributes:
+      label: Controlled conditions
+      description: Tool set, permissions, commit/document versions, budgets, order/randomization, evaluator.
+    validations:
+      required: true
+  - type: textarea
+    id: off
+    attributes:
+      label: ACE-S OFF results
+      description: Include verified success plus raw efficiency metrics where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: on
+    attributes:
+      label: ACE-S ON results
+      description: Include verified success plus raw efficiency metrics where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: failures
+    attributes:
+      label: Failures / regressions / caveats
+      description: Do not omit cases where ACE-S made performance worse.
+    validations:
+      required: true
+  - type: input
+    id: raw
+    attributes:
+      label: Raw result link
+      placeholder: repository, CSV/JSON, gist, or artifact URL
+  - type: checkboxes
+    id: declaration
+    attributes:
+      label: Reproducibility declaration
+      options:
+        - label: ON and OFF used the same model and materially equivalent tools/permissions, or differences are disclosed above.
+          required: true
+        - label: I included regressions and no-uplift cases rather than reporting only wins.
+          required: true
