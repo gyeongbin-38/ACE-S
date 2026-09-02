@@ -83,23 +83,23 @@ at least 2 of 3 tasks are exactly localized
 ### ACE-S
 
 ```text
-Exact localization       = 95.24
-Round efficiency         = 72.41   (100 / 1.38095)
-Cross-repo coverage      = 100.00
+Exact localization       = 95.2381
+Round efficiency         = 72.4138   (100 / 1.38095)
+Cross-repo coverage      = 100.0000
 
-Score = 0.60(95.24) + 0.25(72.41) + 0.15(100)
-      = 90.25
-      ≈ 90.3 / 100
+Score = 0.60(95.2381) + 0.25(72.4138) + 0.15(100)
+      = 90.2463
+      ≈ 90.2 / 100 (one decimal place)
 ```
 
 ### Single-pass baseline
 
 ```text
-Exact localization       = 61.90
-Round efficiency         = 100.00
-Cross-repo coverage      = 71.43
+Exact localization       = 61.9048
+Round efficiency         = 100.0000
+Cross-repo coverage      = 71.4286
 
-Score = 72.86
+Score = 72.8571
       ≈ 72.9 / 100
 ```
 
