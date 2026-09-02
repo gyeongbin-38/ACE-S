@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/research-certificate.yml
       - scripts/discover_evidence_certificate_bench.py
+      - scripts/discover_certificate_call_penalty.py
 
 env:
   PYTHONHASHSEED: "0"
@@ -21,3 +22,5 @@ jobs:
           python-version: "3.12"
       - name: Run typed evidence certificate development bench
         run: python scripts/discover_evidence_certificate_bench.py
+      - name: Run certificate call-penalty sensitivity bench
+        run: python scripts/discover_certificate_call_penalty.py
