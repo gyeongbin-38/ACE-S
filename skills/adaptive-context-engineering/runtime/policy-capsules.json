@@ -1,0 +1,58 @@
+{
+  "version": "0.1",
+  "common": [
+    "Take one narrow context action at a time; expand only on insufficiency.",
+    "Use the lowest fidelity that can support the material claim; jump to raw when exactness requires it.",
+    "Stop when material claims are covered, required freshness/exactness is verified, conflicts are resolved or disclosed, and another bounded fetch is unlikely to change the answer."
+  ],
+  "source": {
+    "CODE": [
+      "Resolve explicit path/symbol/error/test/change anchors first.",
+      "Use the smallest lexical/symbol lookup that can produce a seed; if over-constrained, remove descriptive noise before broadening.",
+      "After a seed, stay in its structural neighborhood: implementation, imports/dependencies, callers/callees, sibling tests, package neighbors, change blast radius.",
+      "Expand at most one hop when current evidence is insufficient; do not restart broad search after a useful seed.",
+      "Read raw affected code and verify against tests, contracts, call sites, or changed behavior."
+    ],
+    "DOCUMENT": [
+      "Map metadata/version, headings/TOC/index before broad reading; use exact anchors before semantic search.",
+      "Treat search hits as locators: read the smallest contiguous region plus controlling qualifiers and material cross-references.",
+      "Jump to raw for exact wording, exceptions, thresholds, tables/formulas, changed requirements, citations, or disputed interpretation.",
+      "If parsed text is broken or layout-dependent, inspect the visual page instead of repeatedly searching bad text.",
+      "Keep page/section coordinates and stop when the claim is supported with controlling qualifiers checked."
+    ],
+    "RESEARCH": [
+      "Frame the decision, constraints, material claims, and freshness before searching.",
+      "Search to resolve claims, not browsing order; prefer primary/official evidence for each claim.",
+      "Use exact entity/field/metric queries first, then authoritative-domain search, targeted comparison/failure search, and broad discovery only if the candidate set is unknown.",
+      "Keep a compact claim ledger; reconcile conflicts by authority, update time, definition, scope, version, and supersession.",
+      "Stop when decision-relevant claims are supported or explicitly uncertain and more sources would mostly duplicate evidence."
+    ],
+    "STATE": [
+      "Enumerate candidate states/versions before deciding which is current.",
+      "Establish date/version/revision and authority; do not merge superseded and current state.",
+      "Resolve conflicts by provenance, update time, scope, and explicit supersession.",
+      "Keep the controlling current state plus recoverable references to material superseded/conflicting state."
+    ],
+    "GENERIC": [
+      "Do not invent a domain. Identify one concrete source, artifact, capability, or working-context uncertainty.",
+      "Inspect one low-cost target first; specialize only if a clear CODE/DOCUMENT/RESEARCH/STATE structure emerges.",
+      "If no progress, change the concrete target/capability once; never compensate by loading every specialist."
+    ]
+  },
+  "requirement": {
+    "EVIDENCE": [
+      "For material claims keep claim→source→locator→source-state provenance; exact claims stay raw/extractive or are reopened before final use.",
+      "Corroborate when consequential, disputed, surprising, or self-reported; do not add redundant sources merely for count."
+    ],
+    "TEMPORAL": [
+      "Verify the controlling source matches the required date/version window; treat changing software, prices, policies, releases, schedules, and organizational claims as stale until established."
+    ],
+    "TOOLS": [
+      "State the required operation, inspect capability metadata/index first, keep a small candidate set, and open deeper tool docs only when arguments/permissions/output semantics remain unclear."
+    ],
+    "RETENTION": [
+      "Retain future-critical invariants, decisions, artifacts, open state, and evidence refs; compact ephemeral exploration at semantic boundaries.",
+      "Prefer compact state + recoverable reference over raw history when reconstruction is cheap; count reacquisition when discarded context must be rebuilt."
+    ]
+  }
+}
