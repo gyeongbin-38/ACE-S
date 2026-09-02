@@ -8,6 +8,7 @@ on:
       - .github/workflows/research-costfloor.yml
       - scripts/run_cost_floor_pruning_bench.py
       - scripts/run_cost_floor_pruning_sealed.py
+      - scripts/run_cost_floor_abstention_strict.py
       - benchmarks/COST_FLOOR_PRUNING_FREEZE_V0.1.md
 
 env:
@@ -23,3 +24,5 @@ jobs:
           python-version: "3.12"
       - name: Run sealed cost-floor plus dominance pruning OOD test
         run: python scripts/run_cost_floor_pruning_sealed.py
+      - name: Run strict no-upper-bound abstention control
+        run: python scripts/run_cost_floor_abstention_strict.py
