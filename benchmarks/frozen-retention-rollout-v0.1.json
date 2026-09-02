@@ -1,0 +1,32 @@
+{
+  "name": "frozen-retention-rollout-v0.1",
+  "status": "frozen_before_sealed_lifecycle_ood",
+  "development_parent_commit": "45497cfcb193dbe940c36b9f1130b5c6b3a4d6e1",
+  "base_retention_policy": {
+    "benefit_exp": 1.0,
+    "cost_exp": 0.75,
+    "exact_weight": 1.5,
+    "abstract_risk_weight": 1.5,
+    "discount": 1.0,
+    "threshold": 1.2
+  },
+  "rollout_algorithm": {
+    "actions": ["RAW", "ABSTRACT", "DROP"],
+    "name": "one-step-retention-policy-rollout-receding-horizon",
+    "decision_rule": "At each future step and current availability state, score every feasible lifecycle action by immediate transition/residency/reacquisition expectation plus the frozen base retention policy's expected remaining cost after each possible need/exactness outcome; choose one lifecycle action and replan after the observed outcome.",
+    "retuning": "none",
+    "terminal_policy": "frozen retention policy",
+    "replanning": "after every observed need/exactness outcome"
+  },
+  "development_observation_only": {
+    "items": 370,
+    "evaluations": 2220,
+    "base_mean_ratio_to_exact_optimal": 1.08904,
+    "rollout_mean_ratio_to_exact_optimal": 1.01853,
+    "rollout_p90": 1.00007,
+    "rollout_within_10pct": 96.67,
+    "rollout_beats_or_ties_base_rate": 100.0
+  },
+  "guardrail": "No sealed lifecycle seed, unseen family, result, or algorithm change may be added to this artifact after this commit. Any sealed retention-rollout evaluation must be created only in a later commit.",
+  "claim_boundary": "Synthetic lifecycle controller mechanics only. Development rollout uses exact need/exactness probabilities for expected action evaluation; real deployment requires estimated probabilities."
+}
