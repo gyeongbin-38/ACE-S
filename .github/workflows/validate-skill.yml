@@ -18,11 +18,7 @@ jobs:
         run: python scripts/validate_microkernel_runtime.py
       - name: Validate RouterBench fixtures
         run: python scripts/validate_routerbench.py
-      - name: Run Microkernel Control Exposure Bench
-        run: python scripts/run_microkernel_bench.py
-      - name: Run bounded adaptive resolution scheduler search
-        run: python scripts/discover_resolution_scheduler_fast.py
-      - name: Run receding-horizon rollout scheduler bench
-        run: python scripts/run_rollout_scheduler_bench.py
+      - name: Run second sealed context scheduler OOD test
+        run: python scripts/run_second_sealed_scheduler_test.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
