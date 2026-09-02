@@ -1,0 +1,25 @@
+name: research-costfloor
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-costfloor.yml
+      - scripts/run_cost_floor_pruning_bench.py
+      - scripts/run_cost_floor_pruning_sealed.py
+      - benchmarks/COST_FLOOR_PRUNING_FREEZE_V0.1.md
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  costfloor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run sealed cost-floor plus dominance pruning OOD test
+        run: python scripts/run_cost_floor_pruning_sealed.py
