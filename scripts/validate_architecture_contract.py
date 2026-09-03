@@ -12,21 +12,39 @@ import json
 from pathlib import Path
 from typing import Any
 
-STRONG_DISTRIBUTION_FORCES = {
+STRONG_SEPARATION_PRESSURES = {
     "state_consistency",
     "trust",
     "failure_isolation",
     "independent_scale",
     "independent_deployment",
     "runtime_requirement",
+    "regulatory_isolation",
+    "data_location",
 }
-ALLOWED_FORCES = STRONG_DISTRIBUTION_FORCES | {"change_coupling", "ownership"}
+ALLOWED_SEPARATION_PRESSURES = STRONG_SEPARATION_PRESSURES | {"change_coupling", "ownership"}
+ALLOWED_COHESION_PRESSURES = {
+    "shared_invariant",
+    "transactional_consistency",
+    "coordinated_change",
+    "shared_domain_model",
+    "chatty_latency",
+    "lifecycle_recovery",
+}
 DISTRIBUTED_KINDS = {"process", "service", "network"}
+DISTANT_LEVELS = {"PROCESS", "SERVICE", "SYSTEM"}
 HIGH_LOCKIN = {"MIGRATABLE", "IRREVERSIBLE_OR_HIGH_LOCKIN"}
+CHANGE_LIKELIHOOD = {"HIGH", "MEDIUM", "LOW", "UNKNOWN"}
 
 
 def nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [x for x in value if isinstance(x, str) and x]
 
 
 def issue(code: str, path: str, message: str, severity: str = "error") -> dict[str, str]:
@@ -48,6 +66,23 @@ def validate(candidate: dict[str, Any]) -> dict[str, Any]:
         if isinstance(c, dict) and nonempty(c.get("id"))
     }
 
+    boundaries = candidate.get("boundaries", [])
+    boundary_ids = {
+        b.get("id") for b in boundaries
+        if isinstance(b, dict) and nonempty(b.get("id"))
+    }
+    flows = candidate.get("critical_flows", [])
+    flow_ids = {
+        f.get("id") for f in flows
+        if isinstance(f, dict) and nonempty(f.get("id"))
+    }
+    decisions = candidate.get("decisions", [])
+    decision_ids = {
+        d.get("id") for d in decisions
+        if isinstance(d, dict) and nonempty(d.get("id"))
+    }
+    traceable_ids = component_ids | boundary_ids | flow_ids | decision_ids
+
     for i, c in enumerate(candidate.get("hard_constraints", [])):
         if not isinstance(c, dict):
             issues.append(issue("HARD_CONSTRAINT_INVALID", f"hard_constraints[{i}]", "constraint must be object"))
@@ -68,25 +103,49 @@ def validate(candidate: dict[str, Any]) -> dict[str, Any]:
             issues.append(issue("CRITICAL_ASR_NO_MECHANISM", f"asrs[{i}].mechanism", "critical ASR has no architecture mechanism"))
         if a.get("critical") is True and not nonempty(a.get("fitness_check")):
             issues.append(issue("CRITICAL_ASR_NO_FITNESS_CHECK", f"asrs[{i}].fitness_check", "critical ASR has no executable or inspectable fitness check", "warning"))
+        refs = a.get("mechanism_refs")
+        if a.get("critical") is True and not refs:
+            issues.append(issue("CRITICAL_ASR_NO_TRACEABILITY", f"asrs[{i}].mechanism_refs", "critical ASR has no typed trace to architecture mechanisms", "warning"))
+        elif refs is not None:
+            if not isinstance(refs, list) or any(not isinstance(x, str) or x not in traceable_ids for x in refs):
+                issues.append(issue("ASR_TRACEABILITY_INVALID", f"asrs[{i}].mechanism_refs", "mechanism_refs must reference known component, boundary, flow, or decision ids"))
 
-    for i, b in enumerate(candidate.get("boundaries", [])):
+    for i, b in enumerate(boundaries):
         if not isinstance(b, dict):
             issues.append(issue("BOUNDARY_INVALID", f"boundaries[{i}]", "boundary must be object"))
             continue
-        forces = b.get("forces", [])
-        if not isinstance(forces, list):
-            forces = []
-        valid_forces = {f for f in forces if f in ALLOWED_FORCES}
-        if not valid_forces:
-            issues.append(issue("BOUNDARY_WITHOUT_FORCE", f"boundaries[{i}].forces", "boundary has no material architecture force"))
+
+        # `forces` is retained as a backwards-compatible alias for separation pressure.
+        raw_separation = b.get("separation_pressure", b.get("forces", []))
+        separation = {x for x in string_list(raw_separation) if x in ALLOWED_SEPARATION_PRESSURES}
+        cohesion = {x for x in string_list(b.get("cohesion_pressure", [])) if x in ALLOWED_COHESION_PRESSURES}
+        if not separation:
+            issues.append(issue("BOUNDARY_WITHOUT_FORCE", f"boundaries[{i}].separation_pressure", "boundary has no material separation pressure"))
+
         kind = b.get("kind")
-        if kind in DISTRIBUTED_KINDS and not (valid_forces & STRONG_DISTRIBUTION_FORCES):
-            issues.append(issue("DISTRIBUTED_WEAK_BOUNDARY", f"boundaries[{i}]", "distributed boundary lacks a strong isolation/scale/deployment/state driver", "warning"))
+        distance = b.get("chosen_distance")
+        is_distant = kind in DISTRIBUTED_KINDS or distance in DISTANT_LEVELS
+        if is_distant and not (separation & STRONG_SEPARATION_PRESSURES):
+            issues.append(issue("DISTRIBUTED_WEAK_BOUNDARY", f"boundaries[{i}]", "distant boundary lacks a strong isolation/scale/deployment/state driver", "warning"))
+
         between = b.get("between", [])
         if not isinstance(between, list) or len(between) != 2 or any(x not in component_ids for x in between):
             issues.append(issue("BOUNDARY_ENDPOINT_INVALID", f"boundaries[{i}].between", "boundary endpoints must reference exactly two known components"))
+
         if kind == "trust" and not nonempty(b.get("enforcement")):
             issues.append(issue("TRUST_BOUNDARY_NO_ENFORCEMENT", f"boundaries[{i}].enforcement", "trust boundary lacks an enforcement point"))
+
+        if is_distant and cohesion and not string_list(b.get("cohesion_mitigation", [])):
+            issues.append(issue("BOUNDARY_COHESION_CONFLICT_UNRESOLVED", f"boundaries[{i}].cohesion_mitigation", "distant boundary has material cohesion pressure but no explicit mitigation"))
+
+        change = b.get("change_likelihood")
+        if change is not None and change not in CHANGE_LIKELIHOOD:
+            issues.append(issue("BOUNDARY_CHANGE_LIKELIHOOD_INVALID", f"boundaries[{i}].change_likelihood", "change_likelihood must be HIGH, MEDIUM, LOW, or UNKNOWN"))
+        elif is_distant and cohesion and change == "UNKNOWN":
+            issues.append(issue("BOUNDARY_CHANGE_LIKELIHOOD_UNKNOWN", f"boundaries[{i}].change_likelihood", "distant boundary with cohesion pressure has unknown change likelihood", "warning"))
+
+        if is_distant and not (nonempty(b.get("merge_condition")) or nonempty(b.get("reversal_condition"))):
+            issues.append(issue("DISTRIBUTED_BOUNDARY_NO_REVERSAL", f"boundaries[{i}]", "distant boundary has no merge/reversal condition", "warning"))
 
     for i, s in enumerate(candidate.get("state", [])):
         if not isinstance(s, dict):
@@ -102,7 +161,7 @@ def validate(candidate: dict[str, Any]) -> dict[str, Any]:
             if not nonempty(s.get("recovery")):
                 issues.append(issue("MUTABLE_STATE_NO_RECOVERY", f"state[{i}].recovery", "mutable state has no recovery/rebuild path", "warning"))
 
-    for i, f in enumerate(candidate.get("critical_flows", [])):
+    for i, f in enumerate(flows):
         if not isinstance(f, dict):
             issues.append(issue("FLOW_INVALID", f"critical_flows[{i}]", "flow must be object"))
             continue
@@ -121,7 +180,7 @@ def validate(candidate: dict[str, Any]) -> dict[str, Any]:
         if f.get("critical") is True and not nonempty(f.get("observability_point")):
             issues.append(issue("CRITICAL_FLOW_NO_OBSERVABILITY", f"critical_flows[{i}].observability_point", "critical flow lacks an observability point", "warning"))
 
-    for i, d in enumerate(candidate.get("decisions", [])):
+    for i, d in enumerate(decisions):
         if not isinstance(d, dict):
             issues.append(issue("DECISION_INVALID", f"decisions[{i}]", "decision must be object"))
             continue
