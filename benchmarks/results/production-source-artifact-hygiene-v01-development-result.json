@@ -1,0 +1,19 @@
+{
+  "experiment": "production-source-artifact-hygiene-development-v0.1",
+  "status": "development_only_seen_tasks",
+  "tasks": 14,
+  "before_frontier_recall_pct": 100.0,
+  "after_frontier_recall_pct": 100.0,
+  "changed_tasks": 2,
+  "mean_candidates_before": 6.428571428571429,
+  "mean_candidates_after": 6.285714285714286,
+  "candidate_reduction_pct": 2.2222222222222254,
+  "removed_examples": [
+    "pnpm-lock.yaml",
+    "package-lock.json"
+  ],
+  "workflow_run_id": 33738855250,
+  "workflow_job_id": 100595784307,
+  "decision": "Safe small deterministic hygiene candidate for prompts explicitly requiring a production source file. Keep separate from the v0.4 hybrid evidence experiment because the measured benefit is small and attribution should remain clean.",
+  "claim_boundary": "Seen-task deterministic filtering only. No semantic quality or unseen generalization claim."
+}
