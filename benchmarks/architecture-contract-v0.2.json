@@ -1,0 +1,155 @@
+{
+  "schema_version": "0.2",
+  "suite_id": "architecture-contract-v0.2",
+  "claim_boundary": "Authored contract fixtures test deterministic invariant, boundary-balance, and traceability semantics only. They are not evidence that the synthesis method improves LLM architecture quality.",
+  "cases": [
+    {
+      "id": "valid-cohesive-system",
+      "expected_gate_passed": true,
+      "expected_error_codes": [],
+      "candidate": {
+        "candidate_id": "cohesive-modular-candidate",
+        "components": [{"id":"api"},{"id":"domain"},{"id":"store"}],
+        "hard_constraints": [{"id":"single-region","status":"satisfied"}],
+        "asrs": [{"id":"recover-orders","critical":true,"mechanism":"domain owns idempotent order command processing and store recovery","mechanism_refs":["place-order","domain-store"],"fitness_check":"replay recovery integration test"}],
+        "boundaries": [
+          {"id":"api-domain","kind":"module","chosen_distance":"MODULE","between":["api","domain"],"separation_pressure":["change_coupling"],"cohesion_pressure":[],"change_likelihood":"MEDIUM"},
+          {"id":"domain-store","kind":"module","chosen_distance":"MODULE","between":["domain","store"],"separation_pressure":["state_consistency"],"cohesion_pressure":["transactional_consistency"],"change_likelihood":"MEDIUM"}
+        ],
+        "state": [{"name":"orders","mutable":true,"owner":"store","consistency":"transactional","recovery":"restore snapshot then replay journal"}],
+        "critical_flows": [{"id":"place-order","critical":true,"hops":[{"from":"api","to":"domain","interface":"PlaceOrder"},{"from":"domain","to":"store","interface":"OrderRepository"}],"failure_behavior":"bounded retry on transient store failure; command idempotency prevents duplicates","observability_point":"order command trace and store error metric"}],
+        "decisions": [{"id":"stay-cohesive","reversibility":"REVERSIBLE","drivers":["strong transactional coupling"],"alternatives":["split order service"],"kill_condition":"independent scaling or release pressure becomes material"}]
+      }
+    },
+    {
+      "id": "noun-microservices-without-forces",
+      "expected_gate_passed": false,
+      "expected_error_codes": ["BOUNDARY_WITHOUT_FORCE","MUTABLE_STATE_NO_OWNER","RELATION_GAP","HIGH_LOCKIN_NO_ALTERNATIVES","HIGH_LOCKIN_NO_KILL_CONDITION","HIGH_LOCKIN_NO_DRIVERS"],
+      "candidate": {
+        "candidate_id": "noun-services",
+        "components": [{"id":"user-service"},{"id":"order-service"},{"id":"catalog-service"}],
+        "hard_constraints": [{"id":"budget","status":"satisfied"}],
+        "asrs": [{"id":"checkout","critical":true,"mechanism":"three services collaborate","fitness_check":"checkout e2e"}],
+        "boundaries": [
+          {"id":"u-o","kind":"service","between":["user-service","order-service"],"forces":[]},
+          {"id":"o-c","kind":"service","between":["order-service","catalog-service"],"forces":[]}
+        ],
+        "state": [{"name":"checkout","mutable":true,"owner":null,"multi_writer_protocol":null,"recovery":null}],
+        "critical_flows": [{"id":"checkout","critical":true,"hops":[{"from":"user-service","to":"order-service","interface":""}],"failure_behavior":"retry","observability_point":"trace"}],
+        "decisions": [{"id":"microservices","reversibility":"IRREVERSIBLE_OR_HIGH_LOCKIN","drivers":[],"alternatives":[],"kill_condition":""}]
+      }
+    },
+    {
+      "id": "trust-boundary-without-enforcement",
+      "expected_gate_passed": false,
+      "expected_error_codes": ["TRUST_BOUNDARY_NO_ENFORCEMENT"],
+      "candidate": {
+        "candidate_id": "trust-gap",
+        "components": [{"id":"public-api"},{"id":"tenant-data"}],
+        "hard_constraints": [],
+        "asrs": [],
+        "boundaries": [{"id":"tenant-trust","kind":"trust","between":["public-api","tenant-data"],"forces":["trust"],"enforcement":""}],
+        "state": [],
+        "critical_flows": [],
+        "decisions": []
+      }
+    },
+    {
+      "id": "hard-constraint-violation",
+      "expected_gate_passed": false,
+      "expected_error_codes": ["HARD_CONSTRAINT_VIOLATION"],
+      "candidate": {
+        "candidate_id": "invalid-region",
+        "components": [{"id":"app"}],
+        "hard_constraints": [{"id":"eu-only-residency","status":"violated"}],
+        "asrs": [],
+        "boundaries": [],
+        "state": [],
+        "critical_flows": [],
+        "decisions": []
+      }
+    },
+    {
+      "id": "explicit-multiwriter-protocol",
+      "expected_gate_passed": true,
+      "expected_error_codes": [],
+      "candidate": {
+        "candidate_id": "multiwriter-explicit",
+        "components": [{"id":"edge-a"},{"id":"edge-b"}],
+        "hard_constraints": [],
+        "asrs": [],
+        "boundaries": [{"id":"edge-network","kind":"network","between":["edge-a","edge-b"],"forces":["independent_scale"]}],
+        "state": [{"name":"presence","mutable":true,"owner":null,"multi_writer_protocol":"LWW register with monotonic version and deterministic tie-break","recovery":"rebuild from retained event log"}],
+        "critical_flows": [],
+        "decisions": []
+      }
+    },
+    {
+      "id": "distant-boundary-with-unresolved-cohesion",
+      "expected_gate_passed": false,
+      "expected_error_codes": ["BOUNDARY_COHESION_CONFLICT_UNRESOLVED"],
+      "candidate": {
+        "candidate_id": "distributed-monolith-risk",
+        "components": [{"id":"checkout"},{"id":"orders"}],
+        "hard_constraints": [],
+        "asrs": [],
+        "boundaries": [{
+          "id":"checkout-orders",
+          "kind":"service",
+          "chosen_distance":"SERVICE",
+          "between":["checkout","orders"],
+          "separation_pressure":["independent_deployment"],
+          "cohesion_pressure":["shared_invariant","coordinated_change"],
+          "change_likelihood":"HIGH",
+          "cohesion_mitigation":[],
+          "merge_condition":"coordinated release rate remains dominant"
+        }],
+        "state": [],
+        "critical_flows": [],
+        "decisions": []
+      }
+    },
+    {
+      "id": "forced-distant-boundary-with-explicit-mitigation",
+      "expected_gate_passed": true,
+      "expected_error_codes": [],
+      "candidate": {
+        "candidate_id": "forced-trust-separation",
+        "components": [{"id":"public-gateway"},{"id":"tenant-data"}],
+        "hard_constraints": [{"id":"tenant-process-isolation","status":"satisfied"}],
+        "asrs": [],
+        "boundaries": [{
+          "id":"tenant-boundary",
+          "kind":"trust",
+          "chosen_distance":"SERVICE",
+          "between":["public-gateway","tenant-data"],
+          "separation_pressure":["trust","failure_isolation"],
+          "cohesion_pressure":["shared_domain_model"],
+          "change_likelihood":"HIGH",
+          "non_negotiable_constraint":"tenant-process-isolation",
+          "cohesion_mitigation":["tenant-data owns authorization and mutable tenant invariants","gateway sends narrow resource commands rather than sharing persistence models"],
+          "enforcement":"tenant-data service validates scoped capability at ingress",
+          "reversal_condition":"none while tenant-process-isolation remains mandatory"
+        }],
+        "state": [],
+        "critical_flows": [],
+        "decisions": []
+      }
+    },
+    {
+      "id": "invalid-asr-traceability",
+      "expected_gate_passed": false,
+      "expected_error_codes": ["ASR_TRACEABILITY_INVALID"],
+      "candidate": {
+        "candidate_id": "trace-gap",
+        "components": [{"id":"api"}],
+        "hard_constraints": [],
+        "asrs": [{"id":"critical-latency","critical":true,"mechanism":"fast path","mechanism_refs":["missing-fast-path"],"fitness_check":"p99 load test"}],
+        "boundaries": [],
+        "state": [],
+        "critical_flows": [],
+        "decisions": []
+      }
+    }
+  ]
+}
