@@ -1,0 +1,9 @@
+{
+  "suite_id": "fixture-paired-pass-v0.1",
+  "pairs": [
+    {
+      "off": "paired-off.jsonl",
+      "on": "paired-on.jsonl"
+    }
+  ]
+}
