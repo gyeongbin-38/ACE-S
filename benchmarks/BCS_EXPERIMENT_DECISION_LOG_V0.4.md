@@ -63,6 +63,40 @@ Post-freeze sealed OOD:
 
 Boundary: synthetic typed-tool economics. Real use requires schema validation, provenance-preserving serialization, and measured token/RPC/latency cost.
 
+### Exact frontier + typed certificate composition — KEEP
+
+Frozen composition rule:
+1. apply legal typed-certificate cost semantics only to structured certificate-capable evidence;
+2. apply structural dominance and valid cost-floor pruning to the resulting action frontier;
+3. require the pruned exact optimum to equal the unpruned certificate-aware exact optimum.
+
+Development interaction test:
+- 360 worlds
+- exact optimum preservation: `100%`
+- mean candidate reduction: `45.618%`
+- full-exposure total-cost reduction: `8.808%`
+
+Post-freeze sealed OOD used six new families and seed `386117509`:
+- 420 worlds
+- exact optimum preservation: `100%`
+- mean candidate reduction: `58.849%`
+- mean total-cost reduction vs full exposure: `8.081%`
+- no semantic certificate capability
+- all worlds solved
+- all predeclared gates passed
+
+Per-family sealed total-cost reduction:
+- `cheap_semantic_complete`: `0.111%`
+- `expensive_typed_complete`: `6.153%`
+- `mixed_wide_cost`: `9.425%`
+- `redundant_typed_and_semantic`: `8.618%`
+- `semantic_heavy_low_cert`: `1.638%`
+- `typed_high_payload`: `14.782%`
+
+Interpretation: the two mechanisms operate on different cost axes. Typed certificates reduce legal execution/exposure cost; proof pruning reduces the candidate search frontier while preserving the same certificate-aware optimum. Do not add their percentages as if they were independent end-to-end savings.
+
+Boundary: post-freeze synthetic finite-decision OOD, not frontier-model answer quality or measured latency.
+
 ### Receding-horizon lifecycle retention — KEEP AS CANDIDATE
 
 Frozen one-step rollout over `RAW / ABSTRACT / DROP` versus fixed retention heuristic.
@@ -142,7 +176,7 @@ But max single-world degradation was `52.811%`.
 
 Lesson: mean/P90 gates can hide catastrophic tail failures.
 
-### Sequential racing v3 with explicit tail gates — DEFER / NOT DEFAULT
+### Sequential racing v3 with explicit tail gates — REJECT AS DEFAULT
 
 Fresh development after introducing max/CVaR gates:
 - sample reduction: `8.527%`
@@ -162,7 +196,28 @@ Post-freeze adversarial OOD:
 
 Predeclared max <=10% gate failed.
 
-Conclusion: even conservative empirical racing still has a rare catastrophic miss. Fixed/conservative frontier evaluation remains the default until a calibrated risk certificate is validated.
+Conclusion: even conservative empirical racing still has a rare catastrophic miss.
+
+### Family-wise risk-controlled racing calibration — NO CERTIFICATE / CLOSE CURRENT LINE
+
+A stricter follow-up treated catastrophic failure as `adaptive environment cost > fixed-K8 cost × 1.10` and attempted to certify risk rather than tuning a heuristic threshold.
+
+Predeclared calibration protocol:
+- calibration worlds: `900`
+- candidate policies: `48`
+- target catastrophic risk: `<=1%`
+- family-wise confidence: `95%`
+- multiple-policy correction: Bonferroni
+- risk bound: exact one-sided binomial upper bound
+
+Result:
+- certified policies: `0`
+- a high-compute-saving candidate still had empirical catastrophic rate `3.22%`
+- corrected upper bound: `5.46%`
+- observed max degradation: `95.95%`
+- controller decision: `retain_fixed_k8`
+
+Conclusion: do not weaken the risk target or confidence level after seeing this result. The current empirical-racing family is closed as a default BCS optimization. Re-open adaptive early stopping only with a materially different certificate/model whose guarantee and shift assumptions are explicit.
 
 ## Measurement corrections
 
@@ -181,7 +236,15 @@ Future reports should separate:
 2. unique/cache-aware value evaluations,
 3. tool/RPC calls,
 4. worker-visible token/byte exposure,
-5. measured wall-clock latency.
+5. controller-only token/byte exposure,
+6. certificate token/byte representation,
+7. measured tool/model/wall-clock latency.
+
+### Runtime trace contract now exists
+
+The experimental branch now includes a real-runtime trace contract, validator, summarizer, positive structured-certificate fixture, negative semantic-certificate fixture, and CI. The validator rejects semantic certificate compression and requires provenance-preserving exact typed certificates.
+
+This validates instrumentation semantics only. It is not itself an end-to-end model benchmark.
 
 ## Architecture consequence
 
@@ -212,8 +275,8 @@ lifecycle decision
 STOP / REPLAN
 ```
 
-Adaptive early stopping is not a default BCS mechanism. Re-open it only when a calibration/risk-control method is frozen before OOD testing and survives explicit mean, tail, worst-case, and quality gates.
+Adaptive early stopping is disabled by default in the current BCS candidate. The attempted family-wise risk calibration certified no empirical racing policy at the predeclared 1% catastrophic-risk target. Fixed/conservative frontier evaluation remains the fallback.
 
 ## Public claim boundary
 
-These are synthetic controller and lifecycle experiments. They are useful for falsifying controller designs and validating bounded mechanics, but they do not establish frontier-model answer-quality improvement or measured Web GPT/Codex latency savings. Those require an external real-task benchmark with final-quality scoring and runtime measurement.
+These are synthetic controller and lifecycle experiments plus instrumentation-contract tests. They are useful for falsifying controller designs, validating bounded mechanics, and preventing misleading metric accounting, but they do not establish frontier-model answer-quality improvement or measured Web GPT/Codex latency savings. Those require an external real-task benchmark with final-quality scoring and runtime measurement.
