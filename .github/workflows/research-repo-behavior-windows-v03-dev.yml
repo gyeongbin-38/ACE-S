@@ -1,0 +1,24 @@
+name: research-repo-behavior-windows-v03-dev
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-behavior-windows-v03-dev.yml
+      - scripts/discover_repo_behavior_windows_v03.py
+
+jobs:
+  discover-v03:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run behavior-window evidence card development search
+        run: python scripts/discover_repo_behavior_windows_v03.py
