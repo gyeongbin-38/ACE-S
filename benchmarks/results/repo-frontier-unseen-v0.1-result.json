@@ -1,0 +1,30 @@
+{
+  "experiment": "repo-proof-or-frontier-sealed-unseen-v0.1",
+  "status": "post_freeze_unseen_controller_execution",
+  "controller_freeze": "frozen-repo-proof-frontier-v0.1",
+  "controller_blob_sha": "93cee5b819d5485d367c79287a92bf6945ff4359",
+  "taskset_commit": "ef8676375b3edc726db6c088b9dff6d4bfe09944",
+  "tasks": 8,
+  "direct_certified_tasks": 0,
+  "semantic_judge_tasks": 8,
+  "false_confident_direct_count": 0,
+  "frontier_recall_pct": 87.5,
+  "expected_anchor_card_recall_pct": 50.0,
+  "raw_search_bytes_total": 3542435,
+  "candidate_card_bytes_total": 123141,
+  "candidate_card_vs_raw_search_reduction_pct": 96.524,
+  "rows": [
+    {"task_id":"httpx-redirect-auth-001","frontier_hit":true,"expected_anchor_visible":true,"raw_search_bytes":279093,"candidate_card_bytes":17054},
+    {"task_id":"click-envvar-splitting-001","frontier_hit":true,"expected_anchor_visible":false,"raw_search_bytes":108679,"candidate_card_bytes":18428},
+    {"task_id":"chi-route-param-context-001","frontier_hit":false,"expected_anchor_visible":false,"raw_search_bytes":246458,"candidate_card_bytes":16935},
+    {"task_id":"axios-xsrf-origin-001","frontier_hit":true,"expected_anchor_visible":false,"raw_search_bytes":936533,"candidate_card_bytes":16018},
+    {"task_id":"ripgrep-hidden-filter-001","frontier_hit":true,"expected_anchor_visible":true,"raw_search_bytes":282545,"candidate_card_bytes":16998},
+    {"task_id":"redis-async-healthcheck-001","frontier_hit":true,"expected_anchor_visible":true,"raw_search_bytes":1418254,"candidate_card_bytes":18103},
+    {"task_id":"express-trust-proxy-ip-001","frontier_hit":true,"expected_anchor_visible":true,"raw_search_bytes":110363,"candidate_card_bytes":8760},
+    {"task_id":"gorilla-route-vars-001","frontier_hit":true,"expected_anchor_visible":false,"raw_search_bytes":160510,"candidate_card_bytes":10845}
+  ],
+  "workflow_run_id": 33736913917,
+  "workflow_job_id": 100589538181,
+  "artifact_id": 9886096571,
+  "claim_boundary": "Post-freeze unseen repository localization/frontier mechanics. Semantic judge accuracy is not included until blind external judge outputs are scored."
+}
