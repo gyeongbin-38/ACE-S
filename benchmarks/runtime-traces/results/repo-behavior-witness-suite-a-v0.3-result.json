@@ -1,0 +1,59 @@
+{
+  "result_id": "repo-behavior-witness-suite-a-v0.3-first-result",
+  "status": "FRESH_UNSEEN_PASS_REPRODUCED",
+  "suite_manifest_commit": "76efa8b7b9807ffbfd5bbba047516a254938d7ee",
+  "evaluation_commit": "ffbd02c7d5d3a8ebf83941bad08a567ce11774ec",
+  "workflow_run_id": 33760099307,
+  "first_attempt": {
+    "artifact_id": 9895072159,
+    "artifact_zip_sha256": "7e59867fcfcbf24cce63ef12ea6a33a494151844895e8bd771416ee9e72ad061"
+  },
+  "clean_rerun_attempt_2": {
+    "artifact_id": 9895106366,
+    "artifact_zip_sha256": "b17386eb75f85c658687ba6837203f3a3f367d07c185c4c6d263e6697ca63abb"
+  },
+  "byte_reproducibility": {
+    "suite_a_v03_json_sha256_both_attempts": "075a9f0de2e29c039c4615d736559b53aa37a2fedc8f392db8e3d35db2fd2c59",
+    "closure_txt_sha256_both_attempts": "656488625d229d21963d481aa7e72d6540c8384e590cdbdc41043bda84bb96f5",
+    "byte_identical": true
+  },
+  "frozen_policy": {
+    "policy_id": "repo-behavior-policy-development-freeze-v0.6.0",
+    "frontier_top_k": 8,
+    "exact_quota": 4,
+    "recall_capacity": 4,
+    "spans": [4,16,24],
+    "max_windows": 5,
+    "merge_gap": 0,
+    "structural_closure_cap_lines": 20,
+    "false_direct_authority_gate": "explicit ownership cue required"
+  },
+  "first_unseen_result": {
+    "tasks": 6,
+    "hard_gate": true,
+    "frontier_hits": "6/6",
+    "behavior_witness_hits": "6/6",
+    "false_confident_direct_select": 0,
+    "worst_case_unique_source_lines": 1060,
+    "mean_unique_source_lines": 970.6666666666666,
+    "mean_structural_extension_lines": 37.833333333333336
+  },
+  "task_results": [
+    {"task_id":"jinja-attrgetter-default-postprocess-a301","frontier":true,"witness":true,"visible_overlap":18,"minimum_visible_lines":10,"unique_source_lines":960},
+    {"task_id":"aiohttp-mimetype-components-a302","frontier":true,"witness":true,"visible_overlap":20,"minimum_visible_lines":14,"unique_source_lines":844},
+    {"task_id":"black-format-unchanged-safety-a303","frontier":true,"witness":true,"visible_overlap":18,"minimum_visible_lines":12,"unique_source_lines":942},
+    {"task_id":"celery-maybe-signature-a304","frontier":true,"witness":true,"visible_overlap":10,"minimum_visible_lines":10,"unique_source_lines":960},
+    {"task_id":"cobra-legacy-positional-validation-a305","frontier":true,"witness":true,"visible_overlap":17,"minimum_visible_lines":8,"unique_source_lines":1058},
+    {"task_id":"reqwest-redirect-limit-a306","frontier":true,"witness":true,"visible_overlap":15,"minimum_visible_lines":9,"unique_source_lines":1060}
+  ],
+  "provenance": {
+    "policy_freeze_blob_sha": "f0d137160a038f96e8dce41ee076150da620f1d1",
+    "suite_manifest_blob_sha": "fc295370ff09fc351c4c5f40451b551f6851c21d",
+    "runner_blob_sha": "f70bf7d015835462768fc1037a4ca720e9e0ce1a",
+    "structural_closure_blob_sha": "4ee02bff827b7b89393030592b6545ff93e404c5",
+    "direct_proof_gate_blob_sha": "ae0a52f985f5e50c33f1e1b7e98e77076aa19bf3",
+    "frontier_reserve_blob_sha": "06a934f9be1a682f68379691f9c0ddda514185d2",
+    "python": "3.12.14"
+  },
+  "claim_boundary": "This is fresh repository-level unseen evidence for deterministic frontier recall, false-direct safety, and Behavior Witness visibility under frozen v0.6.0. It is not evidence of Luna or any other semantic judge accuracy, and it does not establish performance on arbitrary software-engineering tasks beyond this six-repository suite."
+}
