@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1",
+  "suite_id": "runtime-harness-smoke-v0.1",
+  "status": "frozen_before_runtime_execution",
+  "task_stratum": "repository-local",
+  "tasks": [
+    {
+      "task_id": "harness-smoke-001",
+      "repository": "example/example",
+      "commit_sha": "0123456789abcdef0123456789abcdef01234567",
+      "prompt": "Return the production file path for the fixture lookup.",
+      "expected_file": "src/fixture.py"
+    }
+  ],
+  "freeze_rule": "Fixture only; create a new version rather than modifying after results.",
+  "claim_boundary": "CI smoke fixture only."
+}
