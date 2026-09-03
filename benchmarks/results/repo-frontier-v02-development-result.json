@@ -1,0 +1,31 @@
+{
+  "experiment": "dual-channel-repo-frontier-development-v0.2",
+  "status": "development_only_seen_tasks_rejected_for_freeze",
+  "tasks": 14,
+  "candidate_policies": 30,
+  "eligible_100_100": 0,
+  "selected": {
+    "exact_quota": 5,
+    "card_cfg": {
+      "seed_lines": 6,
+      "radius": 1,
+      "def_lookback": 16,
+      "comment_lookback": 4,
+      "max_records": 24
+    },
+    "frontier_recall_pct": 100.0,
+    "anchor_recall_pct": 85.71428571428571,
+    "false_direct": 0,
+    "direct_count": 2,
+    "mean_card_bytes": 9419.5,
+    "mean_search_bytes": 2140409.285714286
+  },
+  "remaining_anchor_misses": [
+    "click-envvar-splitting-001",
+    "axios-xsrf-origin-001"
+  ],
+  "workflow_run_id": 33737455502,
+  "workflow_job_id": 100591279491,
+  "decision": "Do not freeze v0.2 evidence realization. Keep the dual-channel retrieval frontier as a development candidate because it recovered 14/14 expected files, and test behavior-window evidence units separately in v0.3.",
+  "claim_boundary": "All 14 tasks were already observed by this stage. This result is development evidence only and cannot support a generalization claim."
+}
