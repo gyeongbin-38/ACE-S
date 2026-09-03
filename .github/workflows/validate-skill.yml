@@ -41,3 +41,5 @@ jobs:
         run: python scripts/run_architecture_contract_bench.py
       - name: Run architecture Pareto frontier benchmark
         run: python scripts/run_architecture_frontier_bench.py
+      - name: Run architecture state-graph mutation benchmark
+        run: python scripts/run_architecture_graph_mutation_bench.py
