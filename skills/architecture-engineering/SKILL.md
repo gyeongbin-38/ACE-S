@@ -28,6 +28,8 @@ Design architecture as a **search over decisions under constraints**, not as dia
 
 For substantial design work, read `references/synthesis-loop.md` first.
 
+Read `references/evidence-acquisition.md` only when the design/review needs facts not already present, especially for an existing repository or deployed system. Retrieve evidence around the current architecture-changing question rather than broadly inventorying the system.
+
 Read `references/boundary-balance.md` only when creating, splitting, merging, or reviewing a consequential module/process/service/system boundary.
 
 Read `references/decision-frontier.md` only when multiple interacting architectural choices remain feasible and manual comparison is becoming unreliable.
@@ -62,3 +64,4 @@ If those conditions are not met, take the **narrowest architecture-changing ques
 - Complexity is a cost and must have a driver.
 - Unknowns are first-class; never fabricate rationale or requirements.
 - Existing project constraints and accepted decisions outrank generic best practices unless they create a demonstrated critical risk.
+- More available repository context is not a reason to load it; architecture evidence expands only when it can change a decision or resolve an obligation.
