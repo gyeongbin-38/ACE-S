@@ -37,3 +37,5 @@ jobs:
         run: python scripts/validate_benchmarks.py
       - name: Run architecture contract benchmark
         run: python scripts/run_architecture_contract_bench.py
+      - name: Run architecture Pareto frontier benchmark
+        run: python scripts/run_architecture_frontier_bench.py
