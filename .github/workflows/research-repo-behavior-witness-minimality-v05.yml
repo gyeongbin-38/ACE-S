@@ -1,0 +1,81 @@
+name: research-repo-behavior-witness-minimality-v05
+
+on:
+  push:
+    branches:
+      - exp/behavior-witness-minimality-v05
+    paths:
+      - benchmarks/runtime-traces/pilots/repo-behavior-witness-development-v0.5.json
+      - scripts/search_repo_behavior_witness_minimality_v05.py
+      - scripts/discover_repo_behavior_windows_v03.py
+      - scripts/discover_repo_frontier_v02.py
+      - scripts/deterministic_repo_localization_v03.py
+      - scripts/deterministic_repo_localization_v041.py
+      - adapters/deterministic_repo_localization.py
+      - scripts/run_repo_candidate_frontier_dev_v2.py
+      - .github/workflows/research-repo-behavior-witness-minimality-v05.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  minimality-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate ACE-S repository
+        run: |
+          python scripts/validate_skill.py
+          python scripts/validate_benchmarks.py
+      - name: Run frozen-witness pure Behavior Window grid
+        run: |
+          python scripts/search_repo_behavior_witness_minimality_v05.py > /tmp/behavior-witness-minimality-v05.json
+          python - <<'PY'
+          import json
+          p = '/tmp/behavior-witness-minimality-v05.json'
+          data = json.load(open(p, encoding='utf-8'))
+          assert data['tasks'] == 14
+          assert data['candidate_policies'] == 108
+          print('CANDIDATE_POLICIES=', data['candidate_policies'])
+          print('ELIGIBLE_POLICIES=', data['eligible_policies'])
+          print('SELECTED=', json.dumps(data['selected'], sort_keys=True))
+          if data['selected'] is not None:
+              failed = [r['task_id'] for r in data['selected_task_rows'] if not (r['frontier_hit'] and r['witness_hit'])]
+              print('SELECTED_FAILURES=', failed)
+              assert not failed
+              assert data['selected']['false_direct'] == 0
+          else:
+              print('NO_POLICY_PASSED_HARD_GATE=1')
+          PY
+      - name: Record dependency blob SHAs
+        run: |
+          {
+            echo "head=$(git rev-parse HEAD)"
+            for p in \
+              benchmarks/runtime-traces/pilots/repo-behavior-witness-development-v0.5.json \
+              scripts/search_repo_behavior_witness_minimality_v05.py \
+              scripts/discover_repo_behavior_windows_v03.py \
+              scripts/discover_repo_frontier_v02.py \
+              adapters/deterministic_repo_localization.py \
+              scripts/deterministic_repo_localization_v03.py \
+              scripts/deterministic_repo_localization_v041.py \
+              scripts/run_repo_candidate_frontier_dev_v2.py; do
+              printf '%s=' "$p"
+              git rev-parse "HEAD:$p"
+            done
+            python --version
+          } | tee /tmp/dependency-closure.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-witness-minimality-v05
+          path: |
+            /tmp/behavior-witness-minimality-v05.json
+            /tmp/dependency-closure.txt
+          if-no-files-found: error
