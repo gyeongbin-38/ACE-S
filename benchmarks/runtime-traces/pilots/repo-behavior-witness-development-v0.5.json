@@ -1,0 +1,381 @@
+{
+  "schema_version": "0.5",
+  "suite_id": "repo-behavior-witness-development-v0.5",
+  "status": "frozen_before_behavior_window_minimality_execution",
+  "source_tasksets": [
+    "benchmarks/runtime-traces/pilots/repo-evidence-dev-v0.3-corrected.json",
+    "benchmarks/runtime-traces/sealed/repo-frontier-unseen-v0.1.json"
+  ],
+  "construction": {
+    "builder": "scripts/build_repo_behavior_witness_dev_v05.py",
+    "builder_run_id": 33746185538,
+    "builder_artifact_id": 9889708998,
+    "builder_artifact_zip_sha256": "1976b8de5095196794700361f61a8e10e86ab1834af100fd690bdd3aea952b6b",
+    "review_rule": "Generated anchor-based candidates were treated only as locators. Frozen source was inspected before these witnesses were committed; behavior ownership and required regions were corrected manually where necessary.",
+    "known_candidate_corrections": [
+      {
+        "task_id": "chi-route-param-context-001",
+        "generated_region": "context.go:174-183",
+        "reason": "Generated region covered RouteParams.Add (storage), while the task asks for retrieval from request routing context. Frozen witness moved to URLParam/URLParamFromCtx."
+      },
+      {
+        "task_id": "express-trust-proxy-ip-001",
+        "generated_region": "lib/request.js:298-306",
+        "reason": "Generated region covered protocol/trust-proxy behavior, while the task asks for request IP computation. Frozen witness moved to the ip getter and proxyaddr call."
+      },
+      {
+        "task_id": "requests-netrc-evidence-001",
+        "generated_region": "src/requests/utils.py:204-216",
+        "reason": "Function ownership alone did not expose the missing/None-safe authenticator handling, so a second required implementation region was added."
+      },
+      {
+        "task_id": "k8s-current-context-evidence-001",
+        "generated_region": "staging/src/k8s.io/client-go/tools/clientcmd/config.go:380-392",
+        "reason": "The generated region exposed only the function head/explicit-file path. The task is about destination selection, so explicit, default-destination, and loading-precedence branches are frozen separately."
+      },
+      {
+        "task_id": "redis-async-healthcheck-001",
+        "generated_region": "redis/asyncio/connection.py:1246-1255",
+        "reason": "The health-check interval gate and PING/PONG operation are separate behavior-bearing regions, so both are required."
+      }
+    ]
+  },
+  "source_blobs": {
+    "requests-netrc-evidence-001": "d113a6ff3ebee409dc4466a1481a9cf1a628250a",
+    "django-orderby-evidence-001": "45192b78092f39365dba66af1f721885b13f0484",
+    "zod-float-remainder-evidence-001": "f7aee1a885c4d48769b0e20b0ca368f4dc0d965b",
+    "gin-case-insensitive-evidence-001": "580abbaf8ee61b6a826ed936f66b4a5b2f7d5568",
+    "k8s-current-context-evidence-001": "2cd213ccb3e264b647ea8d34bb14e03a5dfc586c",
+    "gson-duplicate-key-evidence-001": "a72bb48cc18c21ecf309837b4469d2175c365e4a",
+    "httpx-redirect-auth-001": "13cd9336732a0854dae25b53b34e4b2e749b5897",
+    "click-envvar-splitting-001": "0eb84621d3ceb92e240f1523e2e58d5951335633",
+    "chi-route-param-context-001": "c5c9a7432a3f599d8d32602523761f49052bc1c5",
+    "axios-xsrf-origin-001": "7ad0c2d1d5059742e620ebdfccd15b7cfde18705",
+    "ripgrep-hidden-filter-001": "2b0300ed38e5e24991cbc050fc51d693c1253336",
+    "redis-async-healthcheck-001": "f9902c6e57a71f1d153acc00f5777f59a207dfe7",
+    "express-trust-proxy-ip-001": "1eb7f9ca16a157f34a3ac817ad210cf52ecef94a",
+    "gorilla-route-vars-001": "eaff897aeadeeef3b765993c64b428eee55186f4"
+  },
+  "expected_symbols": {
+    "requests-netrc-evidence-001": "get_netrc_auth",
+    "django-orderby-evidence-001": "orderby_issubset_groupby",
+    "zod-float-remainder-evidence-001": "floatSafeRemainder",
+    "gin-case-insensitive-evidence-001": "findCaseInsensitivePathRec",
+    "k8s-current-context-evidence-001": "writeCurrentContext",
+    "gson-duplicate-key-evidence-001": "MapTypeAdapterFactory.Adapter.read",
+    "httpx-redirect-auth-001": "_redirect_headers",
+    "click-envvar-splitting-001": "ParamType.split_envvar_value",
+    "chi-route-param-context-001": "URLParamFromCtx",
+    "axios-xsrf-origin-001": "resolveConfig",
+    "ripgrep-hidden-filter-001": "WalkBuilder.hidden",
+    "redis-async-healthcheck-001": "check_health",
+    "express-trust-proxy-ip-001": "req.ip",
+    "gorilla-route-vars-001": "Vars"
+  },
+  "tasks": [
+    {
+      "task_id": "requests-netrc-evidence-001",
+      "repository": "psf/requests",
+      "commit_sha": "47914226c2968802f2cdee3f6f0f6e06e4472f64",
+      "prompt": "Locate the production source file responsible for resolving netrc credentials when authentication data may be missing or None. Return the most relevant production file path.",
+      "expected_file": "src/requests/utils.py",
+      "witnesses": [
+        {
+          "path": "src/requests/utils.py",
+          "start_line": 205,
+          "end_line": 207,
+          "kind": "definition",
+          "claim": "get_netrc_auth owns Requests netrc credential resolution.",
+          "minimum_visible_lines": 3
+        },
+        {
+          "path": "src/requests/utils.py",
+          "start_line": 233,
+          "end_line": 237,
+          "kind": "branch",
+          "claim": "Authenticator data is checked before login/password selection so missing or empty fields are handled safely.",
+          "minimum_visible_lines": 4
+        }
+      ],
+      "construction_note": "Frozen-source audited after candidate generation; both ownership and missing/None-safe credential handling are required."
+    },
+    {
+      "task_id": "django-orderby-evidence-001",
+      "repository": "django/django",
+      "commit_sha": "a284a49153f005f2a7af087025e5112ba06cbd5f",
+      "prompt": "Locate the production source file implementing the orderby_issubset_groupby behavior used by Django SQL query construction. Return the most relevant production file path.",
+      "expected_file": "django/db/models/sql/query.py",
+      "witnesses": [
+        {
+          "path": "django/db/models/sql/query.py",
+          "start_line": 2362,
+          "end_line": 2374,
+          "kind": "implementation",
+          "claim": "The orderby_issubset_groupby property implements the ordering-versus-grouping decision.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "The earlier occurrence near line 542 is a call site; the frozen witness is the property implementation."
+    },
+    {
+      "task_id": "zod-float-remainder-evidence-001",
+      "repository": "colinhacks/zod",
+      "commit_sha": "3a818de145dc2fa9b5753bc8bf97b0b8484cfbaf",
+      "prompt": "Locate the production source file containing the floatSafeRemainder utility involved in exponent/remainder handling. Return the most relevant production file path.",
+      "expected_file": "packages/zod/src/v4/core/util.ts",
+      "witnesses": [
+        {
+          "path": "packages/zod/src/v4/core/util.ts",
+          "start_line": 247,
+          "end_line": 263,
+          "kind": "implementation",
+          "claim": "floatSafeRemainder normalizes decimal/exponent precision before computing the remainder.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "Frozen source directly exposes the utility definition and exponent/decimal handling."
+    },
+    {
+      "task_id": "gin-case-insensitive-evidence-001",
+      "repository": "gin-gonic/gin",
+      "commit_sha": "472d086af2acd924cb4b9d7be0525f7d790f69bc",
+      "prompt": "Locate the production source file implementing findCaseInsensitivePathRec used by RedirectFixedPath behavior. Return the most relevant production file path.",
+      "expected_file": "tree.go",
+      "witnesses": [
+        {
+          "path": "tree.go",
+          "start_line": 702,
+          "end_line": 714,
+          "kind": "implementation",
+          "claim": "findCaseInsensitivePathRec is the recursive case-insensitive path lookup implementation.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "Other occurrences are call sites or recursive calls; this region is the function definition."
+    },
+    {
+      "task_id": "k8s-current-context-evidence-001",
+      "repository": "kubernetes/kubernetes",
+      "commit_sha": "ffa084f81129ea685b176a282921c4d54906c539",
+      "prompt": "Locate the production source file that determines where kubeconfig current-context changes are written when configuration may originate from a different file. Return the most relevant production file path.",
+      "expected_file": "staging/src/k8s.io/client-go/tools/clientcmd/config.go",
+      "witnesses": [
+        {
+          "path": "staging/src/k8s.io/client-go/tools/clientcmd/config.go",
+          "start_line": 387,
+          "end_line": 399,
+          "kind": "branch",
+          "claim": "An explicit kubeconfig path is written back to the explicit file.",
+          "minimum_visible_lines": 4
+        },
+        {
+          "path": "staging/src/k8s.io/client-go/tools/clientcmd/config.go",
+          "start_line": 402,
+          "end_line": 414,
+          "kind": "branch",
+          "claim": "A non-empty new CurrentContext is written to the default destination file.",
+          "minimum_visible_lines": 4
+        },
+        {
+          "path": "staging/src/k8s.io/client-go/tools/clientcmd/config.go",
+          "start_line": 418,
+          "end_line": 430,
+          "kind": "branch",
+          "claim": "Clearing CurrentContext searches loading precedence to find and clear the file that currently sets it.",
+          "minimum_visible_lines": 4
+        }
+      ],
+      "construction_note": "Corrected ground truth. Three destination-selection branches are independently required so a nearby symbol hit cannot masquerade as persistence evidence."
+    },
+    {
+      "task_id": "gson-duplicate-key-evidence-001",
+      "repository": "google/gson",
+      "commit_sha": "f4d371d29c04066dbe7fdb31f642831f9c7f40cd",
+      "prompt": "Locate the production source file responsible for duplicate-key handling, including null values, in Gson map deserialization. Return the most relevant production file path.",
+      "expected_file": "gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java",
+      "witnesses": [
+        {
+          "path": "gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java",
+          "start_line": 201,
+          "end_line": 207,
+          "kind": "branch",
+          "claim": "Map deserialization checks containsKey before put, detecting duplicate keys even when a previous value can be null.",
+          "minimum_visible_lines": 5
+        }
+      ],
+      "construction_note": "The containsKey check is the behavior-bearing fix; relying on Map.put's previous return value would miss prior null values."
+    },
+    {
+      "task_id": "httpx-redirect-auth-001",
+      "repository": "encode/httpx",
+      "commit_sha": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "prompt": "Locate the production source file that decides whether redirect requests preserve or remove Authorization headers based on request origin, including the HTTP-to-HTTPS upgrade case. Return the most relevant production file path.",
+      "expected_file": "httpx/_client.py",
+      "witnesses": [
+        {
+          "path": "httpx/_client.py",
+          "start_line": 547,
+          "end_line": 560,
+          "kind": "branch",
+          "claim": "_redirect_headers removes Authorization only across origins except direct HTTP-to-HTTPS redirects.",
+          "minimum_visible_lines": 7
+        }
+      ],
+      "construction_note": "Frozen region includes function ownership, same-origin check, HTTPS exception, and Authorization mutation."
+    },
+    {
+      "task_id": "click-envvar-splitting-001",
+      "repository": "pallets/click",
+      "commit_sha": "36baa15ff831b939a22bc527cd76ce653ef6f66d",
+      "prompt": "Locate the production source file that defines how parameter values coming from environment variables are split into multiple values using type-specific behavior. Return the most relevant production file path.",
+      "expected_file": "src/click/types.py",
+      "witnesses": [
+        {
+          "path": "src/click/types.py",
+          "start_line": 194,
+          "end_line": 202,
+          "kind": "implementation",
+          "claim": "split_envvar_value uses the type's envvar_list_splitter to split environment-variable values.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "Method documentation and return expression jointly establish the type-specific split behavior."
+    },
+    {
+      "task_id": "chi-route-param-context-001",
+      "repository": "go-chi/chi",
+      "commit_sha": "ae6be7469132cf471ca099d8c7bda4010c4ff7b2",
+      "prompt": "Locate the production source file that retrieves URL route parameters from an HTTP request's routing context. Return the most relevant production file path.",
+      "expected_file": "context.go",
+      "witnesses": [
+        {
+          "path": "context.go",
+          "start_line": 10,
+          "end_line": 20,
+          "kind": "implementation",
+          "claim": "URLParam delegates from the request context to URLParamFromCtx, which resolves RouteContext and retrieves the URL parameter.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "Manual correction from the generated RouteParams.Add storage region to the actual request-context retrieval implementation."
+    },
+    {
+      "task_id": "axios-xsrf-origin-001",
+      "repository": "axios/axios",
+      "commit_sha": "81df7a519431f5d703074df700dc40782a61fa9e",
+      "prompt": "Locate the production source file that decides when a browser request should read the XSRF cookie and attach the XSRF header, including the same-origin check. Return the most relevant production file path.",
+      "expected_file": "lib/helpers/resolveConfig.js",
+      "witnesses": [
+        {
+          "path": "lib/helpers/resolveConfig.js",
+          "start_line": 80,
+          "end_line": 102,
+          "kind": "implementation",
+          "claim": "Standard-browser XSRF logic applies the same-origin gate, reads the cookie, and sets the XSRF header.",
+          "minimum_visible_lines": 8
+        }
+      ],
+      "construction_note": "The region spans the browser gate through same-origin decision and header mutation."
+    },
+    {
+      "task_id": "ripgrep-hidden-filter-001",
+      "repository": "BurntSushi/ripgrep",
+      "commit_sha": "3fce3b5bb0236da2df6d99672afb8a719642eca7",
+      "prompt": "Locate the production source file where recursive walking can enable or disable ignoring hidden files, with hidden-file filtering enabled by default. Return the most relevant production file path.",
+      "expected_file": "crates/ignore/src/walk.rs",
+      "witnesses": [
+        {
+          "path": "crates/ignore/src/walk.rs",
+          "start_line": 870,
+          "end_line": 878,
+          "kind": "implementation",
+          "claim": "WalkBuilder.hidden controls hidden-file ignoring and documents that it is enabled by default.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "Comment contract and mutating call are both inside the frozen region."
+    },
+    {
+      "task_id": "redis-async-healthcheck-001",
+      "repository": "redis/redis-py",
+      "commit_sha": "31369a41ab9f5ca219916d557fa126ed01c38bdb",
+      "prompt": "Locate the production source file implementing asynchronous connection health checks that use PING/PONG after the configured health-check interval elapses. Return the most relevant production file path.",
+      "expected_file": "redis/asyncio/connection.py",
+      "witnesses": [
+        {
+          "path": "redis/asyncio/connection.py",
+          "start_line": 1234,
+          "end_line": 1239,
+          "kind": "implementation",
+          "claim": "_send_ping sends PING and requires PONG.",
+          "minimum_visible_lines": 4
+        },
+        {
+          "path": "redis/asyncio/connection.py",
+          "start_line": 1246,
+          "end_line": 1254,
+          "kind": "branch",
+          "claim": "check_health gates the retrying PING operation on the configured health-check interval and next-health-check time.",
+          "minimum_visible_lines": 6
+        }
+      ],
+      "construction_note": "Both the interval gate and the actual PING/PONG operation are required."
+    },
+    {
+      "task_id": "express-trust-proxy-ip-001",
+      "repository": "expressjs/express",
+      "commit_sha": "023767fe9872e029271df1418f73401bff20ff40",
+      "prompt": "Locate the production source file that computes the request IP address using the application's trust-proxy configuration. Return the most relevant production file path.",
+      "expected_file": "lib/request.js",
+      "witnesses": [
+        {
+          "path": "lib/request.js",
+          "start_line": 339,
+          "end_line": 344,
+          "kind": "implementation",
+          "claim": "The request ip getter retrieves trust proxy fn and computes the address through proxyaddr.",
+          "minimum_visible_lines": 5
+        }
+      ],
+      "construction_note": "Manual correction from the protocol getter to the ip getter that actually computes request IP."
+    },
+    {
+      "task_id": "gorilla-route-vars-001",
+      "repository": "gorilla/mux",
+      "commit_sha": "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265",
+      "prompt": "Locate the production source file that retrieves route variables stored in the current HTTP request context. Return the most relevant production file path.",
+      "expected_file": "mux.go",
+      "witnesses": [
+        {
+          "path": "mux.go",
+          "start_line": 464,
+          "end_line": 471,
+          "kind": "implementation",
+          "claim": "Vars reads varsKey from the current request context and returns the route-variable map.",
+          "minimum_visible_lines": 5
+        }
+      ],
+      "construction_note": "Frozen region contains the contract, context lookup, type assertion, and nil fallback."
+    }
+  ],
+  "scoring_contract": {
+    "hard_gate": [
+      "expected_file must be present in the frozen retrieval frontier for every task",
+      "false-confident direct selection count must be zero",
+      "every frozen witness region must meet its own minimum_visible_lines overlap"
+    ],
+    "claim_is_scorer_input": false,
+    "expected_symbol_is_scorer_input": false,
+    "source_blob_sha_is_scorer_input": false,
+    "line_identity": "path + 1-based source line number",
+    "policy_selection_order_after_hard_gate": [
+      "worst_case_unique_source_lines",
+      "mean_unique_source_lines",
+      "actual_max_windows_emitted_per_task",
+      "configured_max_windows",
+      "span",
+      "merge_gap"
+    ]
+  },
+  "claim_boundary": "Already-observed development repositories only. These witnesses are frozen before the v0.5 Behavior Window minimality controller is executed. This suite can select a development policy but cannot establish unseen generalization."
+}
