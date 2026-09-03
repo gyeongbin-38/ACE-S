@@ -30,6 +30,7 @@ def mutations(base):
 
     g = copy.deepcopy(base)
     remove_edge(g, "asr-tenant-isolation", "SATISFIED_BY", "checkout-flow")
+    remove_edge(g, "asr-tenant-isolation", "DRIVES", "dec-store")
     cases.append(("drop-asr-mechanism-edge", g, {"CRITICAL_ASR_NO_MECHANISM_PATH"}))
 
     g = copy.deepcopy(base)
