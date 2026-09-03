@@ -1,0 +1,28 @@
+{
+  "experiment": "repo-behavior-window-cards-development-v0.3",
+  "status": "development_only_seen_tasks_rejected_for_freeze",
+  "tasks": 14,
+  "candidate_policies": 21,
+  "retrieval_policy": {
+    "exact_quota": 5,
+    "frontier_top_k": 8
+  },
+  "eligible_100_anchor": 0,
+  "selected": {
+    "span": 8,
+    "max_windows": 3,
+    "overlap_merge_gap": 2,
+    "frontier_recall_pct": 100.0,
+    "anchor_recall_pct": 92.85714285714286,
+    "false_direct": 0,
+    "mean_card_bytes": 11728.214285714286,
+    "p95_card_bytes": 16741.7,
+    "max_card_bytes": 16886
+  },
+  "remaining_anchor_miss": "k8s-current-context-evidence-001",
+  "complementary_observation": "Behavior windows repaired the prior Click and Axios evidence misses, while the earlier coverage-oriented card had preserved the Kubernetes anchor. This motivates a generic hybrid coverage + behavior evidence realization rather than increasing either budget alone.",
+  "workflow_run_id": 33738231640,
+  "workflow_job_id": 100593796854,
+  "decision": "Do not freeze v0.3. Evaluate a hybrid evidence card with fixed v0.2 retrieval and strict quality-first selection.",
+  "claim_boundary": "All 14 tasks were already observed by this stage. Development evidence only."
+}
