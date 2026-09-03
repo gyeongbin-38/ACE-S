@@ -1,0 +1,27 @@
+{
+  "benchmark": "luna-architecture-retention-blind-replay-v0.1b",
+  "status": "PASTE_REPRESENTATION_FROZEN_BEFORE_LUNA_OUTPUT",
+  "semantic_lineage": "v0.1",
+  "change_scope": "representation-only compression; task semantics, task order, hidden condition mapping, labels, and scoring target remain unchanged",
+  "run_order": ["K2", "K0", "K1"],
+  "paste_packet_sha256": {
+    "K2": "088d88747cf03c532b221eeedac4bd450debfe7d0eed587be9d6d91f6b433b64",
+    "K0": "02d909c436879d188cb3deebc57c1e516100b319045288867d31a0c4551754ef",
+    "K1": "da3d4e3b516c1fadfe56c472ef1c7f816656e3fe73882cb5de3bd031fdc0b637"
+  },
+  "sealed_labels_sha256": "f9161c5dcb56e13a6924992bc5009eaa6ef64d433f0687c0dad0bb68d2bdb95c",
+  "execution": {
+    "model": "Luna",
+    "reasoning": "xhigh",
+    "temperature": 0,
+    "web": false,
+    "tools": false,
+    "delivery": "paste prompt body directly; do not rely on attachment inspection"
+  },
+  "anti_contamination": [
+    "Do not expose sealed labels or hidden mapping to Luna.",
+    "Use a fresh Luna conversation for each condition.",
+    "Freeze raw outputs before opening mapping/labels.",
+    "Do not repair or rerun a failed task and recount it as unseen."
+  ]
+}
