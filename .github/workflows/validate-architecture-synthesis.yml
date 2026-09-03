@@ -47,3 +47,5 @@ jobs:
         run: python scripts/run_architecture_claim_gate_bench.py
       - name: Run architecture value-of-information benchmark
         run: python scripts/run_architecture_voi_bench.py
+      - name: Run architecture evaluation freeze-bundle benchmark
+        run: python scripts/run_architecture_eval_bundle_bench.py
