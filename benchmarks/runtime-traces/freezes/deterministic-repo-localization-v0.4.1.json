@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "freeze_id": "deterministic-repo-localization-v0.4.1",
+  "status": "frozen_before_sealed_task_reveal",
+  "adapter_path": "adapters/deterministic_repo_localization_v041.py",
+  "adapter_git_blob_sha": "c9e2e739ce3033b6d073c61edaed04e8759623d3",
+  "development_suite": "benchmarks/runtime-traces/pilots/repo-localization-v0.1.json",
+  "development_exact": {
+    "correct": 5,
+    "total": 6,
+    "accuracy_pct": 83.333333,
+    "known_miss_task_id": "k8s-current-context-runtime-001",
+    "known_miss_answer": "cmd/kubeadm/app/phases/kubeconfig/kubeconfig.go",
+    "known_miss_expected": "staging/src/k8s.io/client-go/tools/clientcmd/loader.go"
+  },
+  "development_exposure_accounting": {
+    "off_worker_visible_bytes": 27585,
+    "on_worker_visible_bytes": 2054,
+    "on_vs_off_change_pct": -92.553924,
+    "tool_rpc_calls_off": 6,
+    "tool_rpc_calls_on": 6
+  },
+  "development_contamination_boundary": "All six v0.1 pilot outcomes have been observed and may not be used as sealed performance evidence.",
+  "freeze_rule": "After this manifest is committed, do not modify this adapter or its imported ranking/search policy in response to newly revealed sealed tasks. Any post-reveal change requires a new adapter version and a new untouched sealed suite.",
+  "sealed_predeclared_gates": {
+    "minimum_exact_localization_accuracy_pct": 70.0,
+    "on_off_selected_answer_identity_pct": 100.0,
+    "minimum_worker_visible_byte_reduction_pct": 80.0,
+    "maximum_tool_rpc_call_increase_pct": 0.0,
+    "semantic_certificate_count": 0,
+    "quality_regressions_on_vs_off": 0
+  },
+  "claim_boundary": "This freeze is for deterministic real-repository instrumentation and localization competence. It is not an LLM or end-to-end coding-agent quality claim."
+}
