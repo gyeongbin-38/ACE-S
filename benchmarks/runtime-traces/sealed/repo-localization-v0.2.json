@@ -7,6 +7,7 @@
   "source_dataset": "benchmarks/results/live-github-replay-v0.2.csv",
   "excluded_development_task_ids": ["requests-t2", "django-t1", "zod-t3", "gson-t2", "gin-t1", "k8s-t2"],
   "prompt_template": "Locate the most relevant production source file for: <stage1_query>. Return the production file path.",
+  "freeze_rule": "The adapter and imported ranking/search policy were frozen before these tasks were revealed. Do not change them in response to this suite; any changed policy requires a new untouched suite.",
   "tasks": [
     {"task_id":"sealed-requests-t1","source_task_id":"requests-t1","repository":"psf/requests","commit_sha":"f0198e6dfc431a2293dc16e1b1e8fcddc910a7f3","prompt":"Locate the most relevant production source file for: Content-Type header parsing. Return the production file path.","expected_file":"src/requests/utils.py"},
     {"task_id":"sealed-requests-t3","source_task_id":"requests-t3","repository":"psf/requests","commit_sha":"3ff3ff21dd45957c9e143cd500291959bb15f690","prompt":"Locate the most relevant production source file for: JSONDecodeError picklable deserializable. Return the production file path.","expected_file":"src/requests/exceptions.py"},
