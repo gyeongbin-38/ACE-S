@@ -39,3 +39,5 @@ jobs:
         run: python scripts/run_architecture_impact_bench.py
       - name: Run architecture uncertainty benchmark
         run: python scripts/run_architecture_uncertainty_bench.py
+      - name: Run counterfactual architecture delta benchmark
+        run: python scripts/run_architecture_delta_bench.py
