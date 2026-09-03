@@ -1,0 +1,78 @@
+name: research-repo-behavior-witness-suite-a-v01
+
+on:
+  push:
+    branches:
+      - exp/behavior-witness-minimality-v05
+    paths:
+      - benchmarks/runtime-traces/sealed/repo-behavior-witness-suite-a-v0.1.json
+      - scripts/run_repo_behavior_witness_suite_a_v01.py
+      - .github/workflows/research-repo-behavior-witness-suite-a-v01.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  suite-a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate repository
+        run: |
+          set -euo pipefail
+          python scripts/validate_skill.py
+          python scripts/validate_benchmarks.py
+      - name: Run frozen policy on sealed Suite A
+        run: |
+          set -euo pipefail
+          python scripts/run_repo_behavior_witness_suite_a_v01.py > /tmp/suite-a-v01.json
+          python - <<'PY'
+          import json
+          p='/tmp/suite-a-v01.json'
+          d=json.load(open(p, encoding='utf-8'))
+          assert d['tasks'] == 6
+          assert d['frozen_policy'] == {'spans':[4,16,24], 'max_windows':5, 'merge_gap':0}
+          print('HARD_GATE=', d['hard_gate'])
+          print('FRONTIER_HITS=', d['frontier_hits'], '/6')
+          print('WITNESS_HITS=', d['witness_hits'], '/6')
+          print('FALSE_DIRECT=', d['false_direct'])
+          for r in d['task_rows']:
+              print('TASK=', r['task_id'], 'frontier=', r['frontier_hit'], 'witness=', r['witness_hit'], 'lines=', r['unique_source_lines'])
+          PY
+      - name: Record evaluation closure
+        run: |
+          set -euo pipefail
+          out=/tmp/suite-a-v01-closure.txt
+          : > "$out"
+          echo "head=$(git rev-parse HEAD)" >> "$out"
+          for p in \
+            benchmarks/runtime-traces/pilots/repo-behavior-policy-freeze-v0.5.4.json \
+            benchmarks/runtime-traces/sealed/repo-behavior-witness-suite-a-v0.1.json \
+            scripts/run_repo_behavior_witness_suite_a_v01.py \
+            scripts/search_repo_behavior_witness_multiscale_v053.py \
+            scripts/search_repo_behavior_witness_minimality_v05.py \
+            scripts/discover_repo_behavior_windows_v03.py \
+            scripts/discover_repo_frontier_v02.py \
+            adapters/deterministic_repo_localization.py \
+            adapters/deterministic_repo_localization_v03.py \
+            adapters/deterministic_repo_localization_v041.py \
+            scripts/run_repo_candidate_frontier_dev_v2.py; do
+              printf '%s=' "$p" >> "$out"
+              git rev-parse "HEAD:$p" >> "$out"
+          done
+          python --version >> "$out"
+          cat "$out"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: repo-behavior-witness-suite-a-v01
+          path: |
+            /tmp/suite-a-v01.json
+            /tmp/suite-a-v01-closure.txt
+          if-no-files-found: error
