@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "artifact": "frozen-repo-proof-frontier-v0.1",
+  "status": "frozen_before_unseen_repo_execution",
+  "frozen_parent_commit": "24f5ef432f89beae9f66ab93420b76040e3c598d",
+  "controller_script": "scripts/run_repo_candidate_frontier_dev_v2.py",
+  "controller_policy": {
+    "candidate_top_k": 8,
+    "direct_fast_path": "unique production definition for an explicit code-like prompt symbol",
+    "ambiguous_path": "emit candidate frontier for external semantic judge; never force deterministic top-1",
+    "evidence_card": {
+      "seed_lines": 4,
+      "context_radius": 1,
+      "max_records": 12,
+      "lexical_prefix_len": 6,
+      "selection": "weighted query-signal coverage with exact match preference; lexical-prefix support is used only inside an already-selected candidate file"
+    }
+  },
+  "development_gate": {
+    "suite": "repo-source-evidence-development-v0.2",
+    "tasks": 6,
+    "false_confident_direct_count": 0,
+    "frontier_recall_pct": 100.0,
+    "expected_anchor_card_recall_pct": 100.0,
+    "candidate_card_vs_raw_search_reduction_pct": 99.256,
+    "workflow_run_id": 33734041859,
+    "workflow_job_id": 100580312976
+  },
+  "freeze_rule": "Do not modify candidate ranking, proof rule, TOP_K, card selection, lexical matching, context radius, or card budget after unseen taskset construction/execution begins. Any change requires a new frozen version and a new unseen taskset.",
+  "judge_boundary": "The external semantic judge receives only task text and authenticated candidate cards. Candidate order/rank, expected file, expected anchor, repository search output, and development labels are withheld.",
+  "claim_boundary": "Development gate is seen-task mechanics only. Generalization claims require a post-freeze unseen repository taskset and blind semantic-judge scoring."
+}
