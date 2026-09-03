@@ -1,0 +1,76 @@
+{
+  "schema_version": "0.1",
+  "suite_id": "repo-frontier-unseen-v0.1",
+  "status": "frozen_before_controller_execution",
+  "controller_freeze": "benchmarks/frozen-repo-proof-frontier-v0.1.json",
+  "tasks": [
+    {
+      "task_id": "httpx-redirect-auth-001",
+      "repository": "encode/httpx",
+      "commit_sha": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "prompt": "Locate the production source file that decides whether redirect requests preserve or remove Authorization headers based on request origin, including the HTTP-to-HTTPS upgrade case. Return the most relevant production file path.",
+      "expected_file": "httpx/_client.py",
+      "expected_anchor": "Authorization"
+    },
+    {
+      "task_id": "click-envvar-splitting-001",
+      "repository": "pallets/click",
+      "commit_sha": "36baa15ff831b939a22bc527cd76ce653ef6f66d",
+      "prompt": "Locate the production source file that defines how parameter values coming from environment variables are split into multiple values using type-specific behavior. Return the most relevant production file path.",
+      "expected_file": "src/click/types.py",
+      "expected_anchor": "envvar list splitter"
+    },
+    {
+      "task_id": "chi-route-param-context-001",
+      "repository": "go-chi/chi",
+      "commit_sha": "ae6be7469132cf471ca099d8c7bda4010c4ff7b2",
+      "prompt": "Locate the production source file that retrieves URL route parameters from an HTTP request's routing context. Return the most relevant production file path.",
+      "expected_file": "context.go",
+      "expected_anchor": "url parameter"
+    },
+    {
+      "task_id": "axios-xsrf-origin-001",
+      "repository": "axios/axios",
+      "commit_sha": "81df7a519431f5d703074df700dc40782a61fa9e",
+      "prompt": "Locate the production source file that decides when a browser request should read the XSRF cookie and attach the XSRF header, including the same-origin check. Return the most relevant production file path.",
+      "expected_file": "lib/helpers/resolveConfig.js",
+      "expected_anchor": "Add xsrf header"
+    },
+    {
+      "task_id": "ripgrep-hidden-filter-001",
+      "repository": "BurntSushi/ripgrep",
+      "commit_sha": "3fce3b5bb0236da2df6d99672afb8a719642eca7",
+      "prompt": "Locate the production source file where recursive walking can enable or disable ignoring hidden files, with hidden-file filtering enabled by default. Return the most relevant production file path.",
+      "expected_file": "crates/ignore/src/walk.rs",
+      "expected_anchor": "Enables ignoring hidden files"
+    },
+    {
+      "task_id": "redis-async-healthcheck-001",
+      "repository": "redis/redis-py",
+      "commit_sha": "31369a41ab9f5ca219916d557fa126ed01c38bdb",
+      "prompt": "Locate the production source file implementing asynchronous connection health checks that use PING/PONG after the configured health-check interval elapses. Return the most relevant production file path.",
+      "expected_file": "redis/asyncio/connection.py",
+      "expected_anchor": "PING/PONG"
+    },
+    {
+      "task_id": "express-trust-proxy-ip-001",
+      "repository": "expressjs/express",
+      "commit_sha": "023767fe9872e029271df1418f73401bff20ff40",
+      "prompt": "Locate the production source file that computes the request IP address using the application's trust-proxy configuration. Return the most relevant production file path.",
+      "expected_file": "lib/request.js",
+      "expected_anchor": "trust proxy fn"
+    },
+    {
+      "task_id": "gorilla-route-vars-001",
+      "repository": "gorilla/mux",
+      "commit_sha": "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265",
+      "prompt": "Locate the production source file that retrieves route variables stored in the current HTTP request context. Return the most relevant production file path.",
+      "expected_file": "mux.go",
+      "expected_anchor": "route variables for the current request"
+    }
+  ],
+  "construction_rule": "Repositories and task labels were selected only after the proof-or-frontier controller was frozen. The controller has not been executed on these tasks before this file was committed.",
+  "judge_blinding": "External semantic judges must not receive expected_file, expected_anchor, raw rank score, controller top-1 status, or candidate ordering significance.",
+  "freeze_rule": "Do not change task prompt, repository commit, expected file, or expected anchor after first controller execution. If a fixture is invalid for reasons independent of controller performance, document the invalidity and create a new suite version rather than editing this one.",
+  "claim_boundary": "This taskset tests deterministic repository localization/frontier mechanics and blind semantic selection. It is not a general software-engineering benchmark."
+}
