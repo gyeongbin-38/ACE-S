@@ -30,11 +30,11 @@ def mutations(base):
 
     g = copy.deepcopy(base)
     remove_edge(g, "asr-tenant-isolation", "SATISFIED_BY", "checkout-flow")
-    cases.append(("drop-asr-mechanism-edge", g, {"CRITICAL_ASR_NO_MECHANISM_PATH", "CRITICAL_ASR_NO_FITNESS_PATH"}))
+    cases.append(("drop-asr-mechanism-edge", g, {"CRITICAL_ASR_NO_MECHANISM_PATH"}))
 
     g = copy.deepcopy(base)
-    remove_edge(g, "checkout-flow", "VERIFIED_BY", "fit-tenant")
-    remove_edge(g, "tenant-boundary", "VERIFIED_BY", "fit-tenant")
+    remove_edge(g, "fit-tenant", "VERIFIES", "asr-tenant-isolation")
+    remove_edge(g, "fit-tenant", "VERIFIES", "checkout-flow")
     cases.append(("drop-asr-fitness-path", g, {"CRITICAL_ASR_NO_FITNESS_PATH"}))
 
     g = copy.deepcopy(base)
@@ -67,6 +67,11 @@ def mutations(base):
     g = copy.deepcopy(base)
     g["components"].append({"id": "api", "type": "COMPONENT", "evidence_status": "ACCEPTED_INTENT"})
     cases.append(("duplicate-stable-id", g, {"DUPLICATE_NODE_ID"}))
+
+    g = copy.deepcopy(base)
+    remove_edge(g, "fit-tenant", "VERIFIES", "tenant-boundary")
+    g["traceability_edges"].append({"from": "tenant-boundary", "relation": "VERIFIES", "to": "fit-tenant"})
+    cases.append(("reverse-canonical-edge", g, {"EDGE_DIRECTION_OR_TYPE_INVALID"}))
 
     return cases
 
