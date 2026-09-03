@@ -1,0 +1,75 @@
+name: research-repo-behavior-witness-suite-a-v02
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - 'scripts/run_repo_behavior_witness_suite_a_v02.py'
+      - '.github/workflows/research-repo-behavior-witness-suite-a-v02.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  suite-a-v02:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate repository
+        run: |
+          set -euo pipefail
+          python scripts/validate_skill.py
+          python scripts/validate_benchmarks.py
+      - name: Run frozen v0.6 policy on sealed Suite A v0.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_repo_behavior_witness_suite_a_v02.py > /tmp/suite-a-v02.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/suite-a-v02.json', encoding='utf-8'))
+          print('HARD_GATE=', d['hard_gate'])
+          print('FRONTIER_HITS=', d['frontier_hits'], '/6')
+          print('WITNESS_HITS=', d['witness_hits'], '/6')
+          print('FALSE_DIRECT=', d['false_direct'])
+          for r in d['task_rows']:
+              print('TASK=', r['task_id'], 'frontier=', r['frontier_hit'], 'witness=', r['witness_hit'], 'lines=', r['unique_source_lines'])
+          PY
+      - name: Record evaluation closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=/tmp/suite-a-v02-closure.txt
+          : > "$out"
+          echo "head=$(git rev-parse HEAD)" >> "$out"
+          for p in \
+            benchmarks/runtime-traces/pilots/repo-behavior-policy-freeze-v0.6.0.json \
+            benchmarks/runtime-traces/sealed/repo-behavior-witness-suite-a-v0.2.json \
+            scripts/run_repo_behavior_witness_suite_a_v02.py \
+            scripts/experiment_structural_closure_v06.py \
+            scripts/experiment_direct_proof_gate_v06.py \
+            scripts/experiment_frontier_recall_reserve_v06.py \
+            scripts/search_repo_behavior_witness_multiscale_v053.py \
+            scripts/discover_repo_behavior_windows_v03.py \
+            scripts/discover_repo_frontier_v02.py \
+            adapters/deterministic_repo_localization.py \
+            adapters/deterministic_repo_localization_v03.py \
+            adapters/deterministic_repo_localization_v041.py; do
+              printf '%s=' "$p" >> "$out"
+              git rev-parse "HEAD:$p" >> "$out"
+          done
+          python --version >> "$out"
+          cat "$out"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: repo-behavior-witness-suite-a-v02
+          path: |
+            /tmp/suite-a-v02.json
+            /tmp/suite-a-v02-closure.txt
+          if-no-files-found: error
