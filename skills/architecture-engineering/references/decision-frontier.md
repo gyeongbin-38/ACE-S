@@ -84,7 +84,25 @@ Dimensions may be measured, ordinal, or unknown, but their provenance must be ex
 
 Unknown is not zero.
 
-If a dimension is material but unknown, preserve `UNKNOWN` and identify the cheapest test/measurement that would resolve it. Do not rank a candidate as superior because its cost/risk is merely unmeasured.
+If a dimension is material but unknown, preserve `UNKNOWN`. Do not rank a candidate as superior because its cost/risk is merely unmeasured.
+
+### Choose the next measurement by conservative value of information
+
+When several unknowns could be measured, do not default to the easiest-looking one.
+
+For each bounded evidence question:
+1. enumerate only its explicit plausible outcomes;
+2. for each outcome, fill the affected unknown candidate dimensions;
+3. recompute the feasible Pareto frontier;
+4. calculate how many frontier candidates are eliminated;
+5. divide the **worst-case** frontier reduction by evidence cost;
+6. prefer the question with the largest guaranteed reduction per cost.
+
+If outcome probabilities are independently justified, expected reduction may be reported as secondary information. Do not invent probabilities and do not use an ungrounded expected value for selection.
+
+If no available question reduces the frontier in every supplied outcome, **abstain from claiming a value-of-information winner**. Continue with the cheapest blocking evidence required for correctness, ask for stakeholder utility, or preserve the unresolved frontier.
+
+The deterministic helper `architecture_voi.py` implements this finite-outcome rule. Its result is valid only to the extent that the supplied outcome set is credible and complete enough for the current decision.
 
 ## 7. Selection
 
@@ -94,6 +112,6 @@ Without those, return:
 - feasible frontier;
 - dominated/eliminated candidates and reasons;
 - unresolved tradeoffs;
-- next measurement that can change the frontier.
+- next measurement that can change the frontier, when such a measurement has a defensible value-of-information certificate.
 
 This avoids laundering subjective preferences into a fake mathematical optimum.
