@@ -1,0 +1,16 @@
+{
+  "benchmark": "luna-architecture-retention-blind-replay-v0.1",
+  "condition_id": "K0",
+  "status": "RAW_RECEIVED_BEFORE_LABEL_OPEN",
+  "raw_utf8_bytes": 8765,
+  "raw_sha256": "537917128fac8cf1dd2ebbf467d89a4b94a3edbaa66280eb79b08e7c2b5e16f3",
+  "strict_raw_json": false,
+  "mechanical_normalization": "U+201C/U+201D smart quotes to ASCII double quote only",
+  "normalized_parse_ok": true,
+  "task_count": 18,
+  "unique_task_count": 18,
+  "all_confidence_one": true,
+  "labels_opened": false,
+  "condition_mapping_opened": false,
+  "chronology_note": "The raw response was received in the conversation before this receipt was committed. The conversation record establishes the pre-label chronology; this commit records its hash and structural validation."
+}
