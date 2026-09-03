@@ -10,6 +10,8 @@ on:
       - scripts/summarize_runtime_trace.py
       - scripts/compare_runtime_ab.py
       - scripts/compare_runtime_ab_suite.py
+      - scripts/runtime_trace_writer.py
+      - scripts/validate_runtime_taskset.py
       - benchmarks/runtime-traces/**
 
 env:
@@ -23,6 +25,37 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+      - name: Validate frozen real-repo runtime pilot taskset
+        run: python scripts/validate_runtime_taskset.py benchmarks/runtime-traces/pilots/repo-localization-v0.1.json
+      - name: Smoke-test TraceWriter output
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, "scripts")
+          from runtime_trace_writer import TraceWriter, metric
+          p = Path("/tmp/ace-s-writer-smoke.jsonl")
+          w = TraceWriter(p, "writer-smoke-001", "ON", "ci-fixture", "fixture-model", "repository-local")
+          w.tool_call_start("c1", "fixture.lookup")
+          w.tool_call_end("c1", True, 3.0)
+          digest = w.evidence_observed(
+              "ev1",
+              evidence_kind="structured",
+              certificate_capable=True,
+              provenance_refs=["fixture://source/1"],
+              exact_value={"value": 7},
+              metrics={"controller_only_bytes": metric(32), "controller_only_tokens": metric(None)},
+          )
+          assert digest is not None
+          w.certificate_emitted(
+              "cert1", "ev1", schema_ref="schema://fixture/v1",
+              exact_value_sha256=digest, provenance_refs=["fixture://source/1"],
+              metrics={"certificate_bytes": metric(12), "certificate_tokens": metric(None)},
+          )
+          w.expose_certificate("cert1", bytes_=12, tokens=None)
+          w.end(passed=True, quality_score=1.0, wall_clock_ms=5.0)
+          PY
+          python scripts/validate_runtime_trace.py /tmp/ace-s-writer-smoke.jsonl
       - name: Validate structured certificate trace
         run: python scripts/validate_runtime_trace.py benchmarks/runtime-traces/fixtures/valid-structured-certificate.jsonl
       - name: Reject semantic certificate trace
