@@ -1,0 +1,39 @@
+name: research-frontier-recall-reserve-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - scripts/experiment_frontier_recall_reserve_v06.py
+      - .github/workflows/research-frontier-recall-reserve-v06.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontier-reserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run frontier reserve experiment
+        run: |
+          set -euo pipefail
+          python scripts/experiment_frontier_recall_reserve_v06.py > /tmp/frontier-recall-reserve-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/frontier-recall-reserve-v06.json', encoding='utf-8'))
+          for r in d['results']:
+              print('QUOTA=', r['exact_quota'], 'DEV=', r['development14']['frontier_hits'], '/14', 'A=', r['opened_suite_a6']['frontier_hits'], '/6', 'FALSE_DIRECT=', r['development14']['false_direct']+r['opened_suite_a6']['false_direct'], 'GATE=', r['hard_gate'])
+          print('SELECTED=', json.dumps(d['selected'], sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontier-recall-reserve-v06
+          path: /tmp/frontier-recall-reserve-v06.json
+          if-no-files-found: error
