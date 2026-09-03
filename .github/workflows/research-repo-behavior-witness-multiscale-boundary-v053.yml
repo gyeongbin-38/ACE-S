@@ -1,0 +1,46 @@
+name: research-repo-behavior-witness-multiscale-boundary-v053
+
+on:
+  push:
+    branches:
+      - exp/behavior-witness-minimality-v05
+    paths:
+      - scripts/diagnose_repo_behavior_witness_multiscale_boundary_v053.py
+      - .github/workflows/research-repo-behavior-witness-multiscale-boundary-v053.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  boundary-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Diagnose selected budget boundary
+        run: |
+          set -euo pipefail
+          python scripts/diagnose_repo_behavior_witness_multiscale_boundary_v053.py > /tmp/multiscale-boundary-v053.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/multiscale-boundary-v053.json', encoding='utf-8'))
+          for row in d['comparison']:
+              print('CFG=', json.dumps(row['cfg'], sort_keys=True))
+              print('HARD_GATE=', row['hard_gate'], 'WITNESS_HITS=', row['witness_hits'])
+              print('FAILURES=', json.dumps(row['failures'], sort_keys=True))
+          assert d['comparison'][0]['hard_gate'] is True
+          assert d['comparison'][0]['witness_hits'] == 14
+          assert d['comparison'][1]['hard_gate'] is False
+          assert d['comparison'][1]['witness_hits'] < 14
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-witness-multiscale-boundary-v053
+          path: /tmp/multiscale-boundary-v053.json
+          if-no-files-found: error
