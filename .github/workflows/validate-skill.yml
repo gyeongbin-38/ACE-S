@@ -2,6 +2,8 @@ name: validate-ace-s
 
 on:
   push:
+    branches-ignore:
+      - exp/architecture-synthesis-v01
   pull_request:
 
 env:
