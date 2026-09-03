@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1",
+  "suite_id": "architecture-frontier-v0.1",
+  "directions": {
+    "complexity": "min",
+    "latency_ms": "min",
+    "availability": "max"
+  },
+  "candidates": [
+    {"id":"cohesive","hard_constraint_violations":[],"dimensions":{"complexity":3,"latency_ms":100,"availability":0.99}},
+    {"id":"distributed-fast","hard_constraint_violations":[],"dimensions":{"complexity":5,"latency_ms":80,"availability":0.995}},
+    {"id":"dominated","hard_constraint_violations":[],"dimensions":{"complexity":6,"latency_ms":120,"availability":0.98}},
+    {"id":"illegal","hard_constraint_violations":["data_residency"],"dimensions":{"complexity":1,"latency_ms":10,"availability":0.999}},
+    {"id":"needs-measurement","hard_constraint_violations":[],"dimensions":{"complexity":2,"latency_ms":"UNKNOWN","availability":0.995}}
+  ],
+  "expected": {
+    "pareto_frontier": ["cohesive","distributed-fast","needs-measurement"],
+    "hard_eliminated": ["illegal"],
+    "dominated": ["dominated"],
+    "unknown_candidates": ["needs-measurement"]
+  },
+  "claim_boundary": "Authored control fixture for conservative Pareto semantics only."
+}
