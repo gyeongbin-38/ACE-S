@@ -137,7 +137,7 @@ def main() -> None:
     print(json.dumps({
         "experiment": "behavior-overlap-novelty-v0.6",
         "status": "development_only_after_suite_a_v01_opened",
-        "upstream_repairs": {"safe_direct_proof": true, "exact_quota": 4, "top_k": fixed.TOP_K},
+        "upstream_repairs": {"safe_direct_proof": True, "exact_quota": 4, "top_k": fixed.TOP_K},
         "behavior_cfg": {"spans": [4,16,24], "max_windows": 5, "merge_gap": 0},
         "variants": [baseline, novelty],
         "claim_boundary": "Opened Suite A v0.1 is development evidence. This experiment tests one general overlap-redundancy rule only."
