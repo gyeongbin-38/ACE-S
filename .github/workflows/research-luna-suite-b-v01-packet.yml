@@ -1,0 +1,48 @@
+name: research-luna-suite-b-v01-packet
+on:
+  push:
+    branches: [exp/generalization-repair-v06]
+    paths:
+      - 'benchmarks/runtime-traces/sealed/luna-suite-b-v0.1-input.json'
+      - 'scripts/build_luna_blind_packet_v01.py'
+      - '.github/workflows/research-luna-suite-b-v01-packet.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-packet:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build sealed label-free Suite B packet
+        run: |
+          set -euo pipefail
+          python scripts/build_luna_blind_packet_v01.py benchmarks/runtime-traces/sealed/luna-suite-b-v0.1-input.json > /tmp/luna-suite-b-v01-packet.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/luna-suite-b-v01-packet.json'))
+          assert d['label_fields_present'] is False
+          assert len(d['tasks']) == 6
+          forbidden={'expected_file','expected_symbol','witnesses','witness_id','source_blob_sha','ground_truth','benchmark_claim','source_blobs'}
+          def walk(v):
+              if isinstance(v,dict):
+                  bad=forbidden.intersection(v)
+                  assert not bad, bad
+                  for x in v.values(): walk(x)
+              elif isinstance(v,list):
+                  for x in v: walk(x)
+          walk(d)
+          for t in d['tasks']:
+              assert t['candidates'], t['task_id']
+              print('TASK=',t['task_id'],'MODE=',t['mode'],'CANDIDATES=',len(t['candidates']))
+          PY
+          sha256sum /tmp/luna-suite-b-v01-packet.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: luna-suite-b-v01-packet
+          path: /tmp/luna-suite-b-v01-packet.json
+          if-no-files-found: error
