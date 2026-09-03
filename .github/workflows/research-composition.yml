@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/research-composition.yml
       - scripts/run_certificate_frontier_composition_bench.py
+      - scripts/run_certificate_frontier_composition_sealed.py
 
 env:
   PYTHONHASHSEED: "0"
@@ -19,5 +20,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Run certificate plus exact frontier composition development bench
+      - name: Run certificate plus exact frontier composition development regression
         run: python scripts/run_certificate_frontier_composition_bench.py
+      - name: Run sealed certificate plus exact frontier composition OOD test
+        run: python scripts/run_certificate_frontier_composition_sealed.py
