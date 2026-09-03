@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/research-repo-corrected-v02-v03-audit.yml
       - scripts/audit_corrected_repo_evidence_v02_v03.py
+      - scripts/audit_corrected_repo_evidence_v02_v03_fix.py
 
 jobs:
   audit-corrected:
@@ -21,4 +22,4 @@ jobs:
         with:
           python-version: "3.12"
       - name: Re-score v0.2 and v0.3 with corrected ground truth
-        run: python scripts/audit_corrected_repo_evidence_v02_v03.py
+        run: python scripts/audit_corrected_repo_evidence_v02_v03_fix.py
