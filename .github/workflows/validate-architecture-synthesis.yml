@@ -53,3 +53,5 @@ jobs:
         run: python scripts/run_architecture_constraint_ledger_bench.py
       - name: Run common architecture generation-output benchmark
         run: python scripts/run_architecture_generation_output_bench.py
+      - name: Run blind architecture candidate-manifest benchmark
+        run: python scripts/run_architecture_blind_manifest_bench.py
