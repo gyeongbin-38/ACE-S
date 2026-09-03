@@ -1,0 +1,115 @@
+{
+  "experiment": "luna-suite-b-v0.1",
+  "status": "SCORED_WITH_MECHANICAL_SMART_QUOTE_NORMALIZATION",
+  "branch": "exp/generalization-repair-v06",
+  "base_commit_before_judge_result_artifacts": "51f6294effa25f75c71a62dc27161fd339279eb7",
+  "judge_protocol": "luna-blind-semantic-judge-v0.1",
+  "judge_config": {
+    "declared_model": "Luna xhigh",
+    "model_version_identifier": null,
+    "temperature": 0,
+    "external_browsing_repo_tools": false
+  },
+  "packet": {
+    "sha256": "5b12c4ea205158c990100f66a78bffbba4e09441a618e938dad53b1bcddcd9ad",
+    "input_seal_commit": "36f1bfe4a18e44dfcfa4dca7fd07f4babdc0ff5e",
+    "label_seal_commit": "37fcf8c644da8b742440a06ffed2a138a5ed2bc5",
+    "label_fields_present": false,
+    "tasks": 6,
+    "retrieval_reachable_tasks": 6,
+    "retrieval_frontier_recall_pct": 100.0
+  },
+  "raw_output_freeze": {
+    "repo_path": "benchmarks/runtime-traces/sealed/results/luna-suite-b-v0.1-judge-raw.txt",
+    "repo_mirror_commit": "c496988817d9e06c12534e831260e94cc5af7365",
+    "utf8_bytes": 3334,
+    "sha256": "0fc0515bb4ec2cf69bb5d81ec68e71c757b417e4e46b547b2bfd0e6be3d4cb01",
+    "chronology_note": "The raw Luna response was received and frozen in the conversation before labels were opened. The GitHub mirror was committed afterward, so the pre-label chronology is established by the conversation record rather than the Git commit timestamp."
+  },
+  "format_validation": {
+    "raw_strict_json_parse": false,
+    "raw_issue": "The pasted raw response uses Unicode smart quotation marks U+201C/U+201D instead of JSON quotation mark U+0022.",
+    "scoring_normalization": "Replace U+201C and U+201D with U+0022 only; no semantic field or value changes.",
+    "normalized_json_parse": true,
+    "task_count_and_order_valid": true,
+    "decision_domain_valid": true,
+    "confidence_constraints_valid": true,
+    "visible_evidence_reference_validation": true
+  },
+  "metrics": {
+    "total_tasks": 6,
+    "correct_selection_count": 5,
+    "wrong_selection_count": 0,
+    "abstention_count": 1,
+    "correct_selection_rate_pct": 83.333,
+    "end_to_end_accuracy_pct": 83.333,
+    "coverage_pct": 83.333,
+    "abstention_rate_pct": 16.667,
+    "conditional_accuracy_when_selecting_pct": 100.0,
+    "false_confident_threshold": 0.8,
+    "false_confident_selection_count": 0,
+    "false_confident_selection_rate_all_tasks_pct": 0.0,
+    "false_confident_selection_rate_selected_pct": 0.0,
+    "high_confidence_selected_count": 5
+  },
+  "confidence_calibration": {
+    "scope": "non-abstaining selections only",
+    "selected_count": 5,
+    "observed_selected_accuracy": 1.0,
+    "mean_selected_confidence": 0.954,
+    "accuracy_minus_mean_confidence": 0.046,
+    "brier_score": 0.0047,
+    "negative_log_likelihood": 0.04857,
+    "interpretation": "Slight underconfidence on the five selected cases; sample size is too small for a stable calibration claim. ABSTAIN confidence is excluded because the frozen prompt constrains it as evidence support, not a conventional probability of correctness."
+  },
+  "rows": [
+    {
+      "task_id": "suite-b-httpx-content-decoding-b001",
+      "decision": "ABSTAIN",
+      "expected_file": "httpx/_models.py",
+      "status": "ABSTAIN",
+      "confidence": 0.45
+    },
+    {
+      "task_id": "suite-b-rich-markup-render-b002",
+      "decision": "rich/markup.py",
+      "expected_file": "rich/markup.py",
+      "status": "CORRECT",
+      "confidence": 0.99
+    },
+    {
+      "task_id": "suite-b-gorilla-route-match-b003",
+      "decision": "route.go",
+      "expected_file": "route.go",
+      "status": "CORRECT",
+      "confidence": 0.94
+    },
+    {
+      "task_id": "suite-b-urfave-command-lifecycle-b004",
+      "decision": "command_run.go",
+      "expected_file": "command_run.go",
+      "status": "CORRECT",
+      "confidence": 0.99
+    },
+    {
+      "task_id": "suite-b-clap-token-parser-b005",
+      "decision": "clap_builder/src/parser/parser.rs",
+      "expected_file": "clap_builder/src/parser/parser.rs",
+      "status": "CORRECT",
+      "confidence": 0.99
+    },
+    {
+      "task_id": "suite-b-serde-json-deserializer-b006",
+      "decision": "src/de.rs",
+      "expected_file": "src/de.rs",
+      "status": "CORRECT",
+      "confidence": 0.86
+    }
+  ],
+  "failure_analysis": {
+    "only_non_correct_task": "suite-b-httpx-content-decoding-b001",
+    "class": "SEMANTIC_ABSTENTION_WITH_GOLD_REACHABLE",
+    "note": "The hidden expected file httpx/_models.py was present in the frontier, but visible evidence also showed httpx/_decoders.py applying reversed decoder chains. Luna therefore abstained rather than making a wrong confident selection. This is a judge-coverage loss, not a retrieval miss."
+  },
+  "claim_boundary": "Suite B contains only six tasks. Report the 100% selective accuracy together with 83.333% coverage and the smart-quote transport caveat; do not claim population-level calibration or general semantic-judge accuracy from this run alone."
+}
