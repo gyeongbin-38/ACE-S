@@ -12,16 +12,22 @@ def main():
         "directions": {"cost":"min", "availability":"max"},
         "candidates": [
             {"id":"A", "dimensions":{"cost":5, "availability":9}},
-            {"id":"B", "dimensions":{"cost":4, "availability":None}},
+            {"id":"B", "dimensions":{"cost":None, "availability":None}},
             {"id":"C", "dimensions":{"cost":7, "availability":8}},
         ],
         "questions": [
             {
-                "id":"measure-B-availability",
+                "id":"measure-B-profile",
                 "cost":2,
                 "outcomes":[
-                    {"assignments":[{"candidate":"B","dimension":"availability","value":7}]},
-                    {"assignments":[{"candidate":"B","dimension":"availability","value":10}]},
+                    {"assignments":[
+                        {"candidate":"B","dimension":"cost","value":6},
+                        {"candidate":"B","dimension":"availability","value":8}
+                    ]},
+                    {"assignments":[
+                        {"candidate":"B","dimension":"cost","value":4},
+                        {"candidate":"B","dimension":"availability","value":10}
+                    ]},
                 ],
             },
             {
@@ -36,16 +42,17 @@ def main():
     }
     result = evaluate_questions(obj)
 
-    # A and B are both on the initial frontier. Resolving B availability always
-    # makes exactly one of them dominate the other; rechecking C never resolves
-    # the A/B ambiguity.
+    # A and B are both on the initial frontier because B is materially unknown.
+    # Measuring B's deployment profile is genuinely decision-changing in every
+    # supplied outcome: B=(6,8) makes A dominate B, while B=(4,10) makes B
+    # dominate A. Rechecking already-dominated C cannot resolve the A/B frontier.
     checks = {
         "baseline_frontier": set(result["baseline_frontier"]) == {"A","B"},
-        "selected_high_value_question": result["selected_question"] == "measure-B-availability",
+        "selected_high_value_question": result["selected_question"] == "measure-B-profile",
         "not_abstained": result["abstained"] is False,
     }
     by_id = {q["id"]: q for q in result["questions"]}
-    checks["B_question_guarantees_reduction"] = by_id["measure-B-availability"]["guaranteed_frontier_reduction"] == 1
+    checks["B_profile_guarantees_reduction"] = by_id["measure-B-profile"]["guaranteed_frontier_reduction"] == 1
     checks["C_question_no_guaranteed_reduction"] = by_id["recheck-C-cost"]["guaranteed_frontier_reduction"] == 0
 
     # If no supplied question can reduce the frontier in every outcome, the
