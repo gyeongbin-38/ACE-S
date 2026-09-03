@@ -1,0 +1,47 @@
+name: research-repo-behavior-witness-v05-build
+
+on:
+  push:
+    branches:
+      - exp/behavior-witness-minimality-v05
+    paths:
+      - scripts/build_repo_behavior_witness_dev_v05.py
+      - .github/workflows/research-repo-behavior-witness-v05-build.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build frozen-source witness candidate
+        run: |
+          python scripts/build_repo_behavior_witness_dev_v05.py > /tmp/behavior-witness-v05.json
+          python - <<'PY'
+          import json
+          p = '/tmp/behavior-witness-v05.json'
+          data = json.load(open(p, encoding='utf-8'))
+          assert len(data['tasks']) == 14, len(data['tasks'])
+          for task in data['tasks']:
+              assert task['witnesses']
+              for w in task['witnesses']:
+                  assert w['path'] == task['expected_file']
+                  assert 1 <= w['start_line'] <= w['end_line']
+                  assert 1 <= w['minimum_visible_lines'] <= w['end_line'] - w['start_line'] + 1
+          print('WITNESS_CANDIDATE_VALID=1')
+          PY
+          echo '=== WITNESS_JSON_BEGIN ==='
+          cat /tmp/behavior-witness-v05.json
+          echo '=== WITNESS_JSON_END ==='
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-witness-v05-candidate
+          path: /tmp/behavior-witness-v05.json
+          if-no-files-found: error
