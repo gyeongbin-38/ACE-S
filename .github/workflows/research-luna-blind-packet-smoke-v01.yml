@@ -1,0 +1,45 @@
+name: research-luna-blind-packet-smoke-v01
+on:
+  push:
+    branches: [exp/generalization-repair-v06]
+    paths:
+      - 'scripts/build_luna_blind_packet_v01.py'
+      - 'benchmarks/runtime-traces/pilots/luna-blind-packet-smoke-v0.1-input.json'
+      - '.github/workflows/research-luna-blind-packet-smoke-v01.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-packet:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build label-free packet
+        run: |
+          set -euo pipefail
+          python scripts/build_luna_blind_packet_v01.py benchmarks/runtime-traces/pilots/luna-blind-packet-smoke-v0.1-input.json > /tmp/luna-blind-packet.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/luna-blind-packet.json'))
+          assert d['label_fields_present'] is False
+          forbidden={'expected_file','expected_symbol','witnesses','witness_id','source_blob_sha','ground_truth','benchmark_claim','source_blobs'}
+          def walk(v):
+              if isinstance(v,dict):
+                  assert not forbidden.intersection(v), forbidden.intersection(v)
+                  for x in v.values(): walk(x)
+              elif isinstance(v,list):
+                  for x in v: walk(x)
+          walk(d)
+          print('TASKS=',len(d['tasks']))
+          for t in d['tasks']:
+              print('TASK=',t['task_id'],'MODE=',t['mode'],'CANDIDATES=',len(t['candidates']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: luna-blind-packet-smoke-v01
+          path: /tmp/luna-blind-packet.json
+          if-no-files-found: error
