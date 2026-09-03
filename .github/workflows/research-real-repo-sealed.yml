@@ -40,10 +40,11 @@ jobs:
           check_blob scripts/runtime_trace_writer.py 7742dc9c5cf1f114ce472594d52c8221936a9dde
           check_blob scripts/run_runtime_ab_harness.py 8a7abdaf051532a46d5bfba342aa9bbe31d8c4cc
           check_blob scripts/validate_runtime_trace.py b227052aae076868e4e21c269c225e284c71bc87
+          check_blob scripts/validate_runtime_taskset.py 49800646f68f34ae5c948640b5c24ceb1c190112
           check_blob scripts/summarize_runtime_trace.py 4a53afef985a043196dc44c8586258d384a2dd59
           check_blob scripts/compare_runtime_ab.py 0895985095468bf0f3df333137d21d0c586d9872
           check_blob scripts/compare_runtime_ab_suite.py 272399e96e6a635f7f4e2e807e65af1679195298
-          check_blob benchmarks/runtime-traces/sealed/repo-localization-v0.2.json aa64f95fe6b439f8a636987f9ca9ef8711484f47
+          check_blob benchmarks/runtime-traces/sealed/repo-localization-v0.2.json 2b42292cdbd8cae7e4870a84c70452e57f533f05
           echo "freeze guard passed"
 
       - name: Execute sealed real-repository OFF/ON suite once
