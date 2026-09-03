@@ -1,0 +1,24 @@
+name: research-repo-source-hygiene-v01
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-source-hygiene-v01.yml
+      - scripts/evaluate_repo_source_artifact_filter_v01.py
+
+jobs:
+  source-hygiene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Evaluate deterministic source artifact hygiene
+        run: python scripts/evaluate_repo_source_artifact_filter_v01.py
