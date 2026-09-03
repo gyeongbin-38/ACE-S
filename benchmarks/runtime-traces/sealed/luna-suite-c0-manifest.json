@@ -1,0 +1,27 @@
+{
+  "benchmark": "luna-interactive-architecture-retention-suite-c0",
+  "status": "PACKETS_AND_LABEL_HASH_FROZEN_BEFORE_LUNA_OUTPUT",
+  "purpose": "interactive harness calibration; not final benchmark",
+  "model_request": {
+    "model": "Luna",
+    "reasoning": "xhigh",
+    "temperature": 0,
+    "web": false,
+    "tools": false
+  },
+  "task_count": 6,
+  "stages_per_session": 8,
+  "run_order": ["K1", "K2", "K0"],
+  "packet_sha256": {
+    "K0": "f01693a0b69daba1864781b6c81ca48a552ff1cfe1961ba2ccc717c7b9385292",
+    "K1": "b048f2500d01f34a0db65e169711d2e7a3d2edc3eb32f5c98e19b87ab1faebfa",
+    "K2": "c7cfe05782abc1398a3bfa916d5eeb7626cfc04e4432ac9720432a2588759790"
+  },
+  "sealed_labels_sha256": "b5c3815b035e679ae5a6be0afd1240cebd5edbaf166e1bae70d1dd467945da1f",
+  "anti_contamination": [
+    "Fresh Luna conversation per condition.",
+    "Send startup then stages 1 through 8 sequentially; never reveal future stages early.",
+    "Do not expose condition mapping or sealed labels to Luna.",
+    "Calibration tasks are excluded from final Suite C held-out score."
+  ]
+}
