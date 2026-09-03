@@ -1,0 +1,45 @@
+name: research-behavior-overlap-novelty-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - scripts/experiment_behavior_overlap_novelty_v06.py
+      - .github/workflows/research-behavior-overlap-novelty-v06.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  overlap-novelty:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run overlap novelty experiment
+        run: |
+          set -euo pipefail
+          python scripts/experiment_behavior_overlap_novelty_v06.py > /tmp/behavior-overlap-novelty-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/behavior-overlap-novelty-v06.json', encoding='utf-8'))
+          for r in d['variants']:
+              dev=r['development14']; a=r['opened_suite_a6']
+              print('\nVARIANT=', r['variant'])
+              print('DEV=', dev['witness_hits'], '/14', 'FRONTIER=', dev['frontier_hits'], '/14')
+              print('A=', a['witness_hits'], '/6', 'FRONTIER=', a['frontier_hits'], '/6')
+              print('FALSE_DIRECT=', dev['false_direct']+a['false_direct'], 'GATE20=', r['hard_gate_20'])
+              print('DEV_FAILURES=', json.dumps(dev['failures'], sort_keys=True))
+              print('A_FAILURES=', json.dumps(a['failures'], sort_keys=True))
+              print('DEV_MEAN_LINES=', dev['mean_unique_source_lines'], 'A_MEAN_LINES=', a['mean_unique_source_lines'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-overlap-novelty-v06
+          path: /tmp/behavior-overlap-novelty-v06.json
+          if-no-files-found: error
