@@ -1,0 +1,37 @@
+name: validate-architecture-synthesis
+
+on:
+  push:
+    branches:
+      - exp/architecture-synthesis-v01
+    paths:
+      - 'skills/architecture-engineering/**'
+      - 'benchmarks/architecture-*'
+      - 'scripts/*architecture*'
+      - '.github/workflows/validate-architecture-synthesis.yml'
+  pull_request:
+    paths:
+      - 'skills/architecture-engineering/**'
+      - 'benchmarks/architecture-*'
+      - 'scripts/*architecture*'
+      - '.github/workflows/validate-architecture-synthesis.yml'
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  validate-architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate Architecture Skill progressive loading
+        run: python scripts/validate_architecture_skill.py
+      - name: Run architecture contract benchmark
+        run: python scripts/run_architecture_contract_bench.py
+      - name: Run architecture Pareto frontier benchmark
+        run: python scripts/run_architecture_frontier_bench.py
+      - name: Run architecture state-graph mutation benchmark
+        run: python scripts/run_architecture_graph_mutation_bench.py
