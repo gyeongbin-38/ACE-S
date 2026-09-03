@@ -1,0 +1,135 @@
+{
+  "schema_version": "0.1",
+  "suite_id": "repo-localization-runtime-sealed-v0.2",
+  "status": "sealed_after_adapter_freeze_before_execution",
+  "task_stratum": "repository-local",
+  "adapter_freeze_commit": "3c3769d494a194691709cdfce161ae282cae8205",
+  "source_dataset": "benchmarks/results/live-github-replay-v0.2.csv",
+  "excluded_development_task_ids": ["requests-t2", "django-t1", "zod-t3", "gson-t2", "gin-t1", "k8s-t2"],
+  "prompt_template": "Locate the most relevant production source file for: <stage1_query>. Return the production file path.",
+  "tasks": [
+    {
+      "task_id": "sealed-requests-t1",
+      "source_task_id": "requests-t1",
+      "repository": "psf/requests",
+      "commit_sha": "f0198e6dfc431a2293dc16e1b1e8fcddc910a7f3",
+      "prompt": "Locate the most relevant production source file for: Content-Type header parsing. Return the production file path.",
+      "expected_file": "src/requests/utils.py"
+    },
+    {
+      "task_id": "sealed-requests-t3",
+      "source_task_id": "requests-t3",
+      "repository": "psf/requests",
+      "commit_sha": "3ff3ff21dd45957c9e143cd500291959bb15f690",
+      "prompt": "Locate the most relevant production source file for: JSONDecodeError picklable deserializable. Return the production file path.",
+      "expected_file": "src/requests/exceptions.py"
+    },
+    {
+      "task_id": "sealed-django-t2",
+      "source_task_id": "django-t2",
+      "repository": "django/django",
+      "commit_sha": "b33c31d992591bc8e8d20ac156809e4ae5b45375",
+      "prompt": "Locate the most relevant production source file for: ASGIRequest path_info script name. Return the production file path.",
+      "expected_file": "django/core/handlers/asgi.py"
+    },
+    {
+      "task_id": "sealed-django-t3",
+      "source_task_id": "django-t3",
+      "repository": "django/django",
+      "commit_sha": "e779bc7d78cbcadd395d48e5b6b00acea07ce503",
+      "prompt": "Locate the most relevant production source file for: Field deconstruct serialization. Return the production file path.",
+      "expected_file": "django/db/models/fields/__init__.py"
+    },
+    {
+      "task_id": "sealed-zod-t1",
+      "source_task_id": "zod-t1",
+      "repository": "colinhacks/zod",
+      "commit_sha": "7f789defd73ee35f3099ab5c2091cb19bd2b3578",
+      "prompt": "Locate the most relevant production source file for: record non-enumerable properties validation. Return the production file path.",
+      "expected_file": "packages/zod/src/v4/core/schemas.ts"
+    },
+    {
+      "task_id": "sealed-zod-t2",
+      "source_task_id": "zod-t2",
+      "repository": "colinhacks/zod",
+      "commit_sha": "2f8414bc90cebc76be87c3640617e300a5d9b060",
+      "prompt": "Locate the most relevant production source file for: transform context addIssue. Return the production file path.",
+      "expected_file": "packages/zod/src/v4/classic/schemas.ts"
+    },
+    {
+      "task_id": "sealed-actix-t1",
+      "source_task_id": "actix-t1",
+      "repository": "actix/actix-web",
+      "commit_sha": "f31f9bc92c2518e40fecd7eaa711b0bdf01ec0b9",
+      "prompt": "Locate the most relevant production source file for: mtime unix epoch panic. Return the production file path.",
+      "expected_file": "actix-files/src/named.rs"
+    },
+    {
+      "task_id": "sealed-actix-t2",
+      "source_task_id": "actix-t2",
+      "repository": "actix/actix-web",
+      "commit_sha": "d3bf929040129241d9141dfce9826c40acec549f",
+      "prompt": "Locate the most relevant production source file for: Route wrap to service panic. Return the production file path.",
+      "expected_file": "actix-web/src/route.rs"
+    },
+    {
+      "task_id": "sealed-actix-t3",
+      "source_task_id": "actix-t3",
+      "repository": "actix/actix-web",
+      "commit_sha": "41e4863748ac0c8e446d96528fa1c31b2b20aae1",
+      "prompt": "Locate the most relevant production source file for: Transfer-Encoding chunked empty body. Return the production file path.",
+      "expected_file": "awc/src/client/h1proto.rs"
+    },
+    {
+      "task_id": "sealed-gson-t1",
+      "source_task_id": "gson-t1",
+      "repository": "google/gson",
+      "commit_sha": "6bf8bf6cbf4d4f5f72f69262be890a5a5e28259d",
+      "prompt": "Locate the most relevant production source file for: NumberFormatException location JsonReader. Return the production file path.",
+      "expected_file": "gson/src/main/java/com/google/gson/stream/JsonReader.java"
+    },
+    {
+      "task_id": "sealed-gson-t3",
+      "source_task_id": "gson-t3",
+      "repository": "google/gson",
+      "commit_sha": "e8cdabf296cd4c2c1550ed76cf27a1a8e0c4ec59",
+      "prompt": "Locate the most relevant production source file for: ParameterizedType typeArguments owner clone. Return the production file path.",
+      "expected_file": "gson/src/main/java/com/google/gson/internal/$Gson$Types.java"
+    },
+    {
+      "task_id": "sealed-gin-t2",
+      "source_task_id": "gin-t2",
+      "repository": "gin-gonic/gin",
+      "commit_sha": "9914178584e42458ff7d23891463a880f58c9d86",
+      "prompt": "Locate the most relevant production source file for: ClientIP X-Forwarded-For multiple. Return the production file path.",
+      "expected_file": "context.go"
+    },
+    {
+      "task_id": "sealed-gin-t3",
+      "source_task_id": "gin-t3",
+      "repository": "gin-gonic/gin",
+      "commit_sha": "c3d1092b3b48addf6f9cd00fe274ec3bd14650eb",
+      "prompt": "Locate the most relevant production source file for: form binding empty slice array. Return the production file path.",
+      "expected_file": "binding/form_mapping.go"
+    },
+    {
+      "task_id": "sealed-k8s-t1",
+      "source_task_id": "k8s-t1",
+      "repository": "kubernetes/kubernetes",
+      "commit_sha": "81e4b115fd290208d757566d4e6f58c62d0833eb",
+      "prompt": "Locate the most relevant production source file for: resource claim statuses pod status comparison. Return the production file path.",
+      "expected_file": "pkg/kubelet/status/status_manager.go"
+    },
+    {
+      "task_id": "sealed-k8s-t3",
+      "source_task_id": "k8s-t3",
+      "repository": "kubernetes/kubernetes",
+      "commit_sha": "a49bc6f2fbbd9b1a634d9224dac9828e2012b4ab",
+      "prompt": "Locate the most relevant production source file for: terminatedEndpoints RemoteEndpoints. Return the production file path.",
+      "expected_file": "pkg/proxy/winkernel/proxier.go"
+    }
+  ],
+  "predeclared_gates_ref": "benchmarks/runtime-traces/freezes/deterministic-repo-localization-v0.4.1.json",
+  "post_result_rule": "Do not modify the frozen adapter/imported ranking policy in response to these results. A changed policy requires a new untouched suite.",
+  "claim_boundary": "Sealed-after-adapter-freeze deterministic real-repository localization and instrumentation test. Not an LLM or coding-agent quality claim."
+}
