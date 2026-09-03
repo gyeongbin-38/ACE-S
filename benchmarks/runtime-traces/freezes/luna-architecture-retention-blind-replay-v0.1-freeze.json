@@ -1,0 +1,39 @@
+{
+  "benchmark": "luna-architecture-retention-blind-replay-v0.1",
+  "status": "PACKETS_AND_LABEL_COMMITMENTS_FROZEN_BEFORE_LUNA_OUTPUT",
+  "base_protocol_commit": "275b2ce92acbb8a4d4b38c94fe4664cba724e1b8",
+  "seed": 2026090302,
+  "task_count": 18,
+  "strata": [
+    "constraint_drift",
+    "decision_supersession",
+    "speculative_rollback",
+    "proof_obligation",
+    "ownership_ripple",
+    "compound_long_horizon"
+  ],
+  "condition_ids": ["K0", "K1", "K2"],
+  "run_order": ["K2", "K0", "K1"],
+  "luna_config": {
+    "model": "Luna",
+    "reasoning": "xhigh",
+    "temperature": 0,
+    "web": false,
+    "tools": false,
+    "fresh_conversation_per_condition": true
+  },
+  "packet_sha256": {
+    "K0": "31872894ded11b3f385c3d0c00aa4f3344554620a7d955dd8c2a3c6ca9e497de",
+    "K1": "da2c5b3bd5399a8a8741aaa7bb5a6defc3f5aea3a29f8a2989636d019d79fe6f",
+    "K2": "2c2225a072adcf15162c38a2bbaa0573e314f0644a916c7a56e797debdc9b92b"
+  },
+  "sealed_labels_sha256": "f9161c5dcb56e13a6924992bc5009eaa6ef64d433f0687c0dad0bb68d2bdb95c",
+  "scorer_sha256": "77d5ec8a69e6115d3d73421ee70972e09cb2778205e43aa96324da31b8183b51",
+  "anti_contamination": [
+    "Do not expose SEALED labels or condition mapping to Luna.",
+    "Use a fresh Luna conversation for each condition packet.",
+    "Freeze raw Luna output before opening labels.",
+    "Do not tune packet construction after seeing any Luna output and count the same lineage as held-out."
+  ],
+  "claim_boundary": "This first Luna run is a blind long-horizon context-replay screen of memory architecture views. It is model-level evidence, but it is not yet a fully interactive 30-task multi-turn agent A/B/C."
+}
