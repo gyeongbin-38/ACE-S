@@ -37,3 +37,5 @@ jobs:
         run: python scripts/run_architecture_graph_mutation_bench.py
       - name: Run incremental architecture impact benchmark
         run: python scripts/run_architecture_impact_bench.py
+      - name: Run architecture uncertainty benchmark
+        run: python scripts/run_architecture_uncertainty_bench.py
