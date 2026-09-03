@@ -17,12 +17,14 @@ import re
 from collections import Counter
 from pathlib import Path
 
-import deterministic_repo_localization_v02 as robust
+import deterministic_repo_localization_v02 as robust  # noqa: F401
 import deterministic_repo_localization as base
 
 CURRENT_PROMPT = ""
 CURRENT_REPO: Path | None = None
 
+# Preserve original implementation references before monkeypatching base.
+ORIGINAL_QUERY_TERMS = base.query_terms
 ORIGINAL_GREP = base.grep_repo
 ORIGINAL_IS_PROD = base.is_prod_path
 
@@ -30,7 +32,7 @@ ORIGINAL_IS_PROD = base.is_prod_path
 def smart_query_terms(prompt: str):
     global CURRENT_PROMPT
     CURRENT_PROMPT = prompt
-    rows = list(base.query_terms(prompt))
+    rows = list(ORIGINAL_QUERY_TERMS(prompt))
     merged = {t.lower(): [w, e] for t, w, e in rows}
     for tok in re.findall(r"[A-Za-z][A-Za-z0-9_-]{3,}", prompt):
         if "-" in tok or "_" in tok:
