@@ -1,0 +1,7 @@
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0001","seq":1,"event_type":"task_start","condition":"OFF","surface":"fixture","model":"fixture-model","task_stratum":"repository-local","metrics":{}}
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0002","seq":2,"event_type":"tool_call_start","call_id":"c1","tool_name":"repo.lookup","metrics":{}}
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0003","seq":3,"event_type":"tool_call_end","call_id":"c1","ok":true,"metrics":{"tool_latency_ms":{"status":"measured","value":100}}}
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0004","seq":4,"event_type":"evidence_observed","evidence_id":"ev1","evidence_kind":"structured","certificate_capable":true,"provenance_refs":["repo://fixture/blob/abc#L1-L20"],"value_sha256":"sha256:111","metrics":{}}
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0005","seq":5,"event_type":"worker_context_exposed","representation":"full","evidence_id":"ev1","metrics":{"worker_visible_bytes":{"status":"measured","value":1000},"worker_visible_tokens":{"status":"measured","value":250}}}
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0006","seq":6,"event_type":"model_call","model_call_id":"m1","metrics":{"model_latency_ms":{"status":"measured","value":300}}}
+{"schema_version":"0.1","task_id":"paired-cert-001","event_id":"e0007","seq":7,"event_type":"task_end","passed":true,"quality_score":1.0,"metrics":{"wall_clock_ms":{"status":"measured","value":500}}}
