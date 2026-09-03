@@ -1,0 +1,86 @@
+{
+  "benchmark": "luna-architecture-retention-blind-replay-v0.1b",
+  "status": "BLIND_MAPPING_OPENED_AND_SCORED",
+  "packet_seal_commit": "c49ce6ca590eb090117a77f091f57a16d426f1c4",
+  "sealed_labels_sha256": "f9161c5dcb56e13a6924992bc5009eaa6ef64d433f0687c0dad0bb68d2bdb95c",
+  "condition_mapping": {
+    "K0": "TRANSACTIONAL_TYPED_HYBRID",
+    "K1": "CURRENT_ACE_PROGRESSIVE",
+    "K2": "OFF_FULL_HISTORY"
+  },
+  "chronology": {
+    "all_three_outputs_received_in_conversation_before_mapping_open": true,
+    "k2_prelabel_receipt_commit": "8fa464a09598982f3bc690d5789ea4fa4c6cd98e",
+    "k0_prelabel_receipt_commit": "9c4bf87d92bc913c0776c7edecdf567f7a552841",
+    "k1_git_receipt_before_mapping_open": false,
+    "caveat": "K1 output was received in the conversation before mapping/labels were opened, but no GitHub receipt was committed first; its pre-label chronology therefore rests on the conversation record."
+  },
+  "format_caveat": "Luna used Unicode smart quotes; only U+201C/U+201D to ASCII double quote was treated as mechanical parse normalization.",
+  "aggregate": {
+    "TRANSACTIONAL_TYPED_HYBRID": {
+      "exact_task_success": "17/18 (94.444%)",
+      "component_exact": "197/198 (99.495%)",
+      "current_state_value_accuracy": "90/90 (100.0%)",
+      "provenance_accuracy": "90/90 (100.0%)",
+      "hard_constraint_retention": "35/35 (100.0%)",
+      "obligation_value_retention": "19/19 (100.0%)",
+      "gate_accuracy": "17/18 (94.444%)",
+      "missing_fact_value_errors": 0,
+      "aborted_branch_contamination": 0
+    },
+    "CURRENT_ACE_PROGRESSIVE": {
+      "exact_task_success": "13/18 (72.222%)",
+      "component_exact": "188/198 (94.949%)",
+      "current_state_value_accuracy": "86/90 (95.556%)",
+      "provenance_accuracy": "86/90 (95.556%)",
+      "hard_constraint_retention": "34/35 (97.143%)",
+      "obligation_value_retention": "16/19 (84.211%)",
+      "gate_accuracy": "16/18 (88.889%)",
+      "missing_fact_value_errors": 4,
+      "aborted_branch_contamination": 0
+    },
+    "OFF_FULL_HISTORY": {
+      "exact_task_success": "15/18 (83.333%)",
+      "component_exact": "195/198 (98.485%)",
+      "current_state_value_accuracy": "90/90 (100.0%)",
+      "provenance_accuracy": "90/90 (100.0%)",
+      "hard_constraint_retention": "35/35 (100.0%)",
+      "obligation_value_retention": "19/19 (100.0%)",
+      "gate_accuracy": "15/18 (83.333%)",
+      "missing_fact_value_errors": 0,
+      "aborted_branch_contamination": 0
+    }
+  },
+  "per_stratum_component_score_pct": {
+    "TRANSACTIONAL_TYPED_HYBRID": {"constraint_drift":100.0,"decision_supersession":100.0,"speculative_rollback":100.0,"proof_obligation":96.97,"ownership_ripple":100.0,"compound_long_horizon":100.0},
+    "CURRENT_ACE_PROGRESSIVE": {"constraint_drift":100.0,"decision_supersession":100.0,"speculative_rollback":81.818,"proof_obligation":96.97,"ownership_ripple":90.909,"compound_long_horizon":100.0},
+    "OFF_FULL_HISTORY": {"constraint_drift":100.0,"decision_supersession":96.97,"speculative_rollback":100.0,"proof_obligation":96.97,"ownership_ripple":100.0,"compound_long_horizon":96.97}
+  },
+  "paired_improvement": {
+    "hybrid_vs_current_ace": {
+      "exact_task_success_pp": 22.222,
+      "failed_task_count_reduction_pct": 80.0,
+      "component_score_pp": 4.546,
+      "component_error_count_reduction_pct": 90.0,
+      "obligation_value_retention_pp": 15.789,
+      "gate_accuracy_pp": 5.555
+    },
+    "hybrid_vs_off_full_history": {
+      "exact_task_success_pp": 11.111,
+      "failed_task_count_reduction_pct": 66.667,
+      "component_score_pp": 1.010,
+      "component_error_count_reduction_pct": 66.667,
+      "gate_accuracy_pp": 11.111
+    }
+  },
+  "error_summary": {
+    "TRANSACTIONAL_TYPED_HYBRID": ["archret-11 gate omitted O3"],
+    "CURRENT_ACE_PROGRESSIVE": ["archret-09 O0 missing", "archret-07 HC0 missing", "archret-15 O0 missing plus gate mismatch", "archret-08 O0 missing", "archret-11 gate omitted O3"],
+    "OFF_FULL_HISTORY": ["archret-11 gate omitted O3", "archret-17 gate omitted O2", "archret-04 gate omitted O2"]
+  },
+  "decision_gate": {
+    "passed": true,
+    "reason": "Hybrid has the best exact task success, ties or leads hard-constraint and contamination metrics, has no >10% stratum regression, and reduces component errors versus both baselines."
+  },
+  "claim_boundary": "Blind Luna memory-view replay only. Hybrid receives a controller-generated canonical projection, so this validates architecture/runtime readout more directly than intrinsic long-horizon LLM memory. A fresh interactive 50-100-step same-model A/B/C is still required before a general model-forgetting claim."
+}
