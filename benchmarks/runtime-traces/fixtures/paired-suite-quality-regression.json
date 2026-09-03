@@ -1,0 +1,9 @@
+{
+  "suite_id": "fixture-paired-quality-regression-v0.1",
+  "pairs": [
+    {
+      "off": "paired-off.jsonl",
+      "on": "paired-on-quality-regression.jsonl"
+    }
+  ]
+}
