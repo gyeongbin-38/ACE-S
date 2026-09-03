@@ -1,0 +1,18 @@
+{
+  "suite_id": "luna-blind-packet-smoke-v0.1",
+  "status": "builder_smoke_only_not_suite_b",
+  "tasks": [
+    {
+      "task_id": "smoke-jinja-a301",
+      "repository": "pallets/jinja",
+      "commit_sha": "5ef70112a1ff19c05324ff889dd30405b1002044",
+      "prompt": "Locate the production source file that builds Jinja attribute getter callables, walking dotted attribute parts through the environment, substituting a configured default for undefined values, and optionally post-processing the final value. Return the most relevant production file path."
+    },
+    {
+      "task_id": "smoke-reqwest-a306",
+      "repository": "seanmonstar/reqwest",
+      "commit_sha": "9f06fd28abe53e5ff84a091825ea5ce8984b51e0",
+      "prompt": "Locate the production source file applying Reqwest redirect policy actions: custom policies delegate to the callback, limited policies error after too many prior redirects or otherwise follow, and disabled policies stop. Return the most relevant production file path."
+    }
+  ]
+}
