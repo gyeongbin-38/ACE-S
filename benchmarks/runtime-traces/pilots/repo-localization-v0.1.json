@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1",
+  "suite_id": "repo-localization-runtime-pilot-v0.1",
+  "status": "frozen_before_runtime_execution",
+  "task_stratum": "repository-local",
+  "tasks": [
+    {
+      "task_id": "requests-netrc-runtime-001",
+      "repository": "psf/requests",
+      "commit_sha": "47914226c2968802f2cdee3f6f0f6e06e4472f64",
+      "prompt": "Locate the production source file responsible for resolving netrc credentials when authentication data may be missing or None. Return the most relevant production file path.",
+      "expected_file": "src/requests/utils.py"
+    },
+    {
+      "task_id": "django-orderby-runtime-001",
+      "repository": "django/django",
+      "commit_sha": "a284a49153f005f2a7af087025e5112ba06cbd5f",
+      "prompt": "Locate the production source file implementing the orderby_issubset_groupby behavior used by Django SQL query construction. Return the most relevant production file path.",
+      "expected_file": "django/db/models/sql/query.py"
+    },
+    {
+      "task_id": "zod-float-remainder-runtime-001",
+      "repository": "colinhacks/zod",
+      "commit_sha": "3a818de145dc2fa9b5753bc8bf97b0b8484cfbaf",
+      "prompt": "Locate the production source file containing the floatSafeRemainder utility involved in exponent/remainder handling. Return the most relevant production file path.",
+      "expected_file": "packages/zod/src/v4/core/util.ts"
+    },
+    {
+      "task_id": "gin-case-insensitive-runtime-001",
+      "repository": "gin-gonic/gin",
+      "commit_sha": "472d086af2acd924cb4b9d7be0525f7d790f69bc",
+      "prompt": "Locate the production source file implementing findCaseInsensitivePathRec used by RedirectFixedPath behavior. Return the most relevant production file path.",
+      "expected_file": "tree.go"
+    },
+    {
+      "task_id": "k8s-current-context-runtime-001",
+      "repository": "kubernetes/kubernetes",
+      "commit_sha": "ffa084f81129ea685b176a282921c4d54906c539",
+      "prompt": "Locate the production source file that determines where kubeconfig current-context changes are written when configuration may originate from a different file. Return the most relevant production file path.",
+      "expected_file": "staging/src/k8s.io/client-go/tools/clientcmd/loader.go"
+    },
+    {
+      "task_id": "gson-duplicate-key-runtime-001",
+      "repository": "google/gson",
+      "commit_sha": "f4d371d29c04066dbe7fdb31f642831f9c7f40cd",
+      "prompt": "Locate the production source file responsible for duplicate-key handling, including null values, in Gson map deserialization. Return the most relevant production file path.",
+      "expected_file": "gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java"
+    }
+  ],
+  "freeze_rule": "Do not change prompts, repositories, commit SHAs, expected files, or task membership after runtime results are observed. Create a new suite version instead.",
+  "claim_boundary": "This taskset is derived from previously published real-repository localization fixtures. It freezes evaluation inputs; it is not itself a performance result."
+}
