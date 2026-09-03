@@ -1,0 +1,21 @@
+{
+  "audit_id": "k8s-current-context-fixture-invalid-v0.1",
+  "status": "confirmed_ground_truth_error",
+  "original_suite": "benchmarks/runtime-traces/pilots/repo-evidence-dev-v0.2.json",
+  "task_id": "k8s-current-context-evidence-001",
+  "repository": "kubernetes/kubernetes",
+  "commit_sha": "ffa084f81129ea685b176a282921c4d54906c539",
+  "prompt": "Locate the production source file that determines where kubeconfig current-context changes are written when configuration may originate from a different file. Return the most relevant production file path.",
+  "original_expected_file": "staging/src/k8s.io/client-go/tools/clientcmd/loader.go",
+  "original_expected_anchor": "originating files",
+  "corrected_expected_file": "staging/src/k8s.io/client-go/tools/clientcmd/config.go",
+  "corrected_expected_anchor": "writeCurrentContext",
+  "evidence": [
+    "At the frozen commit, config.go documents that Preferences and CurrentContext are special-cased to the default destination file.",
+    "ModifyConfig calls writeCurrentContext when CurrentContext changes.",
+    "writeCurrentContext contains the explicit/default/preference-chain write-location logic.",
+    "The phrase 'originating files' in loader.go belongs to DoNotResolvePaths path-resolution documentation and does not implement CurrentContext persistence."
+  ],
+  "impact": "Any development metric treating loader.go/originating-files as the K8s success label is invalid for this task. Original frozen artifacts remain immutable; corrected scoring must use a new suite version.",
+  "policy": "Do not edit the original frozen suite. Re-run development comparisons against a corrected successor suite and do not use pre-correction K8s anchor failures or successes for freeze selection."
+}
