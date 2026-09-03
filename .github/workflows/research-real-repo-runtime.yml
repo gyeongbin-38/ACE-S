@@ -1,0 +1,56 @@
+name: research-real-repo-runtime
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-real-repo-runtime.yml
+      - adapters/deterministic_repo_localization.py
+      - scripts/run_runtime_ab_harness.py
+      - scripts/compare_runtime_ab.py
+      - scripts/compare_runtime_ab_suite.py
+      - scripts/runtime_trace_writer.py
+      - scripts/validate_runtime_trace.py
+      - scripts/validate_runtime_taskset.py
+      - benchmarks/runtime-traces/pilots/repo-localization-v0.1.json
+
+env:
+  PYTHONHASHSEED: "0"
+  ACE_S_REPO_CACHE: ${{ runner.temp }}/ace-s-real-repo-cache
+
+jobs:
+  real-repo-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run frozen real-repository OFF/ON localization pilot
+        run: |
+          python scripts/run_runtime_ab_harness.py \
+            benchmarks/runtime-traces/pilots/repo-localization-v0.1.json \
+            --adapter "python adapters/deterministic_repo_localization.py" \
+            --out-dir /tmp/ace-s-real-runtime-v0.1 \
+            --quality-tolerance 0 \
+            --material-improvement-pct 1 \
+            --require-pass
+      - name: Require all frozen tasks correct in both conditions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/ace-s-real-runtime-v0.1/report.json')
+          r=json.loads(p.read_text())
+          bad=[x for x in r['raw_scored_results'] if not x['passed']]
+          if bad:
+              print(json.dumps({'status':'accuracy_gate_failed','bad':bad}, indent=2))
+              raise SystemExit(1)
+          print(json.dumps({
+              'status':'all_correct',
+              'tasks':len(r['raw_scored_results'])//2,
+              'paired_summary':r['paired_summary'],
+          }, indent=2))
+          PY
