@@ -1,0 +1,22 @@
+{
+  "result_id": "repo-behavior-witness-suite-a-v0.2.1-corrected-audit-result",
+  "status": "AUDIT_ONLY_NOT_UNSEEN",
+  "workflow_run_id": 33759284934,
+  "artifact_id": 9894747620,
+  "artifact_zip_sha256": "bf91322ccdf8709338a1ea49832981a2a3fd178fb3c3d7cc5cd9d1e8ae7223eb",
+  "inner_result_json_sha256": "6bcf3c3cd4940be0175c455a1155a7132250f4ee7dde39e18b91ffb0294e3d44",
+  "evaluation_head": "400d2c93e82cc5aa31b695533ed48a3a162e8899",
+  "policy_changed": false,
+  "corrected_result": {
+    "hard_gate": true,
+    "frontier_hits": "6/6",
+    "behavior_witness_hits": "6/6",
+    "false_confident_direct_select": 0
+  },
+  "interpretation": "The only raw Suite A v0.2 miss was eliminated by correcting an impossible Tower witness threshold from six visible lines to the five-line behavior implementation. This confirms the benchmark-label diagnosis, but because the correction occurred after first evaluation this result is audit evidence only and is not fresh unseen generalization evidence.",
+  "immutability": {
+    "raw_first_result_remains": "benchmarks/runtime-traces/results/repo-behavior-witness-suite-a-v0.2-result.json",
+    "raw_first_result_status": "5/6 witness failure",
+    "do_not_promote_this_audit_to_unseen": true
+  }
+}
