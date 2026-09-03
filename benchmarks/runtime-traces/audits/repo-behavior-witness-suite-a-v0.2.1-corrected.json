@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.6.1",
+  "suite_id": "repo-behavior-witness-suite-a-v0.2.1-corrected",
+  "status": "corrected_after_ground_truth_audit_not_unseen",
+  "parent_suite": "benchmarks/runtime-traces/sealed/repo-behavior-witness-suite-a-v0.2.json",
+  "parent_first_result": "benchmarks/runtime-traces/results/repo-behavior-witness-suite-a-v0.2-result.json",
+  "correction": {
+    "task_id": "tower-servicebuilder-layer-a206",
+    "field": "witnesses[0]",
+    "old": {"start_line": 125, "end_line": 136, "minimum_visible_lines": 6},
+    "new": {"start_line": 132, "end_line": 136, "minimum_visible_lines": 5},
+    "reason": "Frozen source audit shows ServiceBuilder::layer implementation is exactly lines 132-136. The first sealed evaluation exposed all five lines; requiring six forced unrelated documentation/enclosing-impl context into the behavior witness.",
+    "policy_changed": false
+  },
+  "source_blobs": {
+    "werkzeug-proxy-real-value-a201": "cbf4e0bae0c1077f0f3db8e776efd655ab799596",
+    "fastapi-response-validation-a202": "dc48a33d63ed9aae3c1b4a5d8abd2ab4f724c908",
+    "pytest-monkeypatch-setenv-a203": "d6db72455a8acde3c4cb94ca58a6deff40b78ce2",
+    "sqlalchemy-url-password-a204": "26563b341a375670a2ea52513eba7690b7eee96a",
+    "uvicorn-proxy-scope-a205": "ebd210c4381cb64192a2fca139f5434838d56df5",
+    "tower-servicebuilder-layer-a206": "1906bfc681337f60fa0c67f1d5421232acb77b70"
+  },
+  "tasks": [
+    {"task_id":"werkzeug-proxy-real-value-a201","repository":"pallets/werkzeug","commit_sha":"0005c79e09bae5f4cc2bd8ccd468d7dafe24a455","prompt":"Locate the production source file responsible for choosing the real forwarded header value based on the configured number of trusted proxies, returning no value when the forwarded list is too short. Return the most relevant production file path.","expected_file":"src/werkzeug/middleware/proxy_fix.py","witnesses":[{"path":"src/werkzeug/middleware/proxy_fix.py","start_line":105,"end_line":124,"kind":"implementation","claim":"ProxyFix parses the forwarded list and selects the trusted value from the right, or returns None when trust/value requirements are not met.","minimum_visible_lines":8}]},
+    {"task_id":"fastapi-response-validation-a202","repository":"fastapi/fastapi","commit_sha":"50113da16fec53b66b80d75e80a89296de4fa5a5","prompt":"Locate the production source file responsible for validating endpoint response content against a response model, raising response validation errors, and serializing the validated value. Return the most relevant production file path.","expected_file":"fastapi/routing.py","witnesses":[{"path":"fastapi/routing.py","start_line":301,"end_line":334,"kind":"implementation","claim":"serialize_response validates response content, raises ResponseValidationError on errors, then serializes the validated value.","minimum_visible_lines":12}]},
+    {"task_id":"pytest-monkeypatch-setenv-a203","repository":"pytest-dev/pytest","commit_sha":"51e9a9f148cd2509a31e3fa0d2b1b3204c2b0dd7","prompt":"Locate the production source file implementing monkeypatch environment-variable assignment, including optional prepending to an existing value and implicit string conversion with a warning. Return the most relevant production file path.","expected_file":"src/_pytest/monkeypatch.py","witnesses":[{"path":"src/_pytest/monkeypatch.py","start_line":308,"end_line":327,"kind":"implementation","claim":"setenv warns and converts non-string values, prepends to an existing environment value when requested, then writes through setitem.","minimum_visible_lines":9}]},
+    {"task_id":"sqlalchemy-url-password-a204","repository":"sqlalchemy/sqlalchemy","commit_sha":"36892d819240c0681a6c08df9752419f91009503","prompt":"Locate the production source file that renders database connection URLs while hiding passwords by default and including the quoted password only when password hiding is disabled. Return the most relevant production file path.","expected_file":"lib/sqlalchemy/engine/url.py","witnesses":[{"path":"lib/sqlalchemy/engine/url.py","start_line":630,"end_line":649,"kind":"implementation","claim":"render_as_string substitutes *** when hide_password is true and otherwise quotes the actual password before appending the authority delimiter.","minimum_visible_lines":10}]},
+    {"task_id":"uvicorn-proxy-scope-a205","repository":"Kludex/uvicorn","commit_sha":"eed8e7212a60681a9c3c865305cdd227a2b16f90","prompt":"Locate the production source file that trusts configured proxy hosts, reads X-Forwarded-Proto and X-Forwarded-For headers, and rewrites the ASGI request scheme and client address. Return the most relevant production file path.","expected_file":"uvicorn/middleware/proxy_headers.py","witnesses":[{"path":"uvicorn/middleware/proxy_headers.py","start_line":27,"end_line":63,"kind":"implementation","claim":"ProxyHeadersMiddleware only consumes forwarded headers for trusted clients, then updates scheme and client address from the forwarded values.","minimum_visible_lines":16}]},
+    {"task_id":"tower-servicebuilder-layer-a206","repository":"tower-rs/tower","commit_sha":"df06d70dbea345facbffb5881fe8647f53bf424d","prompt":"Locate the production source file that adds a new middleware layer to Tower ServiceBuilder by stacking the new layer around the builder's existing layer stack. Return the most relevant production file path.","expected_file":"tower/src/builder/mod.rs","witnesses":[{"path":"tower/src/builder/mod.rs","start_line":132,"end_line":136,"kind":"implementation","claim":"ServiceBuilder::layer creates a new ServiceBuilder whose layer is Stack::new(new_layer, existing_layer).","minimum_visible_lines":5}]}
+  ]
+}
