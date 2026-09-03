@@ -1,0 +1,47 @@
+name: research-build-suite-a-v02-witnesses
+
+on:
+  push:
+    branches:
+      - eval/repo-behavior-suite-a-v02
+    paths:
+      - 'benchmarks/runtime-traces/pilots/repo-behavior-witness-suite-a-v0.2-construction.json'
+      - 'scripts/build_repo_behavior_witness_suite_a_v02.py'
+      - '.github/workflows/research-build-suite-a-v02-witnesses.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-witnesses:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build source-only witness candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_repo_behavior_witness_suite_a_v02.py > /tmp/suite-a-v02-witness-candidates.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/suite-a-v02-witness-candidates.json', encoding='utf-8'))
+          print('POLICY_EXECUTED=', d['policy_executed'])
+          for t in d['tasks']:
+              print('\nTASK=', t['task_id'])
+              print('FILE=', t['expected_file'])
+              print('BLOB=', t['source_blob_sha'])
+              for a in t['anchors']:
+                  print('ANCHOR=', a['anchor'], 'LINE=', a['line'], 'REGION=', [a['candidate_start_line'], a['candidate_end_line']])
+                  for r in a['snippet']:
+                      print(f"  {r['line']:>5}: {r['text']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: suite-a-v02-witness-candidates
+          path: /tmp/suite-a-v02-witness-candidates.json
+          if-no-files-found: error
