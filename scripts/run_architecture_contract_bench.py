@@ -8,7 +8,7 @@ from pathlib import Path
 from validate_architecture_contract import validate
 
 ROOT = Path(__file__).resolve().parents[1]
-SUITE = ROOT / "benchmarks" / "architecture-contract-v0.1.json"
+SUITE = ROOT / "benchmarks" / "architecture-contract-v0.2.json"
 
 
 def main() -> None:
