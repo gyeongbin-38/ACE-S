@@ -1,0 +1,34 @@
+name: research-repo-behavior-witness-suite-a-v021-audit
+on:
+  push:
+    branches: [exp/generalization-repair-v06]
+    paths:
+      - 'scripts/audit_repo_behavior_witness_suite_a_v021.py'
+      - '.github/workflows/research-repo-behavior-witness-suite-a-v021-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run corrected audit
+        run: |
+          set -euo pipefail
+          python scripts/audit_repo_behavior_witness_suite_a_v021.py > /tmp/audit-v021.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/audit-v021.json'))
+          print('HARD_GATE=',d['hard_gate'])
+          print('FRONTIER=',d['frontier_hits'],'/6')
+          print('WITNESS=',d['witness_hits'],'/6')
+          print('FALSE_DIRECT=',d['false_direct'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: repo-behavior-witness-suite-a-v021-audit
+          path: /tmp/audit-v021.json
