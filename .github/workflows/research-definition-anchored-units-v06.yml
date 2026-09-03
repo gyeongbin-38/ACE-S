@@ -1,0 +1,50 @@
+name: research-definition-anchored-units-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - scripts/experiment_definition_anchored_units_v06.py
+      - .github/workflows/research-definition-anchored-units-v06.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  definition-units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run definition-anchored unit experiment
+        run: |
+          set -euo pipefail
+          python scripts/experiment_definition_anchored_units_v06.py > /tmp/definition-units-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/definition-units-v06.json', encoding='utf-8'))
+          print('ELIGIBLE=', d['eligible'])
+          if d['selected'] is not None:
+              s=d['selected']
+              print('SELECTED_CAP=', s['definition_cap'])
+              print('SELECTED_WORST_LINES=', s['worst_case_unique_source_lines_20'])
+              print('SELECTED_MEAN_LINES=', s['mean_unique_source_lines_20'])
+          else:
+              print('SELECTED_CAP=NONE')
+          for r in d['results']:
+              dev=r['development14']; a=r['opened_suite_a6']
+              print('\nCAP=', r['definition_cap'], 'GATE20=', r['hard_gate_20'])
+              print('DEV=', dev['witness_hits'], '/14', 'A=', a['witness_hits'], '/6', 'FALSE=', dev['false_direct']+a['false_direct'])
+              print('A_FAILURES=', json.dumps(a['failures'], sort_keys=True))
+              print('WORST20=', r['worst_case_unique_source_lines_20'], 'MEAN20=', r['mean_unique_source_lines_20'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: definition-anchored-units-v06
+          path: /tmp/definition-units-v06.json
+          if-no-files-found: error
