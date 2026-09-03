@@ -1,0 +1,45 @@
+name: research-gorm-frontier-diagnostic-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - scripts/diagnose_gorm_frontier_v06.py
+      - .github/workflows/research-gorm-frontier-diagnostic-v06.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Diagnose GORM frontier miss
+        run: |
+          set -euo pipefail
+          python scripts/diagnose_gorm_frontier_v06.py > /tmp/gorm-frontier-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/gorm-frontier-v06.json', encoding='utf-8'))
+          print('EXPECTED_EXACT=', json.dumps(d['expected_exact'], sort_keys=True))
+          print('EXPECTED_RECALL=', json.dumps(d['expected_recall'], sort_keys=True))
+          print('FRONTIER=', d['frontier'])
+          print('EXACT_TERMS=', d['exact_terms'])
+          print('RECALL_TERMS=', d['recall_terms'])
+          print('EXACT_TOP12=')
+          for r in d['exact_top20'][:12]: print(json.dumps(r, sort_keys=True))
+          print('RECALL_TOP12=')
+          for r in d['recall_top20'][:12]: print(json.dumps(r, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gorm-frontier-diagnostic-v06
+          path: /tmp/gorm-frontier-v06.json
+          if-no-files-found: error
