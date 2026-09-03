@@ -1,0 +1,13 @@
+{
+  "suite_id": "luna-suite-b-v0.1",
+  "status": "sealed_labels_do_not_expose_to_judge",
+  "labels": [
+    {"task_id": "suite-b-httpx-content-decoding-b001", "expected_file": "httpx/_models.py"},
+    {"task_id": "suite-b-rich-markup-render-b002", "expected_file": "rich/markup.py"},
+    {"task_id": "suite-b-gorilla-route-match-b003", "expected_file": "route.go"},
+    {"task_id": "suite-b-urfave-command-lifecycle-b004", "expected_file": "command_run.go"},
+    {"task_id": "suite-b-clap-token-parser-b005", "expected_file": "clap_builder/src/parser/parser.rs"},
+    {"task_id": "suite-b-serde-json-deserializer-b006", "expected_file": "src/de.rs"}
+  ],
+  "audit_note": "Labels were fixed before packet generation and before any Luna output. The blind packet builder must never read this file."
+}
