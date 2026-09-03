@@ -1,0 +1,44 @@
+name: research-repo-behavior-witness-multiscale-subset-v054
+
+on:
+  push:
+    branches:
+      - exp/behavior-witness-minimality-v05
+    paths:
+      - scripts/search_repo_behavior_witness_multiscale_subset_boundary_v054.py
+      - .github/workflows/research-repo-behavior-witness-multiscale-subset-v054.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  subset-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run exhaustive selected-scale subset boundary
+        run: |
+          set -euo pipefail
+          python scripts/search_repo_behavior_witness_multiscale_subset_boundary_v054.py > /tmp/multiscale-subset-v054.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/multiscale-subset-v054.json', encoding='utf-8'))
+          assert d['candidate_policies'] == 90
+          print('ELIGIBLE_TOTAL=', d['eligible_total'])
+          print('ELIGIBLE_MAX_WINDOWS_4=', d['eligible_max_windows_4'])
+          print('ELIGIBLE_MAX_WINDOWS_5=', d['eligible_max_windows_5'])
+          print('SELECTED=', json.dumps(d['selected'], sort_keys=True))
+          print('BEST_MAX_WINDOWS_4=', json.dumps(d['best_max_windows_4'], sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-witness-multiscale-subset-v054
+          path: /tmp/multiscale-subset-v054.json
+          if-no-files-found: error
