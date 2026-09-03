@@ -1,0 +1,4 @@
+{"schema_version":"0.1","task_id":"fixture-invalid-semantic","event_id":"e001","seq":1,"event_type":"task_start","condition":"ON","surface":"fixture","model":"fixture-model","task_stratum":"research","metrics":{}}
+{"schema_version":"0.1","task_id":"fixture-invalid-semantic","event_id":"e002","seq":2,"event_type":"evidence_observed","evidence_id":"ev-sem","evidence_kind":"semantic","certificate_capable":true,"provenance_refs":["web:source-1"],"metrics":{}}
+{"schema_version":"0.1","task_id":"fixture-invalid-semantic","event_id":"e003","seq":3,"event_type":"certificate_emitted","certificate_id":"cert-sem","evidence_id":"ev-sem","evidence_kind":"structured","schema_ref":"invalid/summary","exact_value_sha256":"deadbeef","provenance_refs":["web:source-1"],"metrics":{}}
+{"schema_version":"0.1","task_id":"fixture-invalid-semantic","event_id":"e004","seq":4,"event_type":"task_end","passed":true,"quality_score":1.0,"metrics":{}}
