@@ -45,3 +45,5 @@ jobs:
         run: python scripts/run_architecture_structural_metrics_bench.py
       - name: Run architecture claim promotion gate benchmark
         run: python scripts/run_architecture_claim_gate_bench.py
+      - name: Run architecture value-of-information benchmark
+        run: python scripts/run_architecture_voi_bench.py
