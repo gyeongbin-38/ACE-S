@@ -1,0 +1,48 @@
+name: research-repo-evidence-dev
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-evidence-dev.yml
+
+jobs:
+  source-evidence-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ACE_S_REPO_CACHE: ${{ runner.temp }}/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate frozen taskset
+        run: python scripts/validate_runtime_taskset.py benchmarks/runtime-traces/pilots/repo-evidence-dev-v0.2.json
+      - name: Run real-repository source-evidence A/B
+        run: >-
+          python scripts/run_repo_evidence_ab_harness.py
+          benchmarks/runtime-traces/pilots/repo-evidence-dev-v0.2.json
+          --adapter "python adapters/deterministic_repo_evidence_v02.py"
+          --out-dir benchmarks/runtime-traces/runs/repo-evidence-dev-v0.2
+          --material-improvement-pct 1
+          --require-pass
+      - name: Enforce meaningful worker-context reduction
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('benchmarks/runtime-traces/runs/repo-evidence-dev-v0.2/report.json')
+          r=json.loads(p.read_text())
+          gate=r['source_evidence_gate']
+          assert gate['all_arms_authentic'] and gate['all_arms_hidden_anchor_visible'] and gate['all_arms_pass'], gate
+          d=r['paired_summary']['aggregate_metric_deltas']['worker_visible_bytes']
+          assert d['on_vs_off_change_pct'] <= -40.0, d
+          print(json.dumps({'worker_visible_change_pct':d['on_vs_off_change_pct'],'source_evidence_gate':gate}, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: repo-evidence-dev-v0.2
+          path: benchmarks/runtime-traces/runs/repo-evidence-dev-v0.2
