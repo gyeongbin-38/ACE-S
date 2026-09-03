@@ -1,0 +1,40 @@
+name: research-structural-closure-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - 'scripts/experiment_structural_closure_v06.py'
+      - '.github/workflows/research-structural-closure-v06.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  structural-closure:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run structural closure experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/experiment_structural_closure_v06.py > /tmp/structural-closure-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/structural-closure-v06.json', encoding='utf-8'))
+          for r in d['results']:
+              print('CAP=', r['cap'], 'FRONTIER=', r['frontier_hits'], '/20', 'WITNESS=', r['witness_hits'], '/20', 'FALSE_DIRECT=', r['false_direct'], 'HARD_GATE=', r['hard_gate'], 'WORST_LINES=', r['worst_case_unique_source_lines'], 'MEAN_LINES=', round(r['mean_unique_source_lines'],3))
+          print('SELECTED=', json.dumps(d['selected'], sort_keys=True))
+          print('FAILURES=', json.dumps(d['selected_failures'], sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: structural-closure-v06
+          path: /tmp/structural-closure-v06.json
+          if-no-files-found: error
