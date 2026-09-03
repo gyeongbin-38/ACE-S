@@ -51,3 +51,5 @@ jobs:
         run: python scripts/run_architecture_eval_bundle_bench.py
       - name: Run architecture constraint-ledger benchmark
         run: python scripts/run_architecture_constraint_ledger_bench.py
+      - name: Run common architecture generation-output benchmark
+        run: python scripts/run_architecture_generation_output_bench.py
