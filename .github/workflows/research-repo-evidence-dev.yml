@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      ACE_S_REPO_CACHE: ${{ runner.temp }}/ace-s-repo-cache
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
       PYTHONHASHSEED: "0"
     steps:
       - uses: actions/checkout@v7
