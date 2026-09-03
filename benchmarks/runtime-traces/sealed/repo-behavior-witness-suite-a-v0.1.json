@@ -1,0 +1,142 @@
+{
+  "schema_version": "0.1",
+  "suite_id": "repo-behavior-witness-suite-a-v0.1",
+  "status": "sealed_before_first_evaluation",
+  "claim_boundary": "Fresh deterministic unseen Suite A. Repositories are disjoint from the 14-task development set. Frozen policy [4,16,24]/5/0 must not be changed after this suite is opened.",
+  "source_blobs": {
+    "flask-request-routing-context-a01": "d4d0de651951f7fa5cf5186847dc1c1189406e29",
+    "pydantic-model-validate-core-a02": "be444fa7bc7dd21c65321e0467ed4ab26131ccf7",
+    "echo-raw-query-param-a03": "a8ee4b51d0be8dc91e64b887b06d4214278b37c5",
+    "starlette-route-method-match-a04": "9969d389e64b25dcac4758ffd48d69d5f44041ff",
+    "axum-path-extractor-a05": "856b360bce900439085c79e8e2b71021f47685b2",
+    "gorm-statement-table-a06": "736087d7aec3c0e1d5d9dbb5fe2da27cc6302d18"
+  },
+  "expected_symbols": {
+    "flask-request-routing-context-a01": "RequestContext.match_request",
+    "pydantic-model-validate-core-a02": "BaseModel.model_validate",
+    "echo-raw-query-param-a03": "Context.QueryParam/getRawQueryParam",
+    "starlette-route-method-match-a04": "Route.matches",
+    "axum-path-extractor-a05": "FromRequestParts<Path<T>>",
+    "gorm-statement-table-a06": "Statement.ParseWithSpecialTableName"
+  },
+  "tasks": [
+    {
+      "task_id": "flask-request-routing-context-a01",
+      "repository": "pallets/flask",
+      "commit_sha": "d318b683471101618febed18996405ad26462110",
+      "prompt": "Locate the production source file that applies URL routing to the current Flask request context, storing either the matched rule and view arguments or a routing exception. Return the most relevant production file path.",
+      "expected_file": "src/flask/ctx.py",
+      "witnesses": [
+        {
+          "path": "src/flask/ctx.py",
+          "start_line": 405,
+          "end_line": 414,
+          "kind": "implementation",
+          "minimum_visible_lines": 8,
+          "claim": "RequestContext performs adapter matching and stores either routing_exception or matched url_rule/view_args."
+        }
+      ]
+    },
+    {
+      "task_id": "pydantic-model-validate-core-a02",
+      "repository": "pydantic/pydantic",
+      "commit_sha": "74a852ea4838a03519e09a9dae4806dcdc026bf5",
+      "prompt": "Locate the production source file that validates a Python object as a Pydantic model, rejects the invalid by_alias=False and by_name!=True combination, then delegates validation to the model's core validator. Return the most relevant production file path.",
+      "expected_file": "pydantic/main.py",
+      "witnesses": [
+        {
+          "path": "pydantic/main.py",
+          "start_line": 788,
+          "end_line": 802,
+          "kind": "implementation",
+          "minimum_visible_lines": 8,
+          "claim": "model_validate enforces alias/name constraints and delegates to __pydantic_validator__.validate_python."
+        }
+      ]
+    },
+    {
+      "task_id": "echo-raw-query-param-a03",
+      "repository": "labstack/echo",
+      "commit_sha": "90702e71a7cde342da70b1f97e8e6420c509f939",
+      "prompt": "Locate the production source file that retrieves a single Echo query parameter directly from the raw query when the full query map has not been built, while preserving url.Values.Get-like decoding and malformed-segment behavior. Return the most relevant production file path.",
+      "expected_file": "context.go",
+      "witnesses": [
+        {
+          "path": "context.go",
+          "start_line": 335,
+          "end_line": 344,
+          "kind": "branch",
+          "minimum_visible_lines": 7,
+          "claim": "QueryParam reuses the parsed map when available and otherwise delegates to raw-query lookup."
+        },
+        {
+          "path": "context.go",
+          "start_line": 347,
+          "end_line": 367,
+          "kind": "implementation",
+          "minimum_visible_lines": 12,
+          "claim": "getRawQueryParam implements first-match raw parsing, semicolon skipping, URL unescape checks, and direct value return."
+        }
+      ]
+    },
+    {
+      "task_id": "starlette-route-method-match-a04",
+      "repository": "Kludex/starlette",
+      "commit_sha": "39fd0ffac25593fce39466320c9a666957ce8b8c",
+      "prompt": "Locate the production source file that matches a Starlette HTTP route path, converts captured path parameters, and distinguishes a partial match caused by an HTTP method mismatch from a full route match. Return the most relevant production file path.",
+      "expected_file": "starlette/routing.py",
+      "witnesses": [
+        {
+          "path": "starlette/routing.py",
+          "start_line": 244,
+          "end_line": 260,
+          "kind": "implementation",
+          "minimum_visible_lines": 10,
+          "claim": "Route.matches performs path matching/conversion and returns PARTIAL for method mismatch, FULL otherwise, NONE when unmatched."
+        }
+      ]
+    },
+    {
+      "task_id": "axum-path-extractor-a05",
+      "repository": "tokio-rs/axum",
+      "commit_sha": "194030d7d0c9395cd98c172d1cfd08777332d7b2",
+      "prompt": "Locate the production source file for Axum's typed Path extractor that obtains URL parameters from request extensions, rejects missing or invalid-UTF8 path parameters, and deserializes them into the requested type. Return the most relevant production file path.",
+      "expected_file": "axum/src/extract/path/mod.rs",
+      "witnesses": [
+        {
+          "path": "axum/src/extract/path/mod.rs",
+          "start_line": 164,
+          "end_line": 179,
+          "kind": "branch",
+          "minimum_visible_lines": 10,
+          "claim": "Path extraction reads UrlParams and converts invalid UTF-8 or missing params into PathRejection."
+        },
+        {
+          "path": "axum/src/extract/path/mod.rs",
+          "start_line": 185,
+          "end_line": 188,
+          "kind": "implementation",
+          "minimum_visible_lines": 4,
+          "claim": "The extracted parameters are deserialized through PathDeserializer and mapped to success or deserialization rejection."
+        }
+      ]
+    },
+    {
+      "task_id": "gorm-statement-table-a06",
+      "repository": "go-gorm/gorm",
+      "commit_sha": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+      "prompt": "Locate the production source file that parses a GORM Statement schema and initializes its table fields, including the special handling for a schema-qualified table name containing a dot. Return the most relevant production file path.",
+      "expected_file": "statement.go",
+      "witnesses": [
+        {
+          "path": "statement.go",
+          "start_line": 516,
+          "end_line": 526,
+          "kind": "implementation",
+          "minimum_visible_lines": 9,
+          "claim": "Statement.ParseWithSpecialTableName parses schema, quotes a qualified table into TableExpr, selects the table component, or falls back to Schema.Table."
+        }
+      ]
+    }
+  ]
+}
