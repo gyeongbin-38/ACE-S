@@ -1,0 +1,125 @@
+{
+  "schema_version": "0.6",
+  "suite_id": "repo-behavior-witness-suite-a-v0.3",
+  "status": "sealed_before_first_evaluation",
+  "policy_freeze": "benchmarks/runtime-traces/pilots/repo-behavior-policy-freeze-v0.6.0.json",
+  "construction": {
+    "rule": "All repositories are disjoint from the 20 v0.6 development repositories and the 6 repositories opened in Suite A v0.2. Source ownership, target commits, source blob SHAs, and behavior witness regions were fixed before the v0.6 evaluator was run on this suite.",
+    "repository_count": 6,
+    "languages": ["Python", "Go", "Rust"],
+    "no_policy_tuning_after_open": true,
+    "witness_threshold_rule": "minimum_visible_lines is never greater than the audited behavior-bearing implementation span"
+  },
+  "source_blobs": {
+    "jinja-attrgetter-default-postprocess-a301": "c46e20c100a25edb912f96b949c2ce4bbbc0ec81",
+    "aiohttp-mimetype-components-a302": "e6d6b6ca1cac5161a979c7e3c63ed5f7fde0027d",
+    "black-format-unchanged-safety-a303": "8e834ed8315182be8dcb38bc7a7d6174363565fe",
+    "celery-maybe-signature-a304": "e82c152b7968dbb1668d51c9681233002fd9d853",
+    "cobra-legacy-positional-validation-a305": "7bf8c389f1f5db19216a265d23b5b21c9e12cfec",
+    "reqwest-redirect-limit-a306": "2d3862c29316cd39cf27b7d49bc4e9f31e88f8a8"
+  },
+  "tasks": [
+    {
+      "task_id": "jinja-attrgetter-default-postprocess-a301",
+      "repository": "pallets/jinja",
+      "commit_sha": "5ef70112a1ff19c05324ff889dd30405b1002044",
+      "prompt": "Locate the production source file that builds Jinja attribute getter callables, walking dotted attribute parts through the environment, substituting a configured default for undefined values, and optionally post-processing the final value. Return the most relevant production file path.",
+      "expected_file": "src/jinja2/filters.py",
+      "witnesses": [
+        {
+          "path": "src/jinja2/filters.py",
+          "start_line": 58,
+          "end_line": 82,
+          "kind": "implementation",
+          "claim": "make_attrgetter prepares attribute parts, resolves each part through environment.getitem, substitutes a default for Undefined, optionally postprocesses, and returns the getter.",
+          "minimum_visible_lines": 10
+        }
+      ]
+    },
+    {
+      "task_id": "aiohttp-mimetype-components-a302",
+      "repository": "aio-libs/aiohttp",
+      "commit_sha": "bffb2f1c14e177f8660226f7b07bc10c3917a607",
+      "prompt": "Locate the production source file that parses a MIME type into normalized type, subtype, structured suffix, and parameter components, including wildcard normalization and lower-cased parameter keys. Return the most relevant production file path.",
+      "expected_file": "aiohttp/helpers.py",
+      "witnesses": [
+        {
+          "path": "aiohttp/helpers.py",
+          "start_line": 332,
+          "end_line": 369,
+          "kind": "implementation",
+          "claim": "parse_mimetype parses parameters, normalizes a bare wildcard, separates type/subtype/suffix, and returns a MimeType with an immutable parameters mapping.",
+          "minimum_visible_lines": 14
+        }
+      ]
+    },
+    {
+      "task_id": "black-format-unchanged-safety-a303",
+      "repository": "psf/black",
+      "commit_sha": "bdcad23abeb99dee53af0c511b9fd49b0354b28e",
+      "prompt": "Locate the production source file that reformats file contents, raises the formatter's unchanged sentinel when output is identical, and in non-fast non-notebook mode checks stability and semantic equivalence before returning formatted output. Return the most relevant production file path.",
+      "expected_file": "src/black/__init__.py",
+      "witnesses": [
+        {
+          "path": "src/black/__init__.py",
+          "start_line": 1110,
+          "end_line": 1142,
+          "kind": "implementation",
+          "claim": "format_file_contents formats notebook or Python input, raises NothingChanged for identical output, conditionally performs safety checks, then returns destination contents.",
+          "minimum_visible_lines": 12
+        }
+      ]
+    },
+    {
+      "task_id": "celery-maybe-signature-a304",
+      "repository": "celery/celery",
+      "commit_sha": "a7e0b38762f0a0562dc9ceee3482c440455ed0dc",
+      "prompt": "Locate the production source file that ensures an optional Celery canvas value is a callable signature: cloning an existing signature when requested, converting serialized dictionaries to signatures, and binding a supplied app before returning. Return the most relevant production file path.",
+      "expected_file": "celery/canvas.py",
+      "witnesses": [
+        {
+          "path": "celery/canvas.py",
+          "start_line": 2414,
+          "end_line": 2440,
+          "kind": "implementation",
+          "claim": "maybe_signature accepts None, existing signatures, or dict-serialized signatures; optionally clones, converts mappings, binds app, and returns the resulting value.",
+          "minimum_visible_lines": 10
+        }
+      ]
+    },
+    {
+      "task_id": "cobra-legacy-positional-validation-a305",
+      "repository": "spf13/cobra",
+      "commit_sha": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "prompt": "Locate the production source file implementing Cobra's legacy positional argument validation: commands without subcommands accept arguments, while a root command with subcommands rejects an unexpected first argument as an unknown command and adds suggestions. Return the most relevant production file path.",
+      "expected_file": "args.go",
+      "witnesses": [
+        {
+          "path": "args.go",
+          "start_line": 23,
+          "end_line": 40,
+          "kind": "implementation",
+          "claim": "legacyArgs accepts arbitrary args when there are no subcommands and rejects unexpected args on a root with subcommands using CommandPath and findSuggestions.",
+          "minimum_visible_lines": 8
+        }
+      ]
+    },
+    {
+      "task_id": "reqwest-redirect-limit-a306",
+      "repository": "seanmonstar/reqwest",
+      "commit_sha": "9f06fd28abe53e5ff84a091825ea5ce8984b51e0",
+      "prompt": "Locate the production source file applying Reqwest redirect policy actions: custom policies delegate to the callback, limited policies error after too many prior redirects or otherwise follow, and disabled policies stop. Return the most relevant production file path.",
+      "expected_file": "src/redirect.rs",
+      "witnesses": [
+        {
+          "path": "src/redirect.rs",
+          "start_line": 130,
+          "end_line": 144,
+          "kind": "implementation",
+          "claim": "Policy::redirect dispatches custom, limited, and none policies; the limited branch checks prior redirect count and returns error or follow accordingly.",
+          "minimum_visible_lines": 9
+        }
+      ]
+    }
+  ]
+}
