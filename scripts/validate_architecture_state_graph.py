@@ -2,8 +2,8 @@
 """Validate typed Architecture State Graph traceability and proof-path invariants.
 
 This checker is deterministic and fail-closed for explicit graph obligations. It
-is not an architecture-quality oracle and does not judge whether the chosen
-mechanisms are substantively good.
+also enforces canonical edge direction/type signatures so relation reversal is
+caught instead of silently accepted. It is not an architecture-quality oracle.
 """
 from __future__ import annotations
 
@@ -23,6 +23,8 @@ NODE_COLLECTIONS = {
     "boundaries": "BOUNDARY",
     "state": "STATE",
     "interfaces": "INTERFACE",
+    "deployment_units": "DEPLOYMENT_UNIT",
+    "trust_enforcements": "TRUST_ENFORCEMENT",
     "critical_flows": "FLOW",
     "decisions": "DECISION",
     "options": "OPTION",
@@ -34,6 +36,28 @@ NODE_COLLECTIONS = {
 }
 ALLOWED_STATUS = {"OBSERVED", "ACCEPTED_INTENT", "INFERRED", "UNRESOLVED"}
 HIGH_LOCKIN = {"MIGRATABLE", "IRREVERSIBLE_OR_HIGH_LOCKIN"}
+ARCH_TYPES = {"COMPONENT", "BOUNDARY", "STATE", "FLOW", "INTERFACE", "DEPLOYMENT_UNIT", "DECISION"}
+ANY_NON_EVIDENCE = set(NODE_COLLECTIONS.values()) - {"EVIDENCE"}
+EDGE_SIGNATURES: dict[str, tuple[set[str], set[str]]] = {
+    "SATISFIED_BY": ({"ASR"}, ARCH_TYPES),
+    "RESTRICTS": ({"HARD_CONSTRAINT"}, {"DECISION", "BOUNDARY", "DEPLOYMENT_UNIT"}),
+    "DRIVES": ({"REQUIREMENT", "ASR", "HARD_CONSTRAINT", "UNKNOWN"}, {"DECISION"}),
+    "SELECTS": ({"DECISION"}, {"OPTION"}),
+    "REJECTS": ({"DECISION"}, {"OPTION"}),
+    "AFFECTS": ({"DECISION"}, ARCH_TYPES - {"DECISION"}),
+    "SEPARATES": ({"BOUNDARY"}, {"COMPONENT"}),
+    "OWNED_BY": ({"STATE"}, {"COMPONENT"}),
+    "TRAVERSES": ({"FLOW"}, {"INTERFACE", "BOUNDARY"}),
+    "READS": ({"FLOW"}, {"STATE"}),
+    "WRITES": ({"FLOW"}, {"STATE"}),
+    "ENFORCES": ({"TRUST_ENFORCEMENT", "COMPONENT", "INTERFACE"}, {"BOUNDARY"}),
+    "ATTACKS": ({"SCENARIO"}, {"ASR", "DECISION", "FLOW", "BOUNDARY"}),
+    "EXPOSED_BY": ({"RISK"}, {"SCENARIO"}),
+    "VERIFIES": ({"FITNESS_CHECK"}, {"ASR", "DECISION", "BOUNDARY", "FLOW", "STATE"}),
+    "PROVES": ({"PROOF_OBLIGATION"}, {"DECISION", "BOUNDARY", "FLOW", "STATE", "ASR"}),
+    "SUPPORTS": ({"EVIDENCE"}, ANY_NON_EVIDENCE),
+    "CONTRADICTS": ({"EVIDENCE"}, ANY_NON_EVIDENCE),
+}
 
 
 def nonempty(v: Any) -> bool:
@@ -42,11 +66,6 @@ def nonempty(v: Any) -> bool:
 
 def issue(code: str, path: str, message: str, severity: str = "error") -> dict[str, str]:
     return {"code": code, "path": path, "message": message, "severity": severity}
-
-
-def _node_id(obj: dict[str, Any]) -> str | None:
-    v = obj.get("id")
-    return v if nonempty(v) else None
 
 
 def validate(graph: dict[str, Any]) -> dict[str, Any]:
@@ -62,8 +81,8 @@ def validate(graph: dict[str, Any]) -> dict[str, Any]:
             if not isinstance(obj, dict):
                 issues.append(issue("NODE_INVALID", f"{collection}[{i}]", "node must be object"))
                 continue
-            nid = _node_id(obj)
-            if not nid:
+            nid = obj.get("id")
+            if not nonempty(nid):
                 issues.append(issue("NODE_ID_REQUIRED", f"{collection}[{i}]", "stable id is required"))
                 continue
             if nid in nodes:
@@ -100,66 +119,96 @@ def validate(graph: dict[str, Any]) -> dict[str, Any]:
         if key in edge_seen:
             issues.append(issue("DUPLICATE_EDGE", f"traceability_edges[{i}]", f"duplicate edge {key}", "warning"))
         edge_seen.add(key)
+        src_type, dst_type = nodes[src][0], nodes[dst][0]
+        signature = EDGE_SIGNATURES.get(rel)
+        if signature is None:
+            issues.append(issue("UNKNOWN_RELATION", f"traceability_edges[{i}].relation", f"unknown canonical relation {rel}"))
+        else:
+            allowed_src, allowed_dst = signature
+            if src_type not in allowed_src or dst_type not in allowed_dst:
+                issues.append(issue(
+                    "EDGE_DIRECTION_OR_TYPE_INVALID",
+                    f"traceability_edges[{i}]",
+                    f"{rel} requires {sorted(allowed_src)} -> {sorted(allowed_dst)}, got {src_type} -> {dst_type}",
+                ))
         outgoing[src].append((rel, dst))
         incoming[dst].append((rel, src))
 
-    def has_path(start: str, target_types: set[str], relations: set[str] | None = None, max_depth: int = 4) -> bool:
+    def forward_reachable(start: str, relations: set[str], max_depth: int = 3) -> set[str]:
         q = deque([(start, 0)])
         seen = {start}
+        reached: set[str] = set()
         while q:
             current, depth = q.popleft()
             if depth >= max_depth:
                 continue
             for rel, nxt in outgoing.get(current, []):
-                if relations is not None and rel not in relations:
+                if rel not in relations or nxt in seen:
                     continue
-                if nxt in seen:
-                    continue
-                if nodes[nxt][0] in target_types:
-                    return True
                 seen.add(nxt)
+                reached.add(nxt)
                 q.append((nxt, depth + 1))
-        return False
+        return reached
 
-    # Critical ASR must reach an architecture mechanism and a fitness check.
-    architecture_types = {"FLOW", "BOUNDARY", "STATE", "DECISION", "COMPONENT", "INTERFACE"}
+    # Critical ASR needs a traceable mechanism plus a fitness check that verifies
+    # either the ASR itself or one of its mechanism nodes.
     for nid, (ntype, obj) in nodes.items():
-        if ntype == "ASR" and obj.get("critical") is True:
-            if not has_path(nid, architecture_types, {"SATISFIED_BY", "RESTRICTS", "DRIVES"}, 3):
-                issues.append(issue("CRITICAL_ASR_NO_MECHANISM_PATH", f"asrs[{nid}]", "critical ASR has no traceable architecture mechanism"))
-            if not has_path(nid, {"FITNESS_CHECK"}, None, 5):
-                issues.append(issue("CRITICAL_ASR_NO_FITNESS_PATH", f"asrs[{nid}]", "critical ASR cannot reach a fitness check"))
+        if ntype != "ASR" or obj.get("critical") is not True:
+            continue
+        mechanisms = {
+            dst for rel, dst in outgoing.get(nid, [])
+            if rel in {"SATISFIED_BY", "DRIVES"} and nodes[dst][0] in ARCH_TYPES
+        }
+        mechanisms |= {
+            x for x in forward_reachable(nid, {"DRIVES", "AFFECTS"}, 2)
+            if nodes[x][0] in ARCH_TYPES
+        }
+        if not mechanisms:
+            issues.append(issue("CRITICAL_ASR_NO_MECHANISM_PATH", f"asrs[{nid}]", "critical ASR has no traceable architecture mechanism"))
+        verify_targets = {nid} | mechanisms
+        has_fitness = any(
+            rel == "VERIFIES" and nodes[src][0] == "FITNESS_CHECK"
+            for target in verify_targets
+            for rel, src in incoming.get(target, [])
+        )
+        if not has_fitness:
+            issues.append(issue("CRITICAL_ASR_NO_FITNESS_PATH", f"asrs[{nid}]", "critical ASR/mechanism has no verifying fitness check"))
 
-    # Mutable state must reach owner/protocol and recovery evidence/check.
     for nid, (ntype, obj) in nodes.items():
         if ntype != "STATE" or obj.get("mutable") is not True:
             continue
-        owner_edges = [dst for rel, dst in outgoing.get(nid, []) if rel == "OWNED_BY" and nodes[dst][0] == "COMPONENT"]
-        protocol = obj.get("multi_writer_protocol")
-        if not owner_edges and not nonempty(protocol):
+        owners = [dst for rel, dst in outgoing.get(nid, []) if rel == "OWNED_BY" and nodes[dst][0] == "COMPONENT"]
+        if not owners and not nonempty(obj.get("multi_writer_protocol")):
             issues.append(issue("MUTABLE_STATE_NO_OWNER_PATH", f"state[{nid}]", "mutable state needs OWNED_BY or explicit multi_writer_protocol"))
-        recovery = obj.get("recovery")
-        if not nonempty(recovery) and not has_path(nid, {"FITNESS_CHECK", "EVIDENCE"}, {"RECOVERED_BY", "VERIFIED_BY", "SUPPORTED_BY"}, 3):
-            issues.append(issue("MUTABLE_STATE_NO_RECOVERY_PATH", f"state[{nid}]", "mutable state lacks recovery path"))
+        has_recovery_check = any(
+            (rel == "VERIFIES" and nodes[src][0] == "FITNESS_CHECK") or
+            (rel == "SUPPORTS" and nodes[src][0] == "EVIDENCE")
+            for rel, src in incoming.get(nid, [])
+        )
+        if not nonempty(obj.get("recovery")) and not has_recovery_check:
+            issues.append(issue("MUTABLE_STATE_NO_RECOVERY_PATH", f"state[{nid}]", "mutable state lacks recovery/rebuild path or verifying evidence"))
 
-    # Trust boundary must have enforcement and a verification path.
     for nid, (ntype, obj) in nodes.items():
         if ntype != "BOUNDARY" or obj.get("trust_boundary") is not True:
             continue
-        enforcement = [dst for rel, dst in incoming.get(nid, []) if rel == "ENFORCES" and nodes[dst][0] in {"COMPONENT", "INTERFACE"}]
-        # Canonical graph may model dedicated TRUST_ENFORCEMENT node outside collection in future;
-        # today enforcement components/interfaces are explicit and inspectable.
+        enforcement = [
+            src for rel, src in incoming.get(nid, [])
+            if rel == "ENFORCES" and nodes[src][0] in {"TRUST_ENFORCEMENT", "COMPONENT", "INTERFACE"}
+        ]
         if not enforcement and not nonempty(obj.get("enforcement")):
             issues.append(issue("TRUST_BOUNDARY_NO_ENFORCEMENT_PATH", f"boundaries[{nid}]", "trust boundary lacks enforcement point"))
-        if not has_path(nid, {"FITNESS_CHECK"}, {"VERIFIED_BY", "PROTECTED_BY"}, 3):
+        has_security_check = any(
+            rel == "VERIFIES" and nodes[src][0] == "FITNESS_CHECK"
+            for rel, src in incoming.get(nid, [])
+        )
+        if not has_security_check:
             issues.append(issue("TRUST_BOUNDARY_NO_SECURITY_CHECK", f"boundaries[{nid}]", "trust boundary lacks security verification path", "warning"))
 
-    # High-lock-in decisions need a selected option, architecture impact, and reopen condition.
     for nid, (ntype, obj) in nodes.items():
         if ntype != "DECISION" or obj.get("reversibility") not in HIGH_LOCKIN:
             continue
         selected = [dst for rel, dst in outgoing.get(nid, []) if rel == "SELECTS" and nodes[dst][0] == "OPTION"]
-        affected = [dst for rel, dst in outgoing.get(nid, []) if rel == "AFFECTS" and nodes[dst][0] in architecture_types]
+        affected = [dst for rel, dst in outgoing.get(nid, []) if rel == "AFFECTS" and nodes[dst][0] in (ARCH_TYPES - {"DECISION"})]
         if len(selected) != 1:
             issues.append(issue("HIGH_LOCKIN_SELECTION_INVALID", f"decisions[{nid}]", "high-lock-in decision must SELECT exactly one option"))
         if not affected:
@@ -167,11 +216,8 @@ def validate(graph: dict[str, Any]) -> dict[str, Any]:
         if not nonempty(obj.get("kill_condition")):
             issues.append(issue("HIGH_LOCKIN_NO_KILL_CONDITION", f"decisions[{nid}]", "high-lock-in decision has no kill/reopen condition"))
 
-    # Evidence may support claims, but inferred evidence cannot be silently marked observed.
     for nid, (ntype, obj) in nodes.items():
-        if ntype != "EVIDENCE":
-            continue
-        if obj.get("derived") is True and obj.get("evidence_status") == "OBSERVED":
+        if ntype == "EVIDENCE" and obj.get("derived") is True and obj.get("evidence_status") == "OBSERVED":
             issues.append(issue("DERIVED_EVIDENCE_MARKED_OBSERVED", f"evidence[{nid}]", "derived/inferred evidence cannot be OBSERVED"))
 
     errors = [x for x in issues if x["severity"] == "error"]
@@ -184,7 +230,7 @@ def validate(graph: dict[str, Any]) -> dict[str, Any]:
         "error_count": len(errors),
         "warning_count": len(warnings),
         "issues": issues,
-        "claim_boundary": "Deterministic graph integrity and proof-path validation only; passing does not prove architecture optimality or mechanism quality.",
+        "claim_boundary": "Deterministic graph integrity, canonical relation direction, and proof-path validation only; passing does not prove architecture optimality or mechanism quality.",
     }
 
 
