@@ -38,6 +38,8 @@ Read `references/evaluation.md` only when candidate architectures exist or an ex
 
 Read `references/proof-obligations.md` only when finalizing/recommending a consequential architecture, reviewing high-risk decisions, or when the user explicitly asks for a production-grade architecture contract.
 
+Read `references/counterfactual.md` only when a consequential design is near promotion and one or more critical ASRs/constraints appear to drive high-impact or high-lock-in decisions. Test only the 1–3 most architecture-sensitive assumptions, not every requirement.
+
 Do not load all references for trivial architecture questions.
 
 ## Stop rule
@@ -49,7 +51,8 @@ Stop architecture exploration when:
 - no unresolved scenario exposes a likely architecture-changing risk;
 - remaining alternatives differ mainly in reversible implementation detail;
 - every major irreversible commitment has rationale and a reversal condition;
-- critical proof obligations are resolved or explicitly accepted as bounded risk.
+- critical proof obligations are resolved or explicitly accepted as bounded risk;
+- for high-impact designs, the most sensitive critical requirement/assumption has a plausible counterfactual response path, or the reason for skipping that test is explicit.
 
 If those conditions are not met, take the **narrowest architecture-changing question** next rather than expanding the entire design.
 
@@ -65,3 +68,4 @@ If those conditions are not met, take the **narrowest architecture-changing ques
 - Unknowns are first-class; never fabricate rationale or requirements.
 - Existing project constraints and accepted decisions outrank generic best practices unless they create a demonstrated critical risk.
 - More available repository context is not a reason to load it; architecture evidence expands only when it can change a decision or resolve an obligation.
+- A local requirement change should normally reopen a local decision neighborhood. Whole-system redesign requires evidence that the impact closure is actually global.
