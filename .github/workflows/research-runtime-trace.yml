@@ -8,6 +8,7 @@ on:
       - .github/workflows/research-runtime-trace.yml
       - scripts/validate_runtime_trace.py
       - scripts/summarize_runtime_trace.py
+      - scripts/compare_runtime_ab.py
       - benchmarks/runtime-traces/**
 
 env:
@@ -32,3 +33,23 @@ jobs:
           echo "semantic certificate correctly rejected"
       - name: Summarize valid trace
         run: python scripts/summarize_runtime_trace.py benchmarks/runtime-traces/fixtures/valid-structured-certificate.jsonl
+      - name: Validate paired OFF trace
+        run: python scripts/validate_runtime_trace.py benchmarks/runtime-traces/fixtures/paired-off.jsonl
+      - name: Validate paired ON trace
+        run: python scripts/validate_runtime_trace.py benchmarks/runtime-traces/fixtures/paired-on.jsonl
+      - name: Require paired A/B quality-preserving efficiency pass
+        run: >-
+          python scripts/compare_runtime_ab.py
+          benchmarks/runtime-traces/fixtures/paired-off.jsonl
+          benchmarks/runtime-traces/fixtures/paired-on.jsonl
+          --require-pass
+      - name: Reject efficiency win with quality regression
+        run: |
+          if python scripts/compare_runtime_ab.py \
+            benchmarks/runtime-traces/fixtures/paired-off.jsonl \
+            benchmarks/runtime-traces/fixtures/paired-on-quality-regression.jsonl \
+            --require-pass; then
+            echo "quality-regressed ON trace unexpectedly passed paired gate"
+            exit 1
+          fi
+          echo "quality regression correctly rejected"
