@@ -1,0 +1,34 @@
+name: research-runtime-trace
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-runtime-trace.yml
+      - scripts/validate_runtime_trace.py
+      - scripts/summarize_runtime_trace.py
+      - benchmarks/runtime-traces/**
+
+env:
+  PYTHONHASHSEED: "0"
+
+jobs:
+  runtime-trace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate structured certificate trace
+        run: python scripts/validate_runtime_trace.py benchmarks/runtime-traces/fixtures/valid-structured-certificate.jsonl
+      - name: Reject semantic certificate trace
+        run: |
+          if python scripts/validate_runtime_trace.py benchmarks/runtime-traces/fixtures/invalid-semantic-certificate.jsonl; then
+            echo "invalid semantic certificate unexpectedly passed"
+            exit 1
+          fi
+          echo "semantic certificate correctly rejected"
+      - name: Summarize valid trace
+        run: python scripts/summarize_runtime_trace.py benchmarks/runtime-traces/fixtures/valid-structured-certificate.jsonl
