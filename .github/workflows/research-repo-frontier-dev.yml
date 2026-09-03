@@ -19,5 +19,5 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Run proof-or-frontier development bench
-        run: python scripts/run_repo_candidate_frontier_dev.py
+      - name: Run coverage-aware proof-or-frontier development bench
+        run: python scripts/run_repo_candidate_frontier_dev_v2.py
