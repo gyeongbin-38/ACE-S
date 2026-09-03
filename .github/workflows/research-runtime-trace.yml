@@ -9,6 +9,7 @@ on:
       - scripts/validate_runtime_trace.py
       - scripts/summarize_runtime_trace.py
       - scripts/compare_runtime_ab.py
+      - scripts/compare_runtime_ab_suite.py
       - benchmarks/runtime-traces/**
 
 env:
@@ -53,3 +54,17 @@ jobs:
             exit 1
           fi
           echo "quality regression correctly rejected"
+      - name: Require passing paired A/B suite
+        run: >-
+          python scripts/compare_runtime_ab_suite.py
+          benchmarks/runtime-traces/fixtures/paired-suite-pass.json
+          --require-pass
+      - name: Reject suite with per-task quality regression
+        run: |
+          if python scripts/compare_runtime_ab_suite.py \
+            benchmarks/runtime-traces/fixtures/paired-suite-quality-regression.json \
+            --require-pass; then
+            echo "quality-regressed suite unexpectedly passed"
+            exit 1
+          fi
+          echo "quality-regressed suite correctly rejected"
