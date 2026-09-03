@@ -1,0 +1,36 @@
+{
+  "benchmark": "luna-interactive-architecture-retention-suite-c1",
+  "status": "INPUTS_FROZEN_BEFORE_MODEL_RUN",
+  "seed": 2026090402,
+  "task_count": 30,
+  "strata": {
+    "constraint_drift": 5,
+    "decision_supersession": 5,
+    "speculative_rollback": 5,
+    "proof_obligation": 5,
+    "ownership_ripple": 5,
+    "compound_long_horizon": 5
+  },
+  "conditions": ["K0", "K1", "K2"],
+  "sessions_per_condition": 6,
+  "turns_per_session": 60,
+  "model": "GPT-5.6 Luna",
+  "reasoning": "xhigh",
+  "temperature": 0,
+  "packet_tree_sha256": {
+    "K0": "208ce6b8f836d7dd85f4f3f5ac10f7ed3f746e67d2d362ea9f4d3742217cd014",
+    "K1": "e8c35655ac5b57c2f8cd9ca05b452037576c0dc3669c255403a5082fc6c5455d",
+    "K2": "717a256cfa75efaeca46aee1a5c5e08e5e010863e157603b40235ff6c9c74917"
+  },
+  "sealed_labels_sha256": "cde1316c920abe90dc03797d4c86fcbea1406e30fd3e8226e404c83371d1961f",
+  "run_order": ["K2", "K0", "K1"],
+  "anti_contamination": [
+    "fresh evaluated session for every K/S pair",
+    "read/send one turn file at a time",
+    "do not open future turns",
+    "do not open labels/mapping",
+    "rerun only verified transport failures",
+    "freeze all outputs before scoring"
+  ],
+  "claim_boundary": "C1 tests 60-turn interactive retention and stale-state behavior; handoff is deferred."
+}
