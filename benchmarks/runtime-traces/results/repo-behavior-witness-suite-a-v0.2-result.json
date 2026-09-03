@@ -1,0 +1,39 @@
+{
+  "result_id": "repo-behavior-witness-suite-a-v0.2-first-result",
+  "status": "SEALED_EVALUATION_FAILED_DUE_TO_WITNESS_THRESHOLD_ERROR",
+  "workflow_run_id": 33758980768,
+  "artifact_id": 9894633258,
+  "artifact_zip_sha256": "4285ed74ae41099a0a1316e8ce98edc9557241439d294f2bb5582c519ffd6335",
+  "inner_result_json_sha256": "b31c205302c5c324b66be3877bb961a10b939d274d4ce0b224ee2cdf8d16ec92",
+  "evaluation_head": "73815a84e4e6882c0a8ef3eefd9ec32514b867b5",
+  "policy_freeze_blob_sha": "f0d137160a038f96e8dce41ee076150da620f1d1",
+  "suite_manifest_blob_sha": "78f4aacf9b867f8f5711402ab3ce96c68b141e3f",
+  "raw_result": {
+    "hard_gate": false,
+    "frontier_hits": "6/6",
+    "behavior_witness_hits": "5/6",
+    "false_confident_direct_select": 0,
+    "worst_case_unique_source_lines": 960,
+    "mean_unique_source_lines": 921.1666666666666
+  },
+  "task_results": [
+    {"task_id": "werkzeug-proxy-real-value-a201", "frontier": true, "witness": true, "visible_overlap": 20, "minimum_visible_lines": 8},
+    {"task_id": "fastapi-response-validation-a202", "frontier": true, "witness": true, "visible_overlap": 24, "minimum_visible_lines": 12},
+    {"task_id": "pytest-monkeypatch-setenv-a203", "frontier": true, "witness": true, "visible_overlap": 15, "minimum_visible_lines": 9},
+    {"task_id": "sqlalchemy-url-password-a204", "frontier": true, "witness": true, "visible_overlap": 14, "minimum_visible_lines": 10},
+    {"task_id": "uvicorn-proxy-scope-a205", "frontier": true, "witness": true, "visible_overlap": 34, "minimum_visible_lines": 16},
+    {"task_id": "tower-servicebuilder-layer-a206", "frontier": true, "witness": false, "visible_overlap": 5, "minimum_visible_lines": 6}
+  ],
+  "ground_truth_audit": {
+    "error_type": "minimum_visible_lines_exceeds_behavior_implementation_size",
+    "task_id": "tower-servicebuilder-layer-a206",
+    "frozen_source_file": "tower/src/builder/mod.rs",
+    "frozen_source_blob_sha": "1906bfc681337f60fa0c67f1d5421232acb77b70",
+    "audited_behavior_region": {"start_line": 132, "end_line": 136, "implementation_lines": 5},
+    "original_witness_region": {"start_line": 125, "end_line": 136, "minimum_visible_lines": 6},
+    "observed_visible_overlap_lines": 5,
+    "finding": "The frozen policy exposed all five implementation lines of ServiceBuilder::layer. The sixth required line could only come from surrounding documentation or the enclosing impl declaration and was not necessary to establish the claimed behavior.",
+    "classification": "benchmark_ground_truth_threshold_error_not_policy_failure"
+  },
+  "immutability_rule": "This file preserves the first sealed result exactly as a 5/6 witness failure. Corrected scoring must use a new lineage file and must never overwrite or relabel this first result as unseen success."
+}
