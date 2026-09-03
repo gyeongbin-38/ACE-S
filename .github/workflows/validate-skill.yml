@@ -27,7 +27,7 @@ jobs:
         run: python scripts/discover_selective_retention_lookahead_v2.py
       - name: Run sealed context action dominance regression
         run: python scripts/run_context_action_dominance_sealed.py
-      - name: Run sealed action-agreement negative regression
+      - name: Run action-agreement negative regression
         run: python scripts/run_agreement_adaptive_rollout_sealed.py
       - name: Run tail-gated sequential rollout racing development search
         run: python scripts/discover_sequential_rollout_racing_v2.py
@@ -35,3 +35,5 @@ jobs:
         run: python scripts/discover_certificate_call_penalty.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
+      - name: Run architecture contract benchmark
+        run: python scripts/run_architecture_contract_bench.py
