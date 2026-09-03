@@ -1,0 +1,41 @@
+name: research-direct-proof-gate-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - scripts/experiment_direct_proof_gate_v06.py
+      - .github/workflows/research-direct-proof-gate-v06.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  proof-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run proof authority experiment
+        run: |
+          set -euo pipefail
+          python scripts/experiment_direct_proof_gate_v06.py > /tmp/direct-proof-gate-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/direct-proof-gate-v06.json', encoding='utf-8'))
+          print('DEV14=', d['development14']['frontier_hits'], '/14', 'false_direct=', d['development14']['false_direct'])
+          print('SUITE_A6=', d['opened_suite_a6']['frontier_hits'], '/6', 'false_direct=', d['opened_suite_a6']['false_direct'])
+          print('GATE=', d['success_gate'])
+          for r in d['opened_suite_a6']['rows']:
+              print('TASK=', r['task_id'], 'direct=', r['direct_path'], 'frontier=', r['frontier_hit'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: direct-proof-gate-v06
+          path: /tmp/direct-proof-gate-v06.json
+          if-no-files-found: error
