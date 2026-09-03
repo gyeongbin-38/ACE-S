@@ -15,14 +15,13 @@ on:
       - scripts/validate_runtime_taskset.py
       - benchmarks/runtime-traces/pilots/repo-localization-v0.1.json
 
-env:
-  PYTHONHASHSEED: "0"
-  ACE_S_REPO_CACHE: ${{ runner.temp }}/ace-s-real-repo-cache
-
 jobs:
   real-repo-runtime:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      PYTHONHASHSEED: "0"
+      ACE_S_REPO_CACHE: ${{ runner.temp }}/ace-s-real-repo-cache
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
