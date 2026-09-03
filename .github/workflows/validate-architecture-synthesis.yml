@@ -43,3 +43,5 @@ jobs:
         run: python scripts/run_architecture_delta_bench.py
       - name: Run normalized architecture relation metrics benchmark
         run: python scripts/run_architecture_structural_metrics_bench.py
+      - name: Run architecture claim promotion gate benchmark
+        run: python scripts/run_architecture_claim_gate_bench.py
