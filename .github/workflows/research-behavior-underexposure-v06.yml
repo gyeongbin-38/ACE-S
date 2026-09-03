@@ -1,0 +1,42 @@
+name: research-behavior-underexposure-v06
+
+on:
+  push:
+    branches:
+      - exp/generalization-repair-v06
+    paths:
+      - scripts/diagnose_behavior_underexposure_v06.py
+      - .github/workflows/research-behavior-underexposure-v06.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Diagnose behavior underexposure
+        run: |
+          set -euo pipefail
+          python scripts/diagnose_behavior_underexposure_v06.py > /tmp/behavior-underexposure-v06.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/behavior-underexposure-v06.json', encoding='utf-8'))
+          for t in d['tasks']:
+              print('\nTASK=', t['task_id'])
+              print('SELECTED=', t['selected_windows'])
+              for w in t['witness_diagnostics']:
+                  print('WITNESS=', w['witness_index'], 'REGION=', w['region'], 'REQUIRED=', w['required'], 'CAN_SATISFY=', w['candidate_can_satisfy'])
+                  for c in w['best_overlapping_candidates'][:4]: print(' CAND=', json.dumps(c, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-underexposure-v06
+          path: /tmp/behavior-underexposure-v06.json
+          if-no-files-found: error
