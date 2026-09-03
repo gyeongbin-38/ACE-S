@@ -35,6 +35,8 @@ jobs:
         run: python scripts/discover_sequential_rollout_racing_v2.py
       - name: Run evidence certificate call-penalty sensitivity
         run: python scripts/discover_certificate_call_penalty.py
+      - name: Run adaptive hidden-acquisition batching development bench
+        run: python scripts/run_batched_hidden_acquisition_bench_v2.py
       - name: Validate benchmark invariants
         run: python scripts/validate_benchmarks.py
       - name: Run architecture contract benchmark
