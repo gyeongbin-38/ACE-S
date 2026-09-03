@@ -33,6 +33,8 @@ jobs:
         run: python scripts/run_agreement_adaptive_rollout_sealed.py
       - name: Run tail-gated sequential rollout racing development search
         run: python scripts/discover_sequential_rollout_racing_v2.py
+      - name: Run catastrophe-gated rollout racing development search
+        run: python scripts/discover_catastrophe_gated_racing_v3.py
       - name: Run evidence certificate call-penalty sensitivity
         run: python scripts/discover_certificate_call_penalty.py
       - name: Run adaptive hidden-acquisition batching development bench
