@@ -1,0 +1,104 @@
+{
+  "freeze_id": "repo-behavior-policy-development-freeze-v0.5.4",
+  "status": "FROZEN_DEVELOPMENT_POLICY",
+  "claim_boundary": "Development-only policy freeze over the 14 previously observed repositories/tasks and the independently audited Behavior Witness manifest. This is not unseen generalization evidence. Fresh sealed Suite A and a separate blind semantic Suite B are required before generalization claims.",
+  "frozen_policy": {
+    "architecture": "pure_multiscale_behavior_windows",
+    "spans": [4, 16, 24],
+    "max_windows": 5,
+    "merge_gap": 0,
+    "retrieval_policy": {
+      "exact_quota": 5,
+      "frontier_top_k": 8
+    },
+    "semantic_judge_used_for_selection": false,
+    "hybrid_evidence_used_for_selection": false
+  },
+  "hard_gate": {
+    "frontier_hits": "14/14",
+    "behavior_witness_hits": "14/14",
+    "false_confident_direct_select": 0
+  },
+  "context_cost": {
+    "worst_case_unique_source_lines": 960,
+    "mean_unique_source_lines": 656.6428571428571,
+    "actual_max_windows_emitted_per_task": 40,
+    "mean_windows_emitted_per_task": 28.928571428571427
+  },
+  "selection_lineage": [
+    {
+      "stage": "fixed_span_grid_v0.5",
+      "candidate_policies": 108,
+      "eligible_policies": 0,
+      "note": "No fixed-span policy satisfied the audited 14/14 hard gate."
+    },
+    {
+      "stage": "multiscale_grid_v0.5.3",
+      "candidate_policies": 105,
+      "eligible_policies": 12,
+      "selected": {
+        "spans": [4, 8, 16, 24],
+        "max_windows": 5,
+        "merge_gap": 0
+      }
+    },
+    {
+      "stage": "winner_scale_subset_boundary_v0.5.4",
+      "candidate_policies": 90,
+      "eligible_total": 6,
+      "eligible_max_windows_4": 0,
+      "eligible_max_windows_5": 6,
+      "selected": {
+        "spans": [4, 16, 24],
+        "max_windows": 5,
+        "merge_gap": 0
+      }
+    }
+  ],
+  "lower_bound_counterexample": {
+    "policy": {
+      "spans": [4, 8, 16, 24],
+      "max_windows": 4,
+      "merge_gap": 0
+    },
+    "witness_hits": "13/14",
+    "failed_task_id": "chi-route-param-context-001",
+    "failed_witness": {
+      "path": "context.go",
+      "start_line": 10,
+      "end_line": 20,
+      "minimum_visible_lines": 6,
+      "visible_overlap_lines": 0
+    }
+  },
+  "reproducibility": {
+    "policy_source_commit": "761b4a4c5150c79f912bc7387c451aa66bf9e987",
+    "workflow_run_id": 33749954293,
+    "attempt_1_artifact_id": 9891170257,
+    "attempt_2_artifact_id": 9891233607,
+    "attempt_1_artifact_zip_digest": "sha256:e0d88239e7f213fdf563f7ffbe4d0834f867c11ed8e0d0b22e305a03ae962b94",
+    "attempt_2_artifact_zip_digest": "sha256:4e15773b28edcfbb982adb5111c8ae6121bf90acd3b9c552e2bd9167872491ed",
+    "inner_result_json_sha256_both_attempts": "80bf28cf3dae4e035ad3d7fa53a89ce513dae40376da0b50df31a39ecec05abe",
+    "python": "3.12.14",
+    "witness_manifest_blob_sha": "9edf9ad88b25ed70734dee904bdbd2844713d515",
+    "subset_boundary_script_blob_sha": "3792cd99f1dc76935947d4adcc59a39344383acd",
+    "multiscale_v053_script_blob_sha": "df962a886553beb66d745f89fd200b2002053ba8",
+    "fixed_minimality_v05_script_blob_sha": "6fe1f29c24066d6e09abdf37c9e19f49309edd16",
+    "behavior_windows_v03_blob_sha": "6db58a2965cd8f58589bf02c435ce2b256acd590",
+    "frontier_v02_blob_sha": "a8253dfe614e4f69d08aa080c80fba13dc16b9fd",
+    "deterministic_base_blob_sha": "832c3be7d16d24aac652fab69f9bb374d800f1d5",
+    "deterministic_v03_blob_sha": "070469b9680280e4b32002f23f14f578da1222ad",
+    "deterministic_v041_blob_sha": "c9e2e739ce3033b6d073c61edaed04e8759623d3",
+    "candidate_frontier_dev_v2_blob_sha": "93cee5b819d5485d367c79287a92bf6945ff4359"
+  },
+  "freeze_rules": {
+    "do_not_tune_on_suite_a": true,
+    "do_not_use_luna_to_reselect_development_hyperparameters": true,
+    "do_not_open_suite_b_expected_labels_to_luna": true,
+    "development_policy_changes_after_this_freeze_require_new_lineage": true
+  },
+  "next_evaluation_order": [
+    "Fresh sealed Suite A deterministic Behavior Witness evaluation",
+    "Separate Suite B blind semantic evaluation with Luna xhigh using evidence cards only"
+  ]
+}
