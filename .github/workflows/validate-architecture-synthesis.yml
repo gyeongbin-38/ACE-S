@@ -41,3 +41,5 @@ jobs:
         run: python scripts/run_architecture_uncertainty_bench.py
       - name: Run counterfactual architecture delta benchmark
         run: python scripts/run_architecture_delta_bench.py
+      - name: Run normalized architecture relation metrics benchmark
+        run: python scripts/run_architecture_structural_metrics_bench.py
