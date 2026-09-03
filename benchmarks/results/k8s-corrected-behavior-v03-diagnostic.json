@@ -1,0 +1,18 @@
+{
+  "experiment": "k8s-corrected-behavior-v03-diagnostic",
+  "status": "confirmed_historical_false_negative",
+  "task_id": "k8s-current-context-evidence-001",
+  "expected_file": "staging/src/k8s.io/client-go/tools/clientcmd/config.go",
+  "expected_anchor": "writeCurrentContext",
+  "frontier_hit": true,
+  "corrected_anchor_visible": true,
+  "historical_v03_cfg": {
+    "span": 8,
+    "max_windows": 3,
+    "overlap_merge_gap": 2
+  },
+  "workflow_run_id": 33740177700,
+  "workflow_job_id": 100600000812,
+  "interpretation": "The sole historical v0.3 miss was caused by an invalid benchmark label. Without changing the v0.3 policy, the corrected implementation owner and behavior witness are both present. Since the other 13 historical task rows were passes, this configuration is 14/14 under the corrected task labels, pending the full corrected policy-grid audit for minimum-byte selection.",
+  "claim_boundary": "Seen-task corrected-label diagnostic only. It repairs development interpretation and is not unseen generalization evidence."
+}
