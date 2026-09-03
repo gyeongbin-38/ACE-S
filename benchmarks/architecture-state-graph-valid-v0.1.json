@@ -1,0 +1,66 @@
+{
+  "schema_version": "0.1",
+  "graph_id": "checkout-proof-carrying-valid-v0.1",
+  "requirements": [
+    {"id": "req-checkout", "type": "REQUIREMENT", "text": "accept checkout requests", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "asrs": [
+    {"id": "asr-tenant-isolation", "type": "ASR", "critical": true, "text": "no cross-tenant data access", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "hard_constraints": [],
+  "non_goals": [],
+  "unknowns": [],
+  "components": [
+    {"id": "api", "type": "COMPONENT", "evidence_status": "ACCEPTED_INTENT"},
+    {"id": "checkout", "type": "COMPONENT", "evidence_status": "ACCEPTED_INTENT"},
+    {"id": "store", "type": "COMPONENT", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "boundaries": [
+    {"id": "tenant-boundary", "type": "BOUNDARY", "trust_boundary": true, "enforcement": "api tenant authorization middleware", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "state": [
+    {"id": "orders", "type": "STATE", "mutable": true, "recovery": "restore snapshot then replay idempotent order journal", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "interfaces": [
+    {"id": "place-order", "type": "INTERFACE", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "critical_flows": [
+    {"id": "checkout-flow", "type": "FLOW", "critical": true, "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "decisions": [
+    {"id": "dec-store", "type": "DECISION", "reversibility": "MIGRATABLE", "kill_condition": "write contention or tenant isolation cannot be maintained", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "options": [
+    {"id": "opt-single-store", "type": "OPTION", "evidence_status": "ACCEPTED_INTENT"},
+    {"id": "opt-sharded-store", "type": "OPTION", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "scenarios": [
+    {"id": "scenario-cross-tenant", "type": "SCENARIO", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "risks": [],
+  "proof_obligations": [
+    {"id": "proof-tenant", "type": "PROOF_OBLIGATION", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "fitness_checks": [
+    {"id": "fit-tenant", "type": "FITNESS_CHECK", "evidence_status": "ACCEPTED_INTENT"}
+  ],
+  "evidence": [
+    {"id": "ev-auth-test", "type": "EVIDENCE", "derived": false, "evidence_status": "OBSERVED"}
+  ],
+  "traceability_edges": [
+    {"from": "asr-tenant-isolation", "relation": "SATISFIED_BY", "to": "checkout-flow"},
+    {"from": "checkout-flow", "relation": "TRAVERSES", "to": "place-order"},
+    {"from": "checkout-flow", "relation": "TRAVERSES", "to": "tenant-boundary"},
+    {"from": "checkout-flow", "relation": "WRITES", "to": "orders"},
+    {"from": "orders", "relation": "OWNED_BY", "to": "store"},
+    {"from": "api", "relation": "ENFORCES", "to": "tenant-boundary"},
+    {"from": "tenant-boundary", "relation": "VERIFIED_BY", "to": "fit-tenant"},
+    {"from": "checkout-flow", "relation": "VERIFIED_BY", "to": "fit-tenant"},
+    {"from": "fit-tenant", "relation": "SUPPORTED_BY", "to": "ev-auth-test"},
+    {"from": "dec-store", "relation": "SELECTS", "to": "opt-single-store"},
+    {"from": "dec-store", "relation": "REJECTS", "to": "opt-sharded-store"},
+    {"from": "dec-store", "relation": "AFFECTS", "to": "orders"},
+    {"from": "scenario-cross-tenant", "relation": "ATTACKS", "to": "tenant-boundary"},
+    {"from": "proof-tenant", "relation": "PROVES", "to": "tenant-boundary"}
+  ]
+}
