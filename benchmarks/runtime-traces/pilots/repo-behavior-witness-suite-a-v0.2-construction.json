@@ -1,0 +1,56 @@
+{
+  "schema_version": "0.2-construction",
+  "suite_id": "repo-behavior-witness-suite-a-v0.2",
+  "status": "construction_before_first_policy_evaluation",
+  "claim_boundary": "Fresh repositories only. This file defines source-label construction anchors. The frozen v0.6 policy must not be executed until a reviewed sealed manifest is committed in a later commit.",
+  "tasks": [
+    {
+      "task_id": "werkzeug-proxyfix-forwarded-for-a201",
+      "repository": "pallets/werkzeug",
+      "commit_sha": "0005c79e09bae5f4cc2bd8ccd468d7dafe24a455",
+      "prompt": "Locate the production source file that selects the trusted X-Forwarded-For value based on the configured proxy count and applies it to the WSGI REMOTE_ADDR. Return the most relevant production file path.",
+      "expected_file": "src/werkzeug/middleware/proxy_fix.py",
+      "anchors": ["def _get_real_value(", "environ[\"REMOTE_ADDR\"] = x_for"]
+    },
+    {
+      "task_id": "fastapi-response-validation-a202",
+      "repository": "fastapi/fastapi",
+      "commit_sha": "50113da16fec53b66b80d75e80a89296de4fa5a5",
+      "prompt": "Locate the production source file that validates an endpoint response against its response field and raises response validation errors before serialization. Return the most relevant production file path.",
+      "expected_file": "fastapi/routing.py",
+      "anchors": ["async def serialize_response(", "value, errors = field.validate(response_content", "raise ResponseValidationError("]
+    },
+    {
+      "task_id": "pytest-monkeypatch-setenv-a203",
+      "repository": "pytest-dev/pytest",
+      "commit_sha": "51e9a9f148cd2509a31e3fa0d2b1b3204c2b0dd7",
+      "prompt": "Locate the production source file implementing MonkeyPatch.setenv, including prepending the existing environment variable value when prepend is supplied. Return the most relevant production file path.",
+      "expected_file": "src/_pytest/monkeypatch.py",
+      "anchors": ["def setenv(", "value = value + prepend + os.environ[name]"]
+    },
+    {
+      "task_id": "sqlalchemy-url-password-render-a204",
+      "repository": "sqlalchemy/sqlalchemy",
+      "commit_sha": "36892d819240c0681a6c08df9752419f91009503",
+      "prompt": "Locate the production source file that renders SQLAlchemy URL strings while hiding the password by default and exposing it only when hide_password is false. Return the most relevant production file path.",
+      "expected_file": "lib/sqlalchemy/engine/url.py",
+      "anchors": ["def render_as_string(self, hide_password: bool = True) -> str:", "if hide_password"]
+    },
+    {
+      "task_id": "urllib3-retry-exhaustion-a205",
+      "repository": "urllib3/urllib3",
+      "commit_sha": "546f5d2419ee1331cc2a22cdf80e6bad46e92dbc",
+      "prompt": "Locate the production source file that decrements urllib3 retry counters and raises MaxRetryError when the newly incremented retry state is exhausted. Return the most relevant production file path.",
+      "expected_file": "src/urllib3/util/retry.py",
+      "anchors": ["def increment(", "if new_retry.is_exhausted():", "raise MaxRetryError(_pool, url, reason)"]
+    },
+    {
+      "task_id": "cobra-command-suggestions-a206",
+      "repository": "spf13/cobra",
+      "commit_sha": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "prompt": "Locate the production source file that generates Cobra command suggestions using Levenshtein distance, prefix matching, and explicit SuggestFor aliases. Return the most relevant production file path.",
+      "expected_file": "command.go",
+      "anchors": ["func (c *Command) SuggestionsFor(typedName string) []string {", "suggestByLevenshtein :=", "suggestByPrefix :="]
+    }
+  ]
+}
