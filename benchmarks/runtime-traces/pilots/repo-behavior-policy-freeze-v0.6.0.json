@@ -1,0 +1,101 @@
+{
+  "freeze_id": "repo-behavior-policy-development-freeze-v0.6.0",
+  "status": "FROZEN_DEVELOPMENT_POLICY",
+  "claim_boundary": "Development-only repair freeze over the original 14 audited tasks plus the opened six-task Suite A v0.1, which became development evidence after first evaluation. This is not unseen generalization evidence. A completely new sealed Suite A v0.2 is required before any renewed generalization claim.",
+  "frozen_policy": {
+    "architecture": "dual_channel_frontier_plus_multiscale_behavior_windows_with_bounded_structural_closure",
+    "safe_direct_proof": {
+      "enabled": true,
+      "authority_rule": "definition certificate may create direct selection only for an explicitly ownership-cued code symbol in the prompt"
+    },
+    "retrieval_policy": {
+      "frontier_top_k": 8,
+      "exact_quota": 4,
+      "recall_capacity_when_full": 4,
+      "recall_channel_can_create_direct_proof": false
+    },
+    "behavior_policy": {
+      "spans": [4, 16, 24],
+      "max_windows": 5,
+      "merge_gap": 0,
+      "structural_closure": {
+        "enabled": true,
+        "forward_cap_lines": 20,
+        "activation": "selected window cuts through an already-recognized brace-delimited definition block"
+      }
+    },
+    "semantic_judge_used_for_selection": false,
+    "hybrid_evidence_used_for_selection": false
+  },
+  "development_hard_gate": {
+    "tasks": 20,
+    "frontier_hits": "20/20",
+    "behavior_witness_hits": "20/20",
+    "false_confident_direct_select": 0
+  },
+  "context_cost": {
+    "worst_case_unique_source_lines": 1064,
+    "mean_unique_source_lines": 774.1,
+    "mean_structural_extension_lines": 50.05
+  },
+  "repair_lineage": [
+    {
+      "failure": "false-confident direct proof on Pydantic",
+      "repair": "explicit ownership cue required before direct definition certificate",
+      "result": "development14 frontier 14/14; opened Suite A frontier 5/6; false direct 0"
+    },
+    {
+      "failure": "GORM expected file was recall-rank 4 but only three recall slots remained under exact_quota=5",
+      "repair": "exact/recall capacity changed from 5/3 to 4/4 inside unchanged TOP_K=8",
+      "boundary": "quota=5 => 5/6 opened Suite A; quota=4 => 6/6; quota=3 => 6/6; quota=4 selected to preserve more exact capacity"
+    },
+    {
+      "failure": "Echo/Axum witness-bearing function bodies were available as candidates but truncated by greedy window placement",
+      "repair": "bounded structural closure to matching brace of selected definition block",
+      "boundary": "cap=16 => 19/20 witness; cap=20 => 20/20; cap=24/32 also pass but expose more context"
+    }
+  ],
+  "lower_bound_counterexamples": [
+    {
+      "dimension": "frontier_exact_quota",
+      "failing_setting": 5,
+      "result": "19/20 frontier over combined development evidence",
+      "failed_task_id": "gorm-statement-table-a06"
+    },
+    {
+      "dimension": "structural_closure_cap_lines",
+      "failing_setting": 16,
+      "result": "19/20 witness over combined development evidence"
+    }
+  ],
+  "reproducibility": {
+    "policy_source_commit": "80bb4c7475e468e43134ffb5eff5f2b8c8ef71bf",
+    "structural_closure_workflow_run_id": 33757041972,
+    "attempt_1_artifact_id": 9893894626,
+    "attempt_2_artifact_id": 9893961118,
+    "attempt_1_artifact_zip_digest": "sha256:cd41ca6f201d2fea84a32e74def72421886afb38c6827e84b86b41d9278ed442",
+    "attempt_2_artifact_zip_digest": "sha256:77df465967a7c1562870949b7e2ffeb68b9f92674cd0876f39c27397644e63b2",
+    "inner_result_json_sha256_both_attempts": "a73a187992cf24c06da0997a8f9cd76537092f7bc35202677567f53bdc1c792f",
+    "python": "3.12.14",
+    "direct_proof_experiment_blob_sha": "ae0a52f985f5e50c33f1e1b7e98e77076aa19bf3",
+    "frontier_reserve_experiment_blob_sha": "06a934f9be1a682f68379691f9c0ddda514185d2",
+    "structural_closure_experiment_blob_sha": "4ee02bff827b7b89393030592b6545ff93e404c5",
+    "inherited_behavior_windows_v03_blob_sha": "6db58a2965cd8f58589bf02c435ce2b256acd590",
+    "inherited_frontier_v02_blob_sha": "a8253dfe614e4f69d08aa080c80fba13dc16b9fd",
+    "development14_witness_manifest_blob_sha": "9edf9ad88b25ed70734dee904bdbd2844713d515",
+    "opened_suite_a_v01_manifest_blob_sha": "8f65f8069b0d7313dc642039f87937575c9c5df9"
+  },
+  "freeze_rules": {
+    "do_not_tune_on_suite_a_v02": true,
+    "suite_a_v01_is_development_only_forever": true,
+    "do_not_use_luna_to_reselect_deterministic_policy": true,
+    "luna_may_be_used_only_as_a_separate_blind_semantic_judge_after_deterministic_evidence_is_frozen": true,
+    "any_policy_change_after_this_freeze_requires_a_new_unseen_suite": true
+  },
+  "next_evaluation_order": [
+    "Construct and seal a completely new Suite A v0.2 on repositories not used by the 20 development tasks",
+    "Run this frozen v0.6.0 policy once on Suite A v0.2",
+    "Keep any failures immutable; do not tune and rebrand the same suite as unseen",
+    "Run a separate Luna xhigh blind semantic Suite B using evidence cards only"
+  ]
+}
