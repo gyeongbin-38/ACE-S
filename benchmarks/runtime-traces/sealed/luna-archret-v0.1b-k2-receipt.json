@@ -1,0 +1,16 @@
+{
+  "benchmark": "luna-architecture-retention-blind-replay-v0.1",
+  "condition_id": "K2",
+  "status": "RAW_RECEIVED_PRE_LABEL_OPEN",
+  "raw_utf8_sha256": "266dc9001a421a7be7259609e5ab3c40d1de46696031b85db2c273666143a27c",
+  "raw_utf8_bytes": 8747,
+  "strict_raw_json_parse": false,
+  "mechanical_normalization": "U+201C/U+201D smart quotes to ASCII double quote only",
+  "normalized_parse_valid": true,
+  "result_count": 18,
+  "duplicate_task_ids": [],
+  "confidence_values": [1.0],
+  "labels_opened": false,
+  "condition_mapping_opened": false,
+  "chronology_note": "The raw K2 Luna response was received in the conversation before this receipt and before any sealed labels or condition mapping were opened. Scoring is intentionally deferred until K0 and K1 are also received and frozen."
+}
