@@ -1,0 +1,24 @@
+name: research-k8s-corrected-v03-fast
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-k8s-corrected-v03-fast.yml
+      - scripts/diagnose_k8s_corrected_behavior_v03.py
+
+jobs:
+  diagnose-k8s:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Check corrected K8s behavior evidence
+        run: python scripts/diagnose_k8s_corrected_behavior_v03.py
