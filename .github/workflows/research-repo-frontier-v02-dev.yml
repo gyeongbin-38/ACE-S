@@ -1,0 +1,24 @@
+name: research-repo-frontier-v02-dev
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-frontier-v02-dev.yml
+      - scripts/discover_repo_frontier_v02.py
+
+jobs:
+  discover-v02:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run dual-channel repository frontier development search
+        run: python scripts/discover_repo_frontier_v02.py
