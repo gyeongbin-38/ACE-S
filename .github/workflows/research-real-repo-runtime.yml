@@ -9,6 +9,7 @@ on:
       - adapters/deterministic_repo_localization.py
       - adapters/deterministic_repo_localization_v02.py
       - adapters/deterministic_repo_localization_v03.py
+      - adapters/deterministic_repo_localization_v031.py
       - scripts/run_runtime_ab_harness.py
       - scripts/compare_runtime_ab.py
       - scripts/compare_runtime_ab_suite.py
@@ -28,16 +29,16 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Run frozen real-repository OFF/ON localization pilot
+      - name: Run development real-repository OFF/ON localization pilot
         run: |
           python scripts/run_runtime_ab_harness.py \
             benchmarks/runtime-traces/pilots/repo-localization-v0.1.json \
-            --adapter "python adapters/deterministic_repo_localization_v03.py" \
+            --adapter "python adapters/deterministic_repo_localization_v031.py" \
             --out-dir /tmp/ace-s-real-runtime-v0.1 \
             --quality-tolerance 0 \
             --material-improvement-pct 1 \
             --require-pass
-      - name: Require all frozen tasks correct in both conditions
+      - name: Require all development tasks correct in both conditions
         run: |
           python - <<'PY'
           import json
