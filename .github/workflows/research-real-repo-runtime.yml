@@ -8,6 +8,7 @@ on:
       - .github/workflows/research-real-repo-runtime.yml
       - adapters/deterministic_repo_localization.py
       - adapters/deterministic_repo_localization_v02.py
+      - adapters/deterministic_repo_localization_v03.py
       - scripts/run_runtime_ab_harness.py
       - scripts/compare_runtime_ab.py
       - scripts/compare_runtime_ab_suite.py
@@ -31,7 +32,7 @@ jobs:
         run: |
           python scripts/run_runtime_ab_harness.py \
             benchmarks/runtime-traces/pilots/repo-localization-v0.1.json \
-            --adapter "python adapters/deterministic_repo_localization_v02.py" \
+            --adapter "python adapters/deterministic_repo_localization_v03.py" \
             --out-dir /tmp/ace-s-real-runtime-v0.1 \
             --quality-tolerance 0 \
             --material-improvement-pct 1 \
