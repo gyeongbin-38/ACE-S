@@ -1,0 +1,79 @@
+{
+  "benchmark": "architecture-memory-runtime-ood-v0.1",
+  "status": "FRESH_OOD_RESULT",
+  "candidate_freeze_required_commit": "78a4f9072ee91833eedf50d30a4f772969ad9ce7",
+  "runner_freeze_commit": "c73feb48d0299a1acdf27e99de28e351272eb947",
+  "raw_result_sha256": "4d8297bf036e8a7aed98e4af1ceaa73b73f933d9673f9becee34977687b5064a",
+  "seed": 2026090301,
+  "sessions_per_family": 300,
+  "families": [
+    "nested_abort_after_inner_commit",
+    "nested_commit_after_inner_abort",
+    "supersede_after_long_gap",
+    "obligation_reopen_cycle",
+    "owner_reassignment",
+    "compound_recovery"
+  ],
+  "strategies": {
+    "sliding_window": {
+      "queries": 58273,
+      "current_state_accuracy_pct": 0.0,
+      "hard_constraint_retention_pct": 0.0,
+      "obligation_correctness_pct": 0.0,
+      "provenance_fidelity_pct": 0.0,
+      "aborted_branch_contamination_count": 0,
+      "aborted_branch_contamination_pct": 0.0,
+      "mean_worker_visible_facts": 72.0
+    },
+    "semantic_event_rag": {
+      "queries": 58273,
+      "current_state_accuracy_pct": 87.097,
+      "hard_constraint_retention_pct": 87.29,
+      "obligation_correctness_pct": 86.97,
+      "provenance_fidelity_pct": 87.136,
+      "aborted_branch_contamination_count": 7513,
+      "aborted_branch_contamination_pct": 12.893,
+      "mean_worker_visible_facts": 5.0
+    },
+    "hierarchical_state_tree": {
+      "queries": 58273,
+      "current_state_accuracy_pct": 100.0,
+      "hard_constraint_retention_pct": 100.0,
+      "obligation_correctness_pct": 100.0,
+      "provenance_fidelity_pct": 0.0,
+      "aborted_branch_contamination_count": 0,
+      "aborted_branch_contamination_pct": 0.0,
+      "mean_worker_visible_facts": 34.0
+    },
+    "mutable_typed_graph": {
+      "queries": 58273,
+      "current_state_accuracy_pct": 87.097,
+      "hard_constraint_retention_pct": 87.29,
+      "obligation_correctness_pct": 86.97,
+      "provenance_fidelity_pct": 87.136,
+      "aborted_branch_contamination_count": 7513,
+      "aborted_branch_contamination_pct": 12.893,
+      "mean_worker_visible_facts": 4.0
+    },
+    "transactional_typed_hybrid": {
+      "queries": 58273,
+      "current_state_accuracy_pct": 100.0,
+      "hard_constraint_retention_pct": 100.0,
+      "obligation_correctness_pct": 100.0,
+      "provenance_fidelity_pct": 100.0,
+      "aborted_branch_contamination_count": 0,
+      "aborted_branch_contamination_pct": 0.0,
+      "mean_worker_visible_facts": 3.47
+    }
+  },
+  "quality_gate": {
+    "state_accuracy_gte_best_nonhybrid": true,
+    "aborted_branch_contamination_zero": true,
+    "hard_constraint_retention_gte_99": true,
+    "provenance_fidelity_gte_99": true,
+    "passed": true
+  },
+  "interpretation": "The transactional typed hybrid matches the hierarchical state tree on current-state, hard-constraint, obligation, and rollback integrity while adding exact provenance and exposing substantially less worker-visible state. Semantic event retrieval and direct mutable graph state are vulnerable to speculative/aborted branch contamination because validity is not a first-class transaction boundary.",
+  "caveat": "The sliding-window condition is intentionally stressed by long distractor tails exceeding its 72-event budget; its 0% result is a stress lower bound, not a claim about arbitrary full-context agents.",
+  "claim_boundary": "Deterministic synthetic state-controller evidence only. This benchmark does not measure LLM instruction retention or answer quality. A fresh same-model long-horizon A/B/C is still required."
+}
