@@ -12,6 +12,8 @@ on:
       - scripts/compare_runtime_ab_suite.py
       - scripts/runtime_trace_writer.py
       - scripts/validate_runtime_taskset.py
+      - scripts/run_runtime_ab_harness.py
+      - scripts/fake_runtime_adapter.py
       - benchmarks/runtime-traces/**
 
 env:
@@ -101,3 +103,10 @@ jobs:
             exit 1
           fi
           echo "quality-regressed suite correctly rejected"
+      - name: Exercise ground-truth-isolated external adapter harness
+        run: >-
+          python scripts/run_runtime_ab_harness.py
+          benchmarks/runtime-traces/fixtures/harness-taskset.json
+          --adapter "python scripts/fake_runtime_adapter.py"
+          --out-dir /tmp/ace-s-runtime-harness
+          --require-pass
