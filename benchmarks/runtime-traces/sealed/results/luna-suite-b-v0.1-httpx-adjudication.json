@@ -1,0 +1,21 @@
+{
+  "suite_id": "luna-suite-b-v0.1",
+  "task_id": "suite-b-httpx-content-decoding-b001",
+  "audit_status": "POST_SCORE_SEMANTIC_AMBIGUITY_FLAG",
+  "frozen_score_unchanged": true,
+  "frozen_label": "httpx/_models.py",
+  "judge_decision": "ABSTAIN",
+  "judge_confidence": 0.45,
+  "finding": "The task prompt composes multiple runtime responsibilities that the visible blind packet splits across httpx/_models.py and httpx/_decoders.py. Under the frozen judge rule requiring ABSTAIN when multiple candidates remain materially plausible or decisive implementation is not visible, the abstention is protocol-conformant even though strict label scoring marks it non-correct.",
+  "visible_evidence": {
+    "httpx/_models.py": "Visible window shows Response._get_content_decoder reading Content-Encoding values and instantiating supported decoder classes, but the supplied window ends at line 712 before the complete chain-construction return path and does not visibly show decoded byte iteration.",
+    "httpx/_decoders.py": "Visible evidence shows MultiDecoder reversing child decoder order and applying the decoder sequence."
+  },
+  "classification": "COMPOSITE_TASK_AND_EVIDENCE_SUFFICIENCY_AMBIGUITY",
+  "not_classified_as": "PROVEN_WRONG_GOLD_LABEL",
+  "recommended_next_lineage": [
+    "Either narrow the task prompt to the responsibility uniquely owned by httpx/_models.py, or",
+    "include decisive visible _models.py evidence for the complete chain construction and decoded-byte iteration path, then issue a fresh unseen lineage."
+  ],
+  "contamination_note": "Do not modify this frozen Suite B item and recount it as unseen. This audit is post-score diagnostic evidence only."
+}
