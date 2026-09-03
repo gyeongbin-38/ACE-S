@@ -21,7 +21,6 @@ jobs:
     timeout-minutes: 30
     env:
       PYTHONHASHSEED: "0"
-      ACE_S_REPO_CACHE: ${{ runner.temp }}/ace-s-real-repo-cache
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
