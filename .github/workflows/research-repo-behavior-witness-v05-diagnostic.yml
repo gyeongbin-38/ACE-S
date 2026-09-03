@@ -1,0 +1,45 @@
+name: research-repo-behavior-witness-v05-diagnostic
+
+on:
+  push:
+    branches:
+      - exp/behavior-witness-minimality-v05
+    paths:
+      - scripts/diagnose_repo_behavior_witness_v05.py
+      - .github/workflows/research-repo-behavior-witness-v05-diagnostic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate repository
+        run: |
+          python scripts/validate_skill.py
+          python scripts/validate_benchmarks.py
+      - name: Diagnose candidate generation vs selection
+        run: |
+          python scripts/diagnose_repo_behavior_witness_v05.py > /tmp/behavior-witness-v05-diagnostic.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/behavior-witness-v05-diagnostic.json', encoding='utf-8'))
+          for task in d['tasks']:
+              print('\nTASK', task['task_id'])
+              for c in task['configs']:
+                  print(' CFG', c['cfg'], 'witness_hit=', c['witness_hit'], 'selected=', c['selected_windows'])
+                  for w in c['witness_candidate_diagnostics']:
+                      print('  W', w['witness_index'], 'region=', w['region'], 'candidate_exists=', w['candidate_exists'], 'first_rank=', w['best_first_step_rank'], 'best=', w['best_candidate'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: behavior-witness-v05-diagnostic
+          path: /tmp/behavior-witness-v05-diagnostic.json
+          if-no-files-found: error
