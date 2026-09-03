@@ -1,0 +1,31 @@
+name: research-repo-frontier-sealed
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-frontier-sealed.yml
+      - scripts/run_repo_candidate_frontier_sealed_v01.py
+      - benchmarks/runtime-traces/sealed/repo-frontier-unseen-v0.1.json
+
+jobs:
+  sealed-unseen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run frozen unseen repository frontier evaluation
+        run: python scripts/run_repo_candidate_frontier_sealed_v01.py
+      - name: Upload internal score and blind Luna packets
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-frontier-unseen-v0.1
+          path: artifacts/repo-frontier-unseen-v0.1/
+          if-no-files-found: error
