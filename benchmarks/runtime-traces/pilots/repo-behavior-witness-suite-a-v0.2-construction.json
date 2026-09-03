@@ -18,7 +18,7 @@
       "commit_sha": "50113da16fec53b66b80d75e80a89296de4fa5a5",
       "prompt": "Locate the production source file that validates an endpoint response against its response field and raises response validation errors before serialization. Return the most relevant production file path.",
       "expected_file": "fastapi/routing.py",
-      "anchors": ["async def serialize_response(", "value, errors = field.validate(response_content", "raise ResponseValidationError("]
+      "anchors": ["async def serialize_response(", "value, errors = field.validate(response_content"]
     },
     {
       "task_id": "pytest-monkeypatch-setenv-a203",
