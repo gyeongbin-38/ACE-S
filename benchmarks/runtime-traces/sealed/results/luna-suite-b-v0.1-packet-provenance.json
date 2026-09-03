@@ -1,0 +1,23 @@
+{
+  "suite_id": "luna-suite-b-v0.1",
+  "status": "blind_packet_frozen_before_judge_output",
+  "judge_protocol": "luna-blind-semantic-judge-v0.1",
+  "judge_config": {"model": "Luna xhigh", "temperature": 0},
+  "input_seal_commit": "36f1bfe4a18e44dfcfa4dca7fd07f4babdc0ff5e",
+  "label_seal_commit": "37fcf8c644da8b742440a06ffed2a138a5ed2bc5",
+  "packet_workflow_commit": "a6ea99d184275eb0c9b12830597010ac2cb905ba",
+  "workflow_run_id": 33762961607,
+  "artifact_id": 9896274859,
+  "artifact_zip_digest": "sha256:949f9a02c23b6e0bc574fee1a8121ceff7d3a74beb60e4e2b9470c0bada289ca",
+  "packet_json_sha256": "5b12c4ea205158c990100f66a78bffbba4e09441a618e938dad53b1bcddcd9ad",
+  "label_fields_present": false,
+  "tasks": [
+    {"task_id":"suite-b-httpx-content-decoding-b001","mode":"NEEDS_SEMANTIC_JUDGE","candidate_count":8},
+    {"task_id":"suite-b-rich-markup-render-b002","mode":"NEEDS_SEMANTIC_JUDGE","candidate_count":8},
+    {"task_id":"suite-b-gorilla-route-match-b003","mode":"NEEDS_SEMANTIC_JUDGE","candidate_count":5},
+    {"task_id":"suite-b-urfave-command-lifecycle-b004","mode":"NEEDS_SEMANTIC_JUDGE","candidate_count":8},
+    {"task_id":"suite-b-clap-token-parser-b005","mode":"NEEDS_SEMANTIC_JUDGE","candidate_count":8},
+    {"task_id":"suite-b-serde-json-deserializer-b006","mode":"NEEDS_SEMANTIC_JUDGE","candidate_count":8}
+  ],
+  "claim_boundary": "This file records packet provenance only. Labels are not embedded. Judge output must be frozen before labels are opened for scoring."
+}
