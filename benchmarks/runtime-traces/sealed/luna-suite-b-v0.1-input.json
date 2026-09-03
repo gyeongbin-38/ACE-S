@@ -1,0 +1,43 @@
+{
+  "suite_id": "luna-suite-b-v0.1",
+  "status": "sealed_blind_semantic_input",
+  "judge_protocol": "luna-blind-semantic-judge-v0.1",
+  "tasks": [
+    {
+      "task_id": "suite-b-httpx-content-decoding-b001",
+      "repository": "encode/httpx",
+      "commit_sha": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "prompt": "Locate the production source that reads a response's Content-Encoding values, builds the supported decoder chain, reverses the coding order, and drives decoded byte iteration. Return the most relevant production file path."
+    },
+    {
+      "task_id": "suite-b-rich-markup-render-b002",
+      "repository": "Textualize/rich",
+      "commit_sha": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+      "prompt": "Locate the production source that parses Rich console markup text, handles escaped brackets and opening or closing tags, and applies the resulting styles to output text spans. Return the most relevant production file path."
+    },
+    {
+      "task_id": "suite-b-gorilla-route-match-b003",
+      "repository": "gorilla/mux",
+      "commit_sha": "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265",
+      "prompt": "Locate the production source that evaluates one registered route against an HTTP request by running its matcher chain, preserving method-mismatch behavior, and filling the selected handler and route match data. Return the most relevant production file path."
+    },
+    {
+      "task_id": "suite-b-urfave-command-lifecycle-b004",
+      "repository": "urfave/cli",
+      "commit_sha": "1a4deb4f5a35ee12706602698dc0527d44c14b19",
+      "prompt": "Locate the production source that runs a CLI command lifecycle: parses positional and flag input according to command definitions, selects matching subcommands or actions, and executes command hooks and actions. Return the most relevant production file path."
+    },
+    {
+      "task_id": "suite-b-clap-token-parser-b005",
+      "repository": "clap-rs/clap",
+      "commit_sha": "af3044228bd76a87a3f46a3c7c3343563c059527",
+      "prompt": "Locate the production source that consumes command-line tokens and decides whether each token is a long option, short option, positional value, or subcommand while building parse state. Return the most relevant production file path."
+    },
+    {
+      "task_id": "suite-b-serde-json-deserializer-b006",
+      "repository": "serde-rs/json",
+      "commit_sha": "afdf6fc67247dd7fa4fcde1381e6ecc6bcc7a30e",
+      "prompt": "Locate the production source that consumes JSON input and drives Serde visitors for primitive values, strings, arrays, and objects during deserialization. Return the most relevant production file path."
+    }
+  ]
+}
