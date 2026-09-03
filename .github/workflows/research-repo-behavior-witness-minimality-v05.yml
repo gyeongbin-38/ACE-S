@@ -8,6 +8,7 @@ on:
       - benchmarks/runtime-traces/pilots/repo-behavior-witness-development-v0.5.json
       - scripts/search_repo_behavior_witness_minimality_v05.py
       - scripts/search_repo_behavior_witness_minimality_v051_cached.py
+      - scripts/search_repo_behavior_witness_minimality_v052_cached_candidates.py
       - scripts/discover_repo_behavior_windows_v03.py
       - scripts/discover_repo_frontier_v02.py
       - scripts/deterministic_repo_localization_v03.py
@@ -37,7 +38,7 @@ jobs:
           python scripts/validate_benchmarks.py
       - name: Run frozen-witness pure Behavior Window grid
         run: |
-          python scripts/search_repo_behavior_witness_minimality_v051_cached.py > /tmp/behavior-witness-minimality-v05.json
+          python scripts/search_repo_behavior_witness_minimality_v052_cached_candidates.py > /tmp/behavior-witness-minimality-v05.json
           python - <<'PY'
           import json
           p = '/tmp/behavior-witness-minimality-v05.json'
@@ -63,6 +64,7 @@ jobs:
               benchmarks/runtime-traces/pilots/repo-behavior-witness-development-v0.5.json \
               scripts/search_repo_behavior_witness_minimality_v05.py \
               scripts/search_repo_behavior_witness_minimality_v051_cached.py \
+              scripts/search_repo_behavior_witness_minimality_v052_cached_candidates.py \
               scripts/discover_repo_behavior_windows_v03.py \
               scripts/discover_repo_frontier_v02.py \
               adapters/deterministic_repo_localization.py \
