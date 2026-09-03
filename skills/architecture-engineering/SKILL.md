@@ -13,19 +13,24 @@ Design architecture as a **search over decisions under constraints**, not as dia
 
 ## Kernel
 
-1. **Frame before designing.** Extract the system goal, actors, hard constraints, architecturally significant requirements (ASRs), unknowns, and evidence already available.
-2. **Do not invent boundaries from nouns.** A module/service/process/data boundary must be justified by a material boundary force: change coupling, state/consistency, trust, failure isolation, independent deployment/scale, or ownership.
-3. **Keep commitments reversible.** Defer technology, topology, distribution, and persistence choices that are not yet forced by an ASR or constraint.
-4. **Generate alternatives only at real decision points.** Do not create arbitrary whole-system variants. Branch where two or more materially different choices remain plausible.
-5. **Evaluate scenarios, not vibes.** Attack each candidate using measurable quality-attribute scenarios and failure cases before selecting it.
-6. **Hard constraints gate; tradeoffs rank.** Reject candidates that violate hard constraints. Compare survivors as a Pareto frontier rather than hiding tradeoffs in one weighted score.
-7. **Record why.** Every irreversible or expensive decision should preserve drivers, rejected alternatives, consequences, evidence, confidence, and reversal conditions.
-8. **Attach fitness checks.** Important architectural claims should become executable or inspectable checks when possible.
-9. **Promote proof-carrying designs.** Before treating a consequential design as final, require typed proof obligations for its critical boundaries, state, trust, flows, ASRs, and high-lock-in decisions.
+1. **Select the work mode.** Distinguish new-system design, redesign of an existing system, architecture review, and conformance verification. For redesign/review, treat docs and ADRs as intent until selected code/deploy/config/test evidence confirms reality.
+2. **Frame before designing.** Extract the system goal, actors, hard constraints, architecturally significant requirements (ASRs), unknowns, and evidence already available.
+3. **Do not invent boundaries from nouns.** A module/service/process/data boundary must be justified by architecture pressure, and any material pressure pulling the sides together must also be handled.
+4. **Keep commitments reversible.** Defer technology, topology, distribution, and persistence choices that are not yet forced by an ASR or constraint.
+5. **Generate alternatives only at real decision points.** Do not create arbitrary whole-system variants. Branch where two or more materially different choices remain plausible.
+6. **Evaluate scenarios, not vibes.** Attack each candidate using measurable quality-attribute scenarios and failure cases before selecting it.
+7. **Hard constraints gate; tradeoffs rank.** Reject candidates that violate hard constraints. Compare survivors as a Pareto frontier rather than hiding tradeoffs in one weighted score.
+8. **Record why.** Every irreversible or expensive decision should preserve drivers, rejected alternatives, consequences, evidence, confidence, and reversal conditions.
+9. **Attach fitness checks.** Important architectural claims should become executable or inspectable checks when possible.
+10. **Promote proof-carrying designs.** Before treating a consequential design as final, require typed proof obligations for its critical boundaries, state, trust, flows, ASRs, and high-lock-in decisions.
 
 ## Progressive loading
 
 For substantial design work, read `references/synthesis-loop.md` first.
+
+Read `references/boundary-balance.md` only when creating, splitting, merging, or reviewing a consequential module/process/service/system boundary.
+
+Read `references/decision-frontier.md` only when multiple interacting architectural choices remain feasible and manual comparison is becoming unreliable.
 
 Read `references/evaluation.md` only when candidate architectures exist or an existing architecture is being reviewed.
 
@@ -53,6 +58,7 @@ If those conditions are not met, take the **narrowest architecture-changing ques
 - State ownership must be explicit.
 - Trust and failure boundaries must be explicit when material.
 - Distribution is earned, never assumed.
+- Separation pressure must be checked against cohesion pressure before increasing boundary distance.
 - Complexity is a cost and must have a driver.
 - Unknowns are first-class; never fabricate rationale or requirements.
 - Existing project constraints and accepted decisions outrank generic best practices unless they create a demonstrated critical risk.
