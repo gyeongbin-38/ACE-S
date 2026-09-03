@@ -24,6 +24,8 @@
   "interfaces": [
     {"id": "place-order", "type": "INTERFACE", "evidence_status": "ACCEPTED_INTENT"}
   ],
+  "deployment_units": [],
+  "trust_enforcements": [],
   "critical_flows": [
     {"id": "checkout-flow", "type": "FLOW", "critical": true, "evidence_status": "ACCEPTED_INTENT"}
   ],
@@ -54,9 +56,10 @@
     {"from": "checkout-flow", "relation": "WRITES", "to": "orders"},
     {"from": "orders", "relation": "OWNED_BY", "to": "store"},
     {"from": "api", "relation": "ENFORCES", "to": "tenant-boundary"},
-    {"from": "tenant-boundary", "relation": "VERIFIED_BY", "to": "fit-tenant"},
-    {"from": "checkout-flow", "relation": "VERIFIED_BY", "to": "fit-tenant"},
-    {"from": "fit-tenant", "relation": "SUPPORTED_BY", "to": "ev-auth-test"},
+    {"from": "fit-tenant", "relation": "VERIFIES", "to": "asr-tenant-isolation"},
+    {"from": "fit-tenant", "relation": "VERIFIES", "to": "tenant-boundary"},
+    {"from": "fit-tenant", "relation": "VERIFIES", "to": "checkout-flow"},
+    {"from": "ev-auth-test", "relation": "SUPPORTS", "to": "fit-tenant"},
     {"from": "dec-store", "relation": "SELECTS", "to": "opt-single-store"},
     {"from": "dec-store", "relation": "REJECTS", "to": "opt-sharded-store"},
     {"from": "dec-store", "relation": "AFFECTS", "to": "orders"},
