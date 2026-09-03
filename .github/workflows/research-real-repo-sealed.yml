@@ -1,0 +1,126 @@
+name: research-real-repo-sealed
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-real-repo-sealed.yml
+
+jobs:
+  sealed-real-repo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Verify frozen adapter, policy, measurement code, and sealed suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_blob() {
+            local path="$1"
+            local expected="$2"
+            local actual
+            actual="$(git hash-object "$path")"
+            if [[ "$actual" != "$expected" ]]; then
+              echo "freeze guard failed: $path expected=$expected actual=$actual"
+              exit 1
+            fi
+          }
+          check_blob adapters/deterministic_repo_localization.py 832c3be7d16d24aac652fab69f9bb374d800f1d5
+          check_blob adapters/deterministic_repo_localization_v02.py e14870390a6c03921b7a5b230e05913404a560e7
+          check_blob adapters/deterministic_repo_localization_v03.py 070469b9680280e4b32002f23f14f578da1222ad
+          check_blob adapters/deterministic_repo_localization_v041.py c9e2e739ce3033b6d073c61edaed04e8759623d3
+          check_blob scripts/runtime_trace_writer.py 7742dc9c5cf1f114ce472594d52c8221936a9dde
+          check_blob scripts/run_runtime_ab_harness.py 8a7abdaf051532a46d5bfba342aa9bbe31d8c4cc
+          check_blob scripts/validate_runtime_trace.py b227052aae076868e4e21c269c225e284c71bc87
+          check_blob scripts/summarize_runtime_trace.py 4a53afef985a043196dc44c8586258d384a2dd59
+          check_blob scripts/compare_runtime_ab.py 0895985095468bf0f3df333137d21d0c586d9872
+          check_blob scripts/compare_runtime_ab_suite.py 272399e96e6a635f7f4e2e807e65af1679195298
+          check_blob benchmarks/runtime-traces/sealed/repo-localization-v0.2.json 2ab488dd98f9d24fc1de39dbe095c614c4dbaa83
+          echo "freeze guard passed"
+
+      - name: Execute sealed real-repository OFF/ON suite once
+        run: |
+          python scripts/run_runtime_ab_harness.py \
+            benchmarks/runtime-traces/sealed/repo-localization-v0.2.json \
+            --adapter "python adapters/deterministic_repo_localization_v041.py" \
+            --out-dir /tmp/ace-s-real-runtime-sealed-v0.2 \
+            --quality-tolerance 0 \
+            --material-improvement-pct 1 \
+            --require-pass
+
+      - name: Enforce predeclared sealed gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('/tmp/ace-s-real-runtime-sealed-v0.2')
+          report = json.loads((root / 'report.json').read_text())
+          raw = report['raw_scored_results']
+          off = {x['task_id']: x for x in raw if x['condition'] == 'OFF'}
+          on = {x['task_id']: x for x in raw if x['condition'] == 'ON'}
+          n = len(off)
+          exact = 100.0 * sum(bool(x['passed']) for x in off.values()) / n
+          identity = 100.0 * sum(off[k]['answer'] == on[k]['answer'] for k in off) / n
+
+          agg = report['paired_summary']['aggregate_metric_deltas']
+          worker_change = agg['worker_visible_bytes']['on_vs_off_change_pct']
+          worker_reduction = -worker_change
+          rpc_change = agg['tool_rpc_calls']['on_vs_off_change_pct']
+          regressions = report['paired_summary']['pass_regression_task_ids']
+
+          semantic_certificates = 0
+          certificate_count = 0
+          for trace in root.glob('*/on.jsonl'):
+              evidence_kind = {}
+              for line in trace.read_text().splitlines():
+                  if not line.strip():
+                      continue
+                  e = json.loads(line)
+                  if e.get('event_type') == 'evidence_observed':
+                      evidence_kind[e['evidence_id']] = e.get('evidence_kind')
+                  elif e.get('event_type') == 'certificate_emitted':
+                      certificate_count += 1
+                      if evidence_kind.get(e['evidence_id']) == 'semantic':
+                          semantic_certificates += 1
+
+          gates = {
+              'minimum_exact_localization_accuracy_70pct': exact >= 70.0 - 1e-12,
+              'on_off_selected_answer_identity_100pct': abs(identity - 100.0) <= 1e-12,
+              'minimum_worker_visible_byte_reduction_80pct': worker_reduction >= 80.0 - 1e-12,
+              'maximum_tool_rpc_call_increase_0pct': rpc_change is not None and rpc_change <= 1e-12,
+              'semantic_certificate_count_0': semantic_certificates == 0,
+              'quality_regressions_0': len(regressions) == 0,
+          }
+          result = {
+              'experiment': 'real-repo-localization-sealed-v0.2',
+              'status': 'sealed_after_adapter_freeze',
+              'adapter_freeze_commit': '3c3769d494a194691709cdfce161ae282cae8205',
+              'tasks': n,
+              'exact_localization_accuracy_pct': round(exact, 3),
+              'on_off_answer_identity_pct': round(identity, 3),
+              'worker_visible_bytes_off': agg['worker_visible_bytes']['off_total'],
+              'worker_visible_bytes_on': agg['worker_visible_bytes']['on_total'],
+              'worker_visible_byte_reduction_pct': round(worker_reduction, 3),
+              'tool_rpc_calls_off': agg['tool_rpc_calls']['off_total'],
+              'tool_rpc_calls_on': agg['tool_rpc_calls']['on_total'],
+              'tool_rpc_call_change_pct': rpc_change,
+              'certificate_count': certificate_count,
+              'semantic_certificate_count': semantic_certificates,
+              'misses': [x for x in off.values() if not x['passed']],
+              'predeclared_gates': gates,
+              'passed_predeclared_all_gate': all(gates.values()),
+              'claim_boundary': 'Deterministic real-repository localization/instrumentation only; not an LLM or coding-agent quality claim.'
+          }
+          print(json.dumps(result, indent=2))
+          if not all(gates.values()):
+              raise SystemExit(1)
+          PY
