@@ -1,0 +1,77 @@
+{
+  "experiment": "repo-behavior-witness-suite-a-v0.1",
+  "status": "SEALED_UNSEEN_RESULT_FAILED_HARD_GATE",
+  "source_commit": "c7b8c8a590b83cda3571dfe314378c17ce5930b7",
+  "workflow_run_id": 33754282798,
+  "artifact_id": 9892788311,
+  "result_json_sha256": "2ca4268f24a7228fba96dde1b59505f57c507c1eead67383da864ba6d405421f",
+  "frozen_policy": {
+    "spans": [4, 16, 24],
+    "max_windows": 5,
+    "merge_gap": 0
+  },
+  "tasks": 6,
+  "hard_gate": false,
+  "frontier_hits": 4,
+  "witness_hits": 2,
+  "false_direct": 1,
+  "context_cost": {
+    "worst_case_unique_source_lines": 960,
+    "mean_unique_source_lines": 775.0,
+    "actual_max_windows_emitted_per_task": 40,
+    "mean_windows_emitted_per_task": 33.166666666666664
+  },
+  "task_results": [
+    {
+      "task_id": "flask-request-routing-context-a01",
+      "frontier_hit": true,
+      "witness_hit": true,
+      "proof_path": null,
+      "unique_source_lines": 960
+    },
+    {
+      "task_id": "pydantic-model-validate-core-a02",
+      "frontier_hit": false,
+      "witness_hit": false,
+      "proof_path": "pydantic-core/src/lookup_key.rs",
+      "failure_class": "false_confident_direct_proof"
+    },
+    {
+      "task_id": "echo-raw-query-param-a03",
+      "frontier_hit": true,
+      "witness_hit": false,
+      "proof_path": null,
+      "failure_class": "behavior_window_underexposure",
+      "witness_overlap": [
+        {"region": "context.go:335-344", "visible": 6, "required": 7},
+        {"region": "context.go:347-367", "visible": 21, "required": 12}
+      ]
+    },
+    {
+      "task_id": "starlette-route-method-match-a04",
+      "frontier_hit": true,
+      "witness_hit": true,
+      "proof_path": null,
+      "unique_source_lines": 914
+    },
+    {
+      "task_id": "axum-path-extractor-a05",
+      "frontier_hit": true,
+      "witness_hit": false,
+      "proof_path": null,
+      "failure_class": "behavior_window_underexposure",
+      "witness_overlap": [
+        {"region": "axum/src/extract/path/mod.rs:164-179", "visible": 7, "required": 10},
+        {"region": "axum/src/extract/path/mod.rs:185-188", "visible": 0, "required": 4}
+      ]
+    },
+    {
+      "task_id": "gorm-statement-table-a06",
+      "frontier_hit": false,
+      "witness_hit": false,
+      "proof_path": null,
+      "failure_class": "frontier_recall_miss"
+    }
+  ],
+  "lineage_rule": "This suite is now opened evidence. Any policy change informed by these failures starts a new development lineage; this suite may not be reused as unseen evidence for that lineage."
+}
