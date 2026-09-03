@@ -1,0 +1,24 @@
+name: research-repo-behavior-windows-v03-fast
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-behavior-windows-v03-fast.yml
+      - scripts/diagnose_repo_behavior_windows_v03.py
+
+jobs:
+  diagnose-v03:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run fast behavior-window diagnostic
+        run: python scripts/diagnose_repo_behavior_windows_v03.py
