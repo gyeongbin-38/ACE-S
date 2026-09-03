@@ -51,6 +51,7 @@
   ],
   "traceability_edges": [
     {"from": "asr-tenant-isolation", "relation": "SATISFIED_BY", "to": "checkout-flow"},
+    {"from": "asr-tenant-isolation", "relation": "DRIVES", "to": "dec-store"},
     {"from": "checkout-flow", "relation": "TRAVERSES", "to": "place-order"},
     {"from": "checkout-flow", "relation": "TRAVERSES", "to": "tenant-boundary"},
     {"from": "checkout-flow", "relation": "WRITES", "to": "orders"},
@@ -63,6 +64,7 @@
     {"from": "dec-store", "relation": "SELECTS", "to": "opt-single-store"},
     {"from": "dec-store", "relation": "REJECTS", "to": "opt-sharded-store"},
     {"from": "dec-store", "relation": "AFFECTS", "to": "orders"},
+    {"from": "scenario-cross-tenant", "relation": "ATTACKS", "to": "asr-tenant-isolation"},
     {"from": "scenario-cross-tenant", "relation": "ATTACKS", "to": "tenant-boundary"},
     {"from": "proof-tenant", "relation": "PROVES", "to": "tenant-boundary"}
   ]
