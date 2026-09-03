@@ -1,0 +1,23 @@
+name: research-repo-frontier-dev
+
+on:
+  push:
+    branches:
+      - exp/adaptive-context-scheduler-v04
+    paths:
+      - .github/workflows/research-repo-frontier-dev.yml
+
+jobs:
+  frontier-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ACE_S_REPO_CACHE: /tmp/ace-s-repo-cache
+      PYTHONHASHSEED: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Run proof-or-frontier development bench
+        run: python scripts/run_repo_candidate_frontier_dev.py
