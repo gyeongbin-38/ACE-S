@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Diagnose Echo/Axum behavior underexposure after Suite A v0.1 opened.
+"""Diagnose Echo/Axum/GORM behavior underexposure after Suite A v0.1 opened.
 
 No selector or witness is modified. For each failed witness this reports whether
 an existing frozen-scale candidate could satisfy the witness minimum and where
@@ -19,7 +19,7 @@ import search_repo_behavior_witness_minimality_v05 as fixed  # noqa: E402
 import search_repo_behavior_witness_multiscale_v053 as multi  # noqa: E402
 
 SUITE = ROOT / "benchmarks/runtime-traces/sealed/repo-behavior-witness-suite-a-v0.1.json"
-TARGETS = {"echo-raw-query-param-a03", "axum-path-extractor-a05"}
+TARGETS = {"echo-raw-query-param-a03", "axum-path-extractor-a05", "gorm-statement-table-a06"}
 CFG = multi.MultiScaleCfg((4, 16, 24), 5, 0)
 
 
