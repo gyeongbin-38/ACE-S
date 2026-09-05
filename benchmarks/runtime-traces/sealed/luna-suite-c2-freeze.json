@@ -1,0 +1,56 @@
+{
+  "benchmark": "ace-s-interactive-architecture-state-suite-c2",
+  "status": "INPUTS_FROZEN_BEFORE_MODEL_RUN",
+  "seed": 2026090501,
+  "branch": "exp/architecture-memory-runtime-v01",
+  "task_count": 30,
+  "strata": {
+    "constraint_drift": 5,
+    "decision_supersession": 5,
+    "speculative_rollback": 5,
+    "proof_obligation": 5,
+    "ownership_ripple": 5,
+    "compound_long_horizon": 5
+  },
+  "conditions": ["K0", "K1", "K2"],
+  "sessions_per_condition": 6,
+  "turns_per_session": 60,
+  "model": "GPT-5.6 Luna",
+  "reasoning": "xhigh",
+  "temperature": 0,
+  "web": false,
+  "run_pack_sha256": "efb8726c5a0683fe020a7e8317d64519ee262b67b2e7a51a34b3ec7ff8f22531",
+  "manifest_sha256": "3a9d4cdd86ce3244daf8806036f7c1c692fe154e477b353d8c748b6e90e8f0f5",
+  "leakage_audit_sha256": "4a71e64a2a3bc43fc8bae84a766cc578099351b5cda996f452c5eff2d514e315",
+  "sealed_labels_sha256": "36494800b787a6222cc1e00e9dad56323ef3458be647d997c38dcea913b510a3",
+  "scorer_sha256": "f15712df0a711674d9df63bd1bdcd7374478aaf1818e83bc6bebbfce6c0312cd",
+  "packet_tree_sha256": {
+    "K0": "91948f007395f954c776147af6bc3be6d28e26c1383e92a840aeb250d705ee44",
+    "K1": "55e48b17973e25b0572651b1539220300d9c38a8decb71d8c32f6c022e8a54b4",
+    "K2": "7959ba0a0a8d41bd498ab9e2260498391fd759d46f007f09b252df19f53fc57f"
+  },
+  "leakage_audit": {
+    "status": "PASS",
+    "issue_count": 0,
+    "checks": [
+      "no gold values in final evaluation prompt",
+      "no gold values in probe query surface",
+      "no semantic answer labels in evaluation surfaces",
+      "condition-invariant evaluation surfaces excluding treatment runtime views"
+    ],
+    "note": "Common state vocabulary such as OPEN/REOPENED/SATISFIED/TRUE is permitted in generic protocol semantics and is not treated as task-specific gold leakage."
+  },
+  "evaluation_surface": {
+    "probe": "free-recall structured state/provenance/gating output; no candidate answers",
+    "final": "free-recall structured state/provenance/gating output; no candidate answers"
+  },
+  "runner_contract": [
+    "Fresh evaluated session for every condition/session pair.",
+    "Process one turn file at a time; never read future turn content early.",
+    "Persist evaluated assistant timeline completion as source of truth.",
+    "Never treat Paseo send acknowledgement as model output.",
+    "Do not expose sealed labels/mapping before all outputs are frozen.",
+    "Do not rerun model mistakes; retry verified transport failures only."
+  ],
+  "claim_boundary": "Suite C2 measures architecture-state retention, validity, provenance, and execution gating under long-horizon changing state. It does not by itself measure generic architecture-design quality."
+}
