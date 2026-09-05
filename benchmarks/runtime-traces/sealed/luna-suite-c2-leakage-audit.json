@@ -1,0 +1,13 @@
+{
+  "benchmark": "ace-s-interactive-architecture-state-suite-c2",
+  "status": "PASS",
+  "seed": 2026090501,
+  "checks": [
+    "no gold values in final evaluation prompt",
+    "no gold values in probe query surface",
+    "no semantic answer labels in evaluation surfaces",
+    "condition-invariant evaluation surfaces excluding treatment runtime views"
+  ],
+  "issue_count": 0,
+  "issues": []
+}
